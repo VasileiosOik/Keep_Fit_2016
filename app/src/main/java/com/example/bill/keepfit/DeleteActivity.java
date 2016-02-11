@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,12 +19,12 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     private static final String DB_NAME = "Mydb.db";
     private Integer helpInt;
     private String helpName;
-    private EditText et1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //retract the incoming intent
         Intent intent = getIntent();
@@ -38,8 +37,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         helpInt=Integer.parseInt(data[data.length-1]);
         helpName=data[data.length-4];
         System.out.println(helpName);
-
-
 
     }
 
@@ -73,7 +70,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
+                        //my deleting code
                         deleteDatabase();
                         dialog.dismiss();
                     }
@@ -103,7 +100,38 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my2_menu, menu);
+        inflater.inflate(R.menu.delete_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * On selecting action bar icons
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.delete_btn:
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
+                //Toast.makeText(this, "Delete selected", Toast.LENGTH_SHORT)
+                //.show();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.delete_menu, menu);
         return true;
     }
 
@@ -114,13 +142,21 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.delete_btn:
                 AlertDialog diaBox = AskOption();
                 diaBox.show();
-                //Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
+                //Toast.makeText(this, "Delete selected", Toast.LENGTH_SHORT)
                 //.show();
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 break;
         }
 
         return true;
+    }
+    */
+    @Override
+    public void onBackPressed() {
+        DeleteActivity.this.finish();
     }
 }

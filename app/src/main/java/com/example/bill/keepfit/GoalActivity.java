@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,12 +32,14 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private EditText et1,et2;
     private ListView mainListView ;
     private ArrayAdapter<String> listAdapter ;
+    private String nameCh;
+    private float percentageSteps=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initialize a tool bar
        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -52,19 +55,17 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         db.setVersion(1);
         db.setLocale(Locale.getDefault());
 
-/*
+
         //create new table if not already exist 1st way
         final String CREATE_TABLE_WalkingGoals =
                 "CREATE TABLE IF NOT EXISTS tbl_WG ("
                         + "name VARCHAR PRIMARY KEY ,"
-                        + "steps INTEGER);";
+                        + "steps INTEGER, "
+                        + "percentage FLOAT);";
         db.execSQL(CREATE_TABLE_WalkingGoals);
-*/
-        //delete the table
-       // db.execSQL("DROP TABLE IF EXISTS tbl_WG");
+        System.out.println("Table has created successfully!");
 
-        //create the table 2nd way
-        db.execSQL("create table if not exists tbl_WG(name varchar primary key, steps int)");
+
         }
 
     //In this method you handle the button events
@@ -81,7 +82,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         et1.setText("");
         et2.setText("");
         //insert data into able
-        db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"')");
+        db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"','"+percentageSteps+"')");
         //display Toast
         Toast.makeText(this, "goal stored successfully!", Toast.LENGTH_LONG).show();
         //to return to previous screen
@@ -117,14 +118,60 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     */
-    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_menu, menu);
+        inflater.inflate(R.menu.save_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * On selecting action bar icons
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            // action with ID save_button was selected
+            case R.id.save:
+                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
+                    Toast.makeText(GoalActivity.this, "You haven't specified a goal",
+                            Toast.LENGTH_LONG).show();
+                }else if(et1.getText().toString().trim().equals("0")){
+                    Toast.makeText(GoalActivity.this, "Wrong name",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if((Integer.parseInt(et2.getText().toString().trim()))<=0){
+                    Toast.makeText(GoalActivity.this, "Wrong number of steps",
+                            Toast.LENGTH_LONG).show();
+                }
+
+                else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
+
+                //    nameChecked().equals(et1.getText().toString().trim())
+                    Toast.makeText(GoalActivity.this, "Name already exists",
+                            Toast.LENGTH_LONG).show();
+                }else if(et1.getText().toString().trim().matches(".*\\d.*")){
+                    Toast.makeText(GoalActivity.this, "Name contains numbers",
+                            Toast.LENGTH_LONG).show();
+                }
+
+                else {
+                    insert();
+                }
+
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
         return true;
     }
-    */
+
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -137,14 +184,57 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             // action with ID save_button was selected
             case R.id.save:
-                insert();
-                //Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
-                //.show();
+                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
+                    Toast.makeText(GoalActivity.this, "You haven't specified a goal",
+                            Toast.LENGTH_LONG).show();
+                }else if(et1.getText().toString().trim().equals("0")){
+                    Toast.makeText(GoalActivity.this, "Wrong name",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if (nameChecked().equals(et1.getText().toString().trim())) {
+                    Toast.makeText(GoalActivity.this, "Name already exists",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    insert();
+                }
+
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 break;
         }
 
         return true;
     }
+*/
+
+
+    public String nameChecked(){
+        Cursor cursor = db.rawQuery("select name from tbl_WG where name='"+et1.getText().toString().trim()+"'", null);
+        cursor.moveToFirst();
+        if(!cursor.isAfterLast()) {
+            do {
+                nameCh=cursor.getString(cursor.getColumnIndex("name"));
+                System.out.println("Name is: " +nameCh);
+                if(nameCh.equals(et1.getText().toString())){
+                    break;
+                }
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return nameCh;
+    }
+
+    @Override
+    public void onBackPressed() {
+        GoalActivity.this.finish();
+    }
+
+
 }

@@ -1,36 +1,28 @@
 package com.example.bill.keepfit;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
     private SQLiteDatabase database;
-    private static final String TABLE_NAME = "tbl_WG";
     private static final String DB_NAME = "Mydb.db";
     private Integer helpInt;
     private String helpName;
     private EditText et1;
-    private Object mActionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //retract the incoming intent
         Intent intent = getIntent();
@@ -47,9 +39,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         //initialize the editText
         et1 = (EditText) findViewById(R.id.editsteps);
-
-
-      //  mActionMode=EditActivity.this.startActionMode((android.view.ActionMode.Callback) mActionModeCallback);
 
     }
 
@@ -71,6 +60,40 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.save_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * On selecting action bar icons
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.save:
+                System.out.println(et1.getText().toString());
+                if(et1.getText().toString().trim().equals("")){
+                    Toast.makeText(EditActivity.this, "You have to enter a value",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    editDatabase();
+                }
+
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
 
     @Override
@@ -78,10 +101,11 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_menu, menu);
+        inflater.inflate(R.menu.check_menu, menu);
         return true;
     }
 
@@ -91,38 +115,30 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             // action with ID save_button was selected
             case R.id.save_btn:
-                editDatabase();
-                //Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
-                //.show();
+                System.out.println(et1.getText().toString());
+                if(et1.getText().toString().trim().equals("")){
+                    Toast.makeText(EditActivity.this, "You have to enter a value",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    editDatabase();
+                }
+
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 break;
         }
 
         return true;
     }
+    */
+    @Override
+    public void onBackPressed() {
 
-    private ActionMode.Callback mActionModeCallback= new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater= mode.getMenuInflater();
-            inflater.inflate(R.menu.my2_menu,menu);
-            return true;
-        }
+        EditActivity.this.finish();
+    }
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };
 }
