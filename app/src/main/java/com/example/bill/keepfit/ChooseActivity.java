@@ -80,7 +80,7 @@ public class ChooseActivity extends AppCompatActivity {
                     if(checkedStatus[i]==true && onlyOne==1) {
                         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
                         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-                        Intent b = new Intent(ChooseActivity.this, PedometerActivity.class);
+                        Intent b = new Intent(ChooseActivity.this, Pedometer2Activity.class);
                         b.putExtra("string", goal_to_remember);
                         startActivity(b);
                         ChooseActivity.this.finish();

@@ -24,9 +24,10 @@ public class Pedometer2Activity extends AppCompatActivity {
     private String dataValue;
     private long stepsToStartAgain;
     private String helpName;
+    private long newStepsStore;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer2);
 
@@ -49,40 +50,59 @@ public class Pedometer2Activity extends AppCompatActivity {
         float prefNameSteps = myPrefs.getFloat("MyData2", 0);
         stepsToStartAgain=(long) prefNameSteps;
 
-      //  mTvStep = (TextView) findViewById(R.id.tv_step);
 
-        Integer helpSteps=Integer.parseInt(editText.getText().toString());
-        editText.setText("");
+
 
         tvchoicestep.setText(" / " +"GOAL : " + String.valueOf(helpInt));
-     //   findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
-       //     @Override
-        //    public void onClick(View v) {
+        findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                giveData();
                 System.out.println("Steps are: " + stepsToStartAgain);
+                System.out.println("END are: " + helpInt);
                 if(stepsToStartAgain==0) {
-                    STEP_COUNT = 0;
+                  //  STEP_COUNT = 0;
+                  newStepsStore=Long.parseLong(editText.getText().toString().trim());
                    // setStep(STEP_COUNT);
+
+
                 }
                 else
                 {
                     if(stepsToStartAgain>=helpInt)
                     {
                         STEP_COUNT = 0;
+                        newStepsStore=0;
+                        newStepsStore=Long.parseLong(editText.getText().toString().trim());
                      //   setStep(STEP_COUNT);
 
+                      //  newStepsStore=STEP_COUNT;
                     }else{
                         STEP_COUNT = stepsToStartAgain;
+                        newStepsStore=(Long.parseLong(editText.getText().toString().trim()) + STEP_COUNT);
+                            if(newStepsStore>helpInt){
+                                newStepsStore=helpInt;
+                            }else if(newStepsStore==helpInt){
+                                newStepsStore=helpInt;
+                            }else {
+                               //nothing
+                            }
                      //   setStep(STEP_COUNT);
                     }
 
                 }
-       //     }
-       // });
+                System.out.println("Steps are now: " + stepsToStartAgain);
+                System.out.println("END are: " + helpInt);
+            }
+        });
 
 
     }
 
-
+    public void giveData(){
+     //   Long helpSteps=Long.parseLong(editText.getText().toString());
+      //  editText.setText("");
+    }
 
   //  private void setStep(long step) {
   //      mTvStep.setText("STEPS : " + String.valueOf(STEP_COUNT));
@@ -92,17 +112,21 @@ public class Pedometer2Activity extends AppCompatActivity {
     // Physical back button click handler
     @Override
     public void onBackPressed() {
+
         //split the whole string to parts
         if (editText.getText().toString().trim().equals("")) {
             //nothing
             stepsToStartAgain=0;
+            //clear the edit text
+            editText.setText("");
             super.finish();
         }
         else {
-            String data[] = editText.getText().toString().split(" ");
+          //  String data[] = editText.getText().toString().split(" ");
             String dataa[] = tvchoicestep.getText().toString().split(" ");
             //store the int value that we want to edit
-            float st = Float.parseFloat(data[data.length - 1]);
+          //  float st = Float.parseFloat(data[data.length - 1]);
+            float st=newStepsStore;
             float st1 = Float.parseFloat(dataa[dataa.length - 1]);
             //percentage of the current steps/total steps
             String data1 = String.valueOf((st / st1));
@@ -113,8 +137,11 @@ public class Pedometer2Activity extends AppCompatActivity {
             prefsEditor.putFloat("MyData2", st);//current steps
             prefsEditor.putString("MyData3", helpName);//name of the current goal
             prefsEditor.commit();
+            //clear the edit text
+            editText.setText("");
             super.finish();
         }
+
     }
 
 }

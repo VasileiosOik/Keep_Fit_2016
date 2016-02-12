@@ -34,7 +34,7 @@
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:text="Start"
+        android:text="Save state"
         android:layout_marginBottom="122dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
