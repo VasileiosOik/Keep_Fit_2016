@@ -206,14 +206,14 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -222,9 +222,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if(id==android.R.id.home){
+     //   if (id == R.id.action_settings) {
+     //       return true;
+      //  }else
+         if(id==android.R.id.home){
             onBackPressed();
         }
 

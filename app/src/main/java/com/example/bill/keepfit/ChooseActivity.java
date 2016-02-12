@@ -136,8 +136,20 @@ public class ChooseActivity extends AppCompatActivity {
         checkedStatus = new Boolean[goalList.size()];
         for ( int index = 0; index < checkedStatus.length; index++)
             checkedStatus[index] = sharedPreferences.getBoolean(Integer.toString(index), false);
-
-
+        /*
+        //check state
+        SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
+        checkedStatus = new Boolean[goalList.size()];
+        int index = sharedPreferences.getInt("last_index", -1);
+        for(int i=0; i< checkedStatus.length; i++) {
+            if (index != -1) {
+                checkedStatus[i] = true;
+            }
+            else {
+                checkedStatus[i] = sharedPreferences.getBoolean(Integer.toString(index), false);
+            }
+        }
+        */
         //create an ArrayAdaptar from the String Array
         ListAdapter2 adapter = new ListAdapter2(this, goalList, checkedStatus);
         // Assign adapter to ListView

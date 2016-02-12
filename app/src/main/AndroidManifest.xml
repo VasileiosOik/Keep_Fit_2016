@@ -40,7 +40,8 @@
         <activity android:name=".PedometerActivity" />
         <activity android:name=".EditDeleteActivity" />
         <activity android:name=".ChooseActivity" />
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".Pedometer2Activity"></activity>
     </application>
 
 </manifest>
