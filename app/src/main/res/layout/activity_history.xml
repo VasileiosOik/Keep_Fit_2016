@@ -51,7 +51,7 @@
                 <ListView android:id="@+id/goal_list"
                     android:layout_width="fill_parent"
                     android:layout_height="459dp"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:choiceMode="singleChoice"
                     android:dividerHeight="5.0sp" />
             </LinearLayout>

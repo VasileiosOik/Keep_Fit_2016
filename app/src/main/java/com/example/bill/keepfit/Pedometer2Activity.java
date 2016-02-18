@@ -173,6 +173,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
                 }
             }
+                editText.setText("");
                 System.out.println("Current steps: " + newStepsStore);
                 System.out.println("Total Goal steps are: " + helpInt);
 
