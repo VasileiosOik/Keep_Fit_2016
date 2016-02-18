@@ -175,7 +175,8 @@ private void saveDatabase(String portion) {
 
 
 
-            Cursor cursor = database.rawQuery("select * from history_tbl_WG where name='" + nameOfCurrentGoal + "'", null);
+          //  Cursor cursor = database.rawQuery("select * from history_tbl_WG where name='" + nameOfCurrentGoal + "'", null);
+            Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
             System.out.println("edw");
             if (!cursor.isAfterLast()) {
@@ -187,12 +188,12 @@ private void saveDatabase(String portion) {
                     Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                     Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
                     Float percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
-                    System.out.println("Percentage is: "+percentage);
+                   // System.out.println("Percentage is: "+percentage);
                     dateTime = cursor.getString(cursor.getColumnIndex("date"));
-
+                   // System.out.println("Day created was: "+dateTime);
                     if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0)) {
                         System.out.println("difference in days in if: " + differenceInDays());
-                        goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + percentage + "%" + " || Steps Walked: " + stepsDid);
+                        goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
 
                     } else {
                         //nothing
@@ -230,8 +231,10 @@ private void saveDatabase(String portion) {
 
             Date oldDate = dateFormat.parse(dateTime);
          //   System.out.println(oldDate);
+            System.out.println("Now date: " +oldDate);
 
             Date currentDate =  dateFormat.parse(curDateHistory);
+            System.out.println("Now date: " +currentDate);
 
           //  long diff = currentDate.getTime() - oldDate.getTime();
         //    long seconds = diff / 1000;
@@ -301,7 +304,7 @@ private void saveDatabase(String portion) {
 
 
         if((dateSearch.compareTo(curDateHistory)<0)) {
-            databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + (percentage * 100) + 0.5 + "','" + activeNumber + "','" + dateSearch + "')");
+            databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateSearch + "')");
             System.out.println("insert the data to history");
         }else{
             System.out.println("Date has not changed! Nothing is inserted!");
