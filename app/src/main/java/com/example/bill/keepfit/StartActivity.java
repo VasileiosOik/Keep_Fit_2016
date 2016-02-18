@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
@@ -67,8 +68,15 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
 
 
-        //create table
+        //create basic table
         createTableRow();
+
+        //create table history
+        createTableHistory();
+
+        //create help history table
+        createHelpTableHistory();
+
         //for animation
         preferences();
 
@@ -188,7 +196,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "steps INTEGER, "
                         + "percentage FLOAT);";
         db.execSQL(CREATE_TABLE_WalkingGoals);
-        System.out.println("Table has created successfully!");
+     //   System.out.println("Table has created successfully!");
 
         //delete the table
         // db.execSQL("DROP TABLE IF EXISTS tbl_WG");
@@ -219,7 +227,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 float percentFilled = ((currentPosition - seriesItem.getMinValue()) / (seriesItem.getMaxValue() - seriesItem.getMinValue()));
-                System.out.println("here: " + percentFilled);
+               // System.out.println("here: " + percentFilled);
                 textPercentage.setText(String.format("%.0f%%", percentFilled * 100f));
             }
 
@@ -370,11 +378,49 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 steps_count = (Float.parseFloat(prefName)) / 2;
                 Steps_so_far=prefNameSteps;
                 System.out.println("The percentage: " + steps_count);
-                System.out.println("The steps so far: " + Steps_so_far);
+                System.out.println("The steps have walked so far: " + Steps_so_far);
               //  saveDatabase();
             }
 
         }
+    }
+
+    public void createTableHistory(){
+        //create the table
+        database = openOrCreateDatabase("MyHelpdb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+        database.setVersion(1);
+        database.setLocale(Locale.getDefault());
+
+        //create new table if not already exist 1st way
+        final String CREATE_TABLE_TIME_Goals =
+                "CREATE TABLE IF NOT EXISTS time_tbl_WG ("
+                        + "name VARCHAR PRIMARY KEY ,"
+                        + "allsteps INTEGER, "
+                        + "didsteps INTEGER, "
+                        + "percentage FLOAT, "
+                        + "active INTEGER,"
+                        + "date STRING);";
+        database.execSQL(CREATE_TABLE_TIME_Goals);
+     //   System.out.println("Table2 has created successfully!");
+    }
+
+    public void createHelpTableHistory(){
+        //create the table
+        database = openOrCreateDatabase("MyHistorydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+        database.setVersion(1);
+        database.setLocale(Locale.getDefault());
+
+        //create new table if not already exist 1st way
+        final String CREATE_TABLE_HISTORY_Goals =
+                "CREATE TABLE IF NOT EXISTS history_tbl_WG ("
+                        + "name VARCHAR  ,"
+                        + "allsteps INTEGER, "
+                        + "didsteps INTEGER, "
+                        + "percentage FLOAT, "
+                        + "active INTEGER,"
+                        + "date STRING);";
+        database.execSQL(CREATE_TABLE_HISTORY_Goals);
+        //   System.out.println("Table2 has created successfully!");
     }
 
 
@@ -406,4 +452,47 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.start_menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //no inspection Simplifiable If Statement
+        if (id == R.id.action_testMode) {
+            System.out.println("Test mode!");
+            /*
+            ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+            database = dbOpenHelper.openDataBase();
+            //clear the history
+            database.execSQL("delete from "+ TABLE_NAME);
+            database.close();
+            //reload the activity instantly
+            Intent intent = getIntent();
+            overridePendingTransition(0, 0);
+            //no animation
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            overridePendingTransition(0, 0);
+            //finish the activity and restart it
+            finish();
+            startActivity(intent);
+
+            */
+            return true;
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

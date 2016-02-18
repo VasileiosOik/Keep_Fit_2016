@@ -34,6 +34,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayAdapter<String> listAdapter ;
     private String nameCh;
     private float percentageSteps=0;
+    private String date="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
