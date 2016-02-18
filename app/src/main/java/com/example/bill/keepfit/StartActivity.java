@@ -468,29 +468,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         //no inspection Simplifiable If Statement
-        if (id == R.id.action_testMode) {
-            System.out.println("Test mode!");
-            /*
-            ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-            database = dbOpenHelper.openDataBase();
-            //clear the history
-            database.execSQL("delete from "+ TABLE_NAME);
-            database.close();
-            //reload the activity instantly
-            Intent intent = getIntent();
-            overridePendingTransition(0, 0);
-            //no animation
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            overridePendingTransition(0, 0);
-            //finish the activity and restart it
-            finish();
-            startActivity(intent);
-
-            */
+        if (id == R.id.action_testModeA) {
+            System.out.println("Activate Test mode!");
+            return true;
+        }else if(id == R.id.action_testModeD){
+            System.out.println("Deactivate Test mode!");
             return true;
         }
-
-
 
         return super.onOptionsItemSelected(item);
     }

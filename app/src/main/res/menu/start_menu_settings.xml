@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".HistoryActivity">
     <item
-        android:id="@+id/action_testMode"
+        android:id="@+id/action_testModeA"
         android:orderInCategory="100"
-        android:title="Test Mode"
+        android:title="Test Mode ON"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_testModeD"
+        android:orderInCategory="100"
+        android:title="Test Mode OFF"
         app:showAsAction="never" />
 </menu>
