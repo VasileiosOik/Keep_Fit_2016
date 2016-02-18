@@ -297,8 +297,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         if((steps_count*100f)==mSeriesMax) {
             mDecoView.addEvent(new DecoEvent.Builder(DecoDrawEffect.EffectType.EFFECT_SPIRAL_EXPLODE)
                     .setIndex(mSeries1Index)
-                    .setDelay(21000)
-                    .setDuration(3000)
+                    .setDelay(10000)
+                    .setDuration(2000)
                     .setDisplayText("GOAL!")
                     .setListener(new DecoEvent.ExecuteEventListener() {
                         @Override
@@ -313,7 +313,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                     })
                     .build());
         }
-        */
+    */
         resetText();
     }
 
@@ -468,14 +468,12 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         //no inspection Simplifiable If Statement
-        if (id == R.id.action_testModeA) {
-            System.out.println("Activate Test mode!");
-            return true;
-        }else if(id == R.id.action_testModeD){
-            System.out.println("Deactivate Test mode!");
+        if (id == R.id.action_testMode) {
+            System.out.println("Test mode!");
+            Intent i = new Intent(StartActivity.this, TestModeActivity.class);
+            startActivity(i);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
