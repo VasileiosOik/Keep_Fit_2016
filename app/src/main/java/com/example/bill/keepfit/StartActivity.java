@@ -50,7 +50,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private DecoView mDecoView;
     private final float mSeriesMax = 50f;
     private float steps_count = 0f;
-    private float Steps_so_far=0;
+    private int Steps_so_far=0;
     private String prefName;
     private float prefNameSteps;
     private String goalName;
@@ -102,13 +102,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         //initialize the 3 options of the floating button
         ImageView iconSortCreate = new ImageView(this);
-        iconSortCreate.setImageResource(R.drawable.create);
+        iconSortCreate.setImageResource(R.drawable.add);
 
         ImageView iconSortGoal = new ImageView(this);
         iconSortGoal.setImageResource(R.drawable.edit);
 
         ImageView iconSortStart = new ImageView(this);
-        iconSortStart.setImageResource(R.drawable.start);
+        iconSortStart.setImageResource(R.drawable.play);
 
         //build the button
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -376,9 +376,9 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             goalName=myPrefs.getString("MyData3", "0");
             if (prefName != null) {
                 steps_count = (Float.parseFloat(prefName)) / 2;
-                Steps_so_far=prefNameSteps;
+                Steps_so_far= (int) prefNameSteps;
                 System.out.println("The percentage: " + steps_count);
-                System.out.println("The steps have walked so far: " + Steps_so_far);
+                System.out.println("The steps have walked so far: " +  Steps_so_far);
               //  saveDatabase();
             }
 

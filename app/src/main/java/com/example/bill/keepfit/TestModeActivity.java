@@ -11,7 +11,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class TestModeActivity extends AppCompatActivity {
-    EditText et;
+    private EditText et;
+    private Integer activeTestMode=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class TestModeActivity extends AppCompatActivity {
                 System.out.println(et.getText().toString());
                 if(et.getText().toString().trim().equals("")){
                     //nothing happened!
+                    Toast.makeText(TestModeActivity.this, "Enter a proper Date", Toast.LENGTH_LONG).show();
                 }else{
                     storeTheDate();
                     finish();
@@ -58,24 +60,16 @@ public class TestModeActivity extends AppCompatActivity {
     }
 
     private void storeTheDate() {
-        String properDate;
-        properDate=et.getText().toString().trim();
+        String currentDate;
+        currentDate=et.getText().toString().trim();
 
-        String data[] =properDate.split("/");
+        String data[] =currentDate.split("/");
         String year=data[data.length-1];
         String month=data[data.length-2];
         String day=data[data.length-3];
-
-        Calendar Day = Calendar.getInstance();
-        Day.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
-        Day.set(Calendar.MONTH, Integer.parseInt(month));
-        Day.set(Calendar.YEAR, Integer.parseInt(year));
-
-        Calendar today = Calendar.getInstance();
-
-
-
+        activeTestMode=1;
 
         System.out.println(year + " " + month + " " +day);
+
     }
 }

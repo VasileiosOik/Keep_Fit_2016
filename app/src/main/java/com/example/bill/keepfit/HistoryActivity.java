@@ -91,15 +91,12 @@ public class HistoryActivity extends AppCompatActivity {
             database.close();
             //reload the activity instantly
             Intent intent = getIntent();
-            overridePendingTransition(0, 0);
             //no animation
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            overridePendingTransition(0, 0);
-            //finish the activity and restart it
             finish();
+            overridePendingTransition(0, 0);
             startActivity(intent);
-
-
+            overridePendingTransition(0, 0);
             return true;
         }else if(id==android.R.id.home){
             onBackPressed();
