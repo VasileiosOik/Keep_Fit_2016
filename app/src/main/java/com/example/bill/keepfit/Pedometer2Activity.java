@@ -48,7 +48,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer2);
 
-
+        print();
         //retract the incoming intent
         Intent intent = getIntent();
         //recover the row that we want to edit
@@ -76,6 +76,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
 
         if(checkIsTheSame() != null && !checkIsTheSame().isEmpty() && checkIsTheSame().equals(helpName) ) {
+            System.out.println("bika sto shared preference ara 1");
             activeGoal=myPrefs.getInt("MyData4", 0);
         }else{
             activeGoal=0;
@@ -261,7 +262,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         }
         cursor.close();
       //  database.close();
-        System.out.println("checkIsTheSame: " +name);
+      //  System.out.println("checkIsTheSame: " +name);
         return name;
     }
 
@@ -346,7 +347,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         database.execSQL("UPDATE time_tbl_WG SET didsteps='"+didSteps+"' WHERE name='"+helpName+"'");
         database.execSQL("UPDATE time_tbl_WG SET percentage='"+percentageSteps+"' WHERE name='"+helpName+"'");
         //refresh the active part
-       // database.execSQL("UPDATE time_tbl_WG SET active='"+active+"' WHERE name='"+helpName+"'");
+        database.execSQL("UPDATE time_tbl_WG SET active='"+active+"' WHERE name='"+helpName+"'");
     }
 
 
@@ -446,6 +447,40 @@ public class Pedometer2Activity extends AppCompatActivity {
 
         database.execSQL("delete from "+ TABLE_NAME);
         database.close();
+    }
+
+
+    public void print() {
+        String name = "";
+        Integer steps = 0;
+        Integer stepsDid = 0;
+        Float percentage = 0f;
+        String dateSearch = "";
+        Integer activeNumber = 0;
+        SQLiteDatabase databasehelp;
+        //here i store the active goal that i want to transfer
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHelpdb.db");
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select * from time_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            System.out.println("edw1111111");
+            do {
+                System.out.println("Collect the data from the active goal");
+                name = cursor.getString(cursor.getColumnIndex("name"));
+                steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
+                dateSearch = cursor.getString(cursor.getColumnIndex("date"));
+                activeNumber = cursor.getInt(cursor.getColumnIndex("active"));
+                System.out.println(name +" " +steps +" " +stepsDid +" " +percentage + " " +dateSearch +" " +activeNumber);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
     }
 
 

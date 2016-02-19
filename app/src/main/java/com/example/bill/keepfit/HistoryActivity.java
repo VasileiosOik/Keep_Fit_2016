@@ -54,6 +54,8 @@ public class HistoryActivity extends AppCompatActivity {
         //get the present date
         curDateHistory = getCurrentDate();
 
+        print();
+
         //insert the percentage
      //   saveDatabase(prefName);
         if(checkIfTableIsEmpty()==true){
@@ -178,10 +180,9 @@ private void saveDatabase(String portion) {
           //  Cursor cursor = database.rawQuery("select * from history_tbl_WG where name='" + nameOfCurrentGoal + "'", null);
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
-            System.out.println("edw");
+         //   System.out.println("edw");
             if (!cursor.isAfterLast()) {
-                System.out.println("edw1");
-                // if(cursor.moveToFirst()){
+           //     System.out.println("edw1");
                 do {
                     System.out.println("Retrieve data now and checking the date...");
                     String name = cursor.getString(cursor.getColumnIndex("name"));
@@ -231,10 +232,10 @@ private void saveDatabase(String portion) {
 
             Date oldDate = dateFormat.parse(dateTime);
          //   System.out.println(oldDate);
-            System.out.println("Now date: " +oldDate);
+          //  System.out.println("Now date: " +oldDate);
 
             Date currentDate =  dateFormat.parse(curDateHistory);
-            System.out.println("Now date: " +currentDate);
+         //   System.out.println("Now date: " +currentDate);
 
           //  long diff = currentDate.getTime() - oldDate.getTime();
         //    long seconds = diff / 1000;
@@ -303,7 +304,9 @@ private void saveDatabase(String portion) {
         databasehelp = dbOpenHelper1.openDataBase();
 
 
-        if((dateSearch.compareTo(curDateHistory)<0)) {
+        if((dateSearch.compareTo(curDateHistory)<0) && dateSearch!=null && dateSearch!="") {
+            System.out.println("palia: " +dateSearch);
+            System.out.println("Nea: " +curDateHistory);
             databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateSearch + "')");
             System.out.println("insert the data to history");
         }else{
@@ -332,4 +335,37 @@ private void saveDatabase(String portion) {
 
         return flag;
     }
-}
+
+    public void print() {
+        String name = "";
+        Integer steps = 0;
+        Integer stepsDid = 0;
+        Float percentage = 0f;
+        String dateSearch = "";
+        Integer activeNumber = 0;
+        SQLiteDatabase databasehelp;
+        //here i store the active goal that i want to transfer
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            System.out.println("edw1111111");
+            do {
+                System.out.println("Collect the data from the active goal");
+                name = cursor.getString(cursor.getColumnIndex("name"));
+                steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
+                dateSearch = cursor.getString(cursor.getColumnIndex("date"));
+                activeNumber = cursor.getInt(cursor.getColumnIndex("active"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+    }
+    }

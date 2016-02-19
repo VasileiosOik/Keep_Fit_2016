@@ -66,6 +66,16 @@ public class TestModeActivity extends AppCompatActivity {
         String month=data[data.length-2];
         String day=data[data.length-3];
 
+        Calendar Day = Calendar.getInstance();
+        Day.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+        Day.set(Calendar.MONTH, Integer.parseInt(month));
+        Day.set(Calendar.YEAR, Integer.parseInt(year));
+
+        Calendar today = Calendar.getInstance();
+
+
+
+
         System.out.println(year + " " + month + " " +day);
     }
 }
