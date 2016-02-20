@@ -43,10 +43,17 @@ public class Pedometer2Activity extends AppCompatActivity {
     private float st;
     private float st1;
     private String dateTime;
+    private String dateTM;
+    private Integer numberTM;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer2);
+
+        //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
+        SharedPreferences testModePreferences = this.getSharedPreferences("textModeSetting", MODE_PRIVATE);
+        dateTM=testModePreferences.getString("date", null);
+        numberTM=testModePreferences.getInt("testM",0);
 
         print();
         //retract the incoming intent
@@ -65,10 +72,13 @@ public class Pedometer2Activity extends AppCompatActivity {
         tvchoicestep=(TextView) findViewById(R.id.tv_choice_step);
         mTvStep=(TextView) findViewById(R.id.tv_current);
 
+
+
         //shared preferences
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
         float prefNameSteps = myPrefs.getFloat("MyData2", 0);
         stepsToStartAgain=(long) prefNameSteps;
+
 
         //return the current date that the goal started
         curDate=getCurrentDate();
@@ -83,11 +93,16 @@ public class Pedometer2Activity extends AppCompatActivity {
         }
 
         //here i play with time
-        if(checkDifInTime()>=1 && activeGoal==1){
-            System.out.println("Date changed! clear the data from the table!");
-            stepsToStartAgain=0;
-            activeGoal=0;
-            clearCurrentTable();
+        if(checkDifInTime()>=1 && (activeGoal==1 || activeGoal==0)){
+            if(numberTM==0) {
+                System.out.println("Date changed! clear the data from the table!");
+                stepsToStartAgain = 0;
+                activeGoal = 0;
+                clearCurrentTable();
+            }
+            else{
+                //continue
+            }
         }
 
 
@@ -215,20 +230,38 @@ public class Pedometer2Activity extends AppCompatActivity {
             prefsEditor.putFloat("MyData2", st);//current steps
             prefsEditor.putString("MyData3", helpName);//name of the current goal
             System.out.println("Steps to start again are: " + (int) st);
-            //hereeeeeeeeeeeeeeeeeeeeeeeeee
+
+
             if(activeGoal==0){
                 activeGoal=1;
                 prefsEditor.putInt("MyData4", activeGoal);
                 System.out.println("Turn out to  1 <<ACTIVE>> " +helpName);
                 boolean b=rowNameExists(helpName);
                 if(b==true){
-                    updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                    //for the test mode check if is active or not
+                    if(numberTM==1){
+                        updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,dateTM);
+                    }else{
+                        updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                    }
+
                 }else{
-                    //fill the database with the info needed
-                    fillDatabase(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                    if(numberTM==1){
+                        //fill the database with the info needed
+                        fillDatabase(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,dateTM);
+                    }else{
+                        //fill the database with the info needed
+                        fillDatabase(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                    }
+
                 }
             }else{
-                updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                if(numberTM==1){
+                    updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,dateTM);
+                }else{
+                    updateDB(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                }
+
             }
             prefsEditor.commit();
             //clear the edit text
@@ -289,7 +322,7 @@ public class Pedometer2Activity extends AppCompatActivity {
       //  database.close();
 
         //check the time difference
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         long days = 0;
 
 
@@ -364,7 +397,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     public String getCurrentDate(){
         Date curDate = new Date();
       //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String DateToStr = format.format(curDate);
      //   System.out.println(DateToStr);
         return DateToStr;

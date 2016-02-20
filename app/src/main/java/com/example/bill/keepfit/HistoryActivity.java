@@ -32,6 +32,8 @@ public class HistoryActivity extends AppCompatActivity {
     private String goalName;
     private String curDateHistory;
     private String dateTime;
+    private String dateTM;
+    private Integer numberTM;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,11 @@ public class HistoryActivity extends AppCompatActivity {
         prefName = myPrefs.getString("MyData", "0");//percentage
         prefNameSteps = myPrefs.getFloat("MyData2", 0);//current steps
         goalName=myPrefs.getString("MyData3", "0");//name of the current goal
+
+        //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
+        SharedPreferences testModePreferences = this.getSharedPreferences("textModeSetting", MODE_PRIVATE);
+        dateTM=testModePreferences.getString("date", null);
+        numberTM=testModePreferences.getInt("testM",0);
 
 
         //here we initialize the listview to the list in the xml file
@@ -189,14 +196,23 @@ private void saveDatabase(String portion) {
                    // System.out.println("Percentage is: "+percentage);
                     dateTime = cursor.getString(cursor.getColumnIndex("date"));
                    // System.out.println("Day created was: "+dateTime);
-                    if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0)) {
-                        System.out.println("difference in days in if: " + differenceInDays());
+                    //hereeeeeeee test mode again
+                    if(numberTM==1 && dateTime.equals(dateTM)){
+                        System.out.println("here in test mode");
                         goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
 
-                    } else {
-                        //nothing
-                        System.out.println("difference in days on else: " + differenceInDays());
                     }
+
+                        if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
+                            System.out.println("difference in days in if: " + differenceInDays());
+                            goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
+
+                        } else {
+                            //nothing
+                            System.out.println("difference in days on else: " + differenceInDays());
+                        }
+
+
 
 
                 } while (cursor.moveToNext());
@@ -214,7 +230,7 @@ private void saveDatabase(String portion) {
 
     public String getCurrentDate(){
         Date curDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         String DateToStr = format.format(curDate);
      //   System.out.println(DateToStr);
         return DateToStr;
@@ -224,7 +240,7 @@ private void saveDatabase(String portion) {
 
         long days=0;
         //the format of the date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
 
             Date oldDate = dateFormat.parse(dateTime);
@@ -299,17 +315,27 @@ private void saveDatabase(String portion) {
         //open the database
         ExternalDbOpenHelper dbOpenHelper1 = new ExternalDbOpenHelper(this, DB_NAME);
         databasehelp = dbOpenHelper1.openDataBase();
+        //here test mode again
+        System.out.println("einai to test mode: " +numberTM);
+        if(numberTM==1 && dateSearch.equals(dateTM)){
+            if(name.equals(checkIsTheSame())){
+                database.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
+                database.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
+                database.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
+            }else{
+                System.out.println("insert apo to test mode");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateTM + "')");
+            }
 
-
-        if((dateSearch.compareTo(curDateHistory)<0) && dateSearch!=null && dateSearch!="") {
-            System.out.println("palia: " +dateSearch);
-            System.out.println("Nea: " +curDateHistory);
-            databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateSearch + "')");
-            System.out.println("insert the data to history");
-        }else{
-            System.out.println("Date has not changed! Nothing is inserted!");
         }
-
+            if((dateSearch.compareTo(curDateHistory)<0) && dateSearch!=null && dateSearch!="" && numberTM==0) {
+                System.out.println("palia: " +dateSearch);
+                System.out.println("Nea: " +curDateHistory);
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateSearch + "')");
+                System.out.println("insert the data to history");
+            }else{
+                System.out.println("Date has not changed! Nothing is inserted!");
+            }
 
     }
 
@@ -358,11 +384,39 @@ private void saveDatabase(String portion) {
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber = cursor.getInt(cursor.getColumnIndex("active"));
-
+                System.out.println(name +" " +steps +" " +stepsDid +" " +percentage + " " +dateSearch +" " +activeNumber);
 
             } while (cursor.moveToNext());
         }
         cursor.close();
 
+    }
+
+    public String checkIsTheSame() {
+        String name = null;
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select name from history_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+
+        if (!cursor.isAfterLast()) {
+            // if(cursor.moveToFirst()){
+            do {
+                // System.out.println("Retrieve data now");
+                name = cursor.getString(cursor.getColumnIndex("name"));
+                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
+                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        //  database.close();
+        //  System.out.println("checkIsTheSame: " +name);
+        return name;
     }
     }
