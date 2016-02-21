@@ -34,6 +34,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String dateTime;
     private String dateTM;
     private Integer numberTM;
+    private int exists=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,12 @@ public class HistoryActivity extends AppCompatActivity {
         mainListView = (ListView) findViewById( R.id.goal_list );
 
         //get the present date
-        curDateHistory = getCurrentDate();
+        if(numberTM==0){
+            curDateHistory=getCurrentDate();
+        }else{
+            curDateHistory=dateTM;
+        }
+
 
         print();
 
@@ -179,8 +185,6 @@ private void saveDatabase(String portion) {
             //here i retrieve the data i want
             goalList = new ArrayList<String>();
 
-
-
           //  Cursor cursor = database.rawQuery("select * from history_tbl_WG where name='" + nameOfCurrentGoal + "'", null);
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -287,7 +291,7 @@ private void saveDatabase(String portion) {
         Float percentage=0f;
         String dateSearch="";
         Integer activeNumber=0;
-        SQLiteDatabase databasehelp;
+        SQLiteDatabase databasehelp = null;
         //here i store the active goal that i want to transfer
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHelpdb.db");
@@ -306,28 +310,38 @@ private void saveDatabase(String portion) {
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
 
+                if(name.equals(checkIsTheSame())){
+                    exists++;
+                }
 
+            //edw htan prin
             } while (cursor.moveToNext());
         }
         cursor.close();
-
 
         //open the database
         ExternalDbOpenHelper dbOpenHelper1 = new ExternalDbOpenHelper(this, DB_NAME);
         databasehelp = dbOpenHelper1.openDataBase();
         //here test mode again
         System.out.println("einai to test mode: " +numberTM);
+        System.out.println(dateSearch);
+        System.out.println(dateTM);
         if(numberTM==1 && dateSearch.equals(dateTM)){
-            if(name.equals(checkIsTheSame())){
-                database.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
-                database.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
-                database.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
+            System.out.println(name);
+            if(name.equals(checkIsTheSame()) && exists==0){
+                System.out.println("Exists in the history table");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
             }else{
                 System.out.println("insert apo to test mode");
                 databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateTM + "')");
             }
 
         }
+
+
+
             if((dateSearch.compareTo(curDateHistory)<0) && dateSearch!=null && dateSearch!="" && numberTM==0) {
                 System.out.println("palia: " +dateSearch);
                 System.out.println("Nea: " +curDateHistory);
@@ -336,7 +350,13 @@ private void saveDatabase(String portion) {
             }else{
                 System.out.println("Date has not changed! Nothing is inserted!");
             }
+            //edw ta evala
 
+
+
+        //close the databases
+        database.close();
+        databasehelp.close();
     }
 
     public boolean checkIfTableIsEmpty() {
@@ -356,6 +376,9 @@ private void saveDatabase(String portion) {
             flag=false;
         }
 
+
+
+        database.close();
         return flag;
     }
 
@@ -389,7 +412,7 @@ private void saveDatabase(String portion) {
             } while (cursor.moveToNext());
         }
         cursor.close();
-
+        database.close();
     }
 
     public String checkIsTheSame() {
@@ -415,8 +438,8 @@ private void saveDatabase(String portion) {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        //  database.close();
-        //  System.out.println("checkIsTheSame: " +name);
+        database.close();
+        System.out.println("checkIsTheSame: " +name);
         return name;
     }
     }

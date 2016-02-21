@@ -154,6 +154,13 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         if(activeTestMode==0){
             System.out.println("Diegrapse ton goal apo to history");
             destroyTestModeGoals();
+        }else{
+            SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+            SharedPreferences.Editor prefsEditor = myPrefs.edit();
+            prefsEditor.putString("MyData", String.valueOf(0));//percentage
+            prefsEditor.putFloat("MyData2", 0f);//current steps
+            prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
+            prefsEditor.commit();
         }
         //yes or no???????
         previousDate=null;

@@ -54,7 +54,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         //we want here to update the value with a new one given by the user
 
         database.execSQL("UPDATE tbl_WG SET steps='"+helpSteps+"' WHERE steps="+helpInt+"");
-
+        database.close();
         //to return to previous screen
         finish();
 
