@@ -45,6 +45,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     private String dateTime;
     private String dateTM;
     private Integer numberTM;
+    private Integer stepsTM;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,16 @@ public class Pedometer2Activity extends AppCompatActivity {
         float prefNameSteps = myPrefs.getFloat("MyData2", 0);
         stepsToStartAgain=(long) prefNameSteps;
 
+        //after changing from test mode to main mode you need to start from where you ve stopped before
+        if(numberTM==0){
+            if(stepsToStartAfterChangingTestMode()!=null) {
+                stepsToStartAgain = stepsToStartAfterChangingTestMode();
+            }
+        }
+
+
+
+
 
         //return the current date that the goal started
         if(numberTM==0){
@@ -90,8 +101,9 @@ public class Pedometer2Activity extends AppCompatActivity {
 
 
 
-        if(checkIsTheSame() != null && !checkIsTheSame().isEmpty() && checkIsTheSame().equals(helpName) ) {
+        if(checkIsTheSame() != null && !checkIsTheSame().isEmpty() && checkIsTheSame().equals(helpName)  ) {
             System.out.println("bika sto shared preference ara 1");
+            System.out.println("ektos kai an einai test mode ara 0 sthn prwth fora");
             activeGoal=myPrefs.getInt("MyData4", 0);
         }else{
             activeGoal=0;
@@ -204,6 +216,28 @@ public class Pedometer2Activity extends AppCompatActivity {
 
     }
 
+    private Integer stepsToStartAfterChangingTestMode() {
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select didsteps from time_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+
+            do {
+
+                stepsTM = cursor.getInt(cursor.getColumnIndex("didsteps"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        System.out.println(stepsTM);
+        return stepsTM;
+    }
+
 
     // Physical back button click handler
     @Override
@@ -241,8 +275,10 @@ public class Pedometer2Activity extends AppCompatActivity {
                 activeGoal=1;
                 prefsEditor.putInt("MyData4", activeGoal);
                 System.out.println("Turn out to  1 <<ACTIVE>> " +helpName);
+                //check if the name exists in the table
                 boolean b=rowNameExists(helpName);
-                if(b==true){
+                //check again if exists with the same date
+                if(b==true && dateFound(dateTM)==true){
                     //for the test mode check if is active or not
                     System.out.println("To b einai true");
                     if(numberTM==1){
@@ -436,6 +472,29 @@ public class Pedometer2Activity extends AppCompatActivity {
         database.close();
         return bValue;
     }
+
+    public boolean dateFound(String dateName){
+        Boolean dateValue=false;
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select name from time_tbl_WG where date='" + dateName + "'", null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+
+            do {
+                String nameRow = cursor.getString(cursor.getColumnIndex("name"));
+                if(nameRow.equals(helpName)){
+                    dateValue=true;
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return dateValue;
+    }
+
 
     public void storeActiveGoal(){
         String name="";

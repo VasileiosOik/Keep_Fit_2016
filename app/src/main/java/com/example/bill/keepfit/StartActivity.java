@@ -394,7 +394,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //create new table if not already exist 1st way
         final String CREATE_TABLE_TIME_Goals =
                 "CREATE TABLE IF NOT EXISTS time_tbl_WG ("
-                        + "name VARCHAR PRIMARY KEY ,"
+                        + "name VARCHAR  ,"
                         + "allsteps INTEGER, "
                         + "didsteps INTEGER, "
                         + "percentage FLOAT, "

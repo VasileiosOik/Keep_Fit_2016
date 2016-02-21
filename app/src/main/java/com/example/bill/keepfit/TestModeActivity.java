@@ -160,6 +160,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             prefsEditor.putString("MyData", String.valueOf(0));//percentage
             prefsEditor.putFloat("MyData2", 0f);//current steps
             prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
+            prefsEditor.putInt("MyData4", 0);
             prefsEditor.commit();
         }
         //yes or no???????
@@ -246,6 +247,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         prefsEditor.putString("MyData", String.valueOf(0));//percentage
         prefsEditor.putFloat("MyData2", 0f);//current steps
         prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
+        prefsEditor.putInt("MyData4", 0);
         prefsEditor.commit();
 
     }
