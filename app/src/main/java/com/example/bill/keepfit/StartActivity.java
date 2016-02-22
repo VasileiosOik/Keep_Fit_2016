@@ -196,6 +196,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "steps INTEGER, "
                         + "percentage FLOAT);";
         db.execSQL(CREATE_TABLE_WalkingGoals);
+        db.close();
      //   System.out.println("Table has created successfully!");
 
         //delete the table
@@ -401,6 +402,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "active INTEGER,"
                         + "date STRING);";
         database.execSQL(CREATE_TABLE_TIME_Goals);
+        database.close();
      //   System.out.println("Table2 has created successfully!");
     }
 
@@ -420,6 +422,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "active INTEGER,"
                         + "date STRING);";
         database.execSQL(CREATE_TABLE_HISTORY_Goals);
+        database.close();
         //   System.out.println("Table2 has created successfully!");
     }
 

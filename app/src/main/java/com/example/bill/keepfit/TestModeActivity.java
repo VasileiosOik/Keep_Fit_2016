@@ -93,7 +93,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                     }
 
                 }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
-                    Toast.makeText(TestModeActivity.this, "Contains invalid characters (-,*)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TestModeActivity.this, "A date cannot contain any of these: -,*", Toast.LENGTH_LONG).show();
                 }else{
                     storeTheDate();
                     finish();

@@ -35,6 +35,10 @@ public class HistoryActivity extends AppCompatActivity {
     private String dateTM;
     private Integer numberTM;
     private int exists=0;
+    private Boolean cClear=false;
+    private String  clearDate="";
+    private Boolean clearMode=false;
+    private boolean keepValue=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,11 @@ public class HistoryActivity extends AppCompatActivity {
         dateTM=testModePreferences.getString("date", null);
         numberTM=testModePreferences.getInt("testM",0);
 
+        //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the clear
+        SharedPreferences clearPreferences = this.getSharedPreferences("clearSetting", MODE_PRIVATE);
+       // clearMode=clearPreferences.getBoolean("returnClear", false);
+        clearDate = clearPreferences.getString("returnClearDate", "nothing");
+
 
         //here we initialize the listview to the list in the xml file
         mainListView = (ListView) findViewById( R.id.goal_list );
@@ -67,13 +76,19 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
 
+
+
+
+        //see what history table has inside
         print();
 
-        //insert the percentage
-     //   saveDatabase(prefName);
-        if(checkIfTableIsEmpty()==true){
-            storeActiveGoal();
-        }
+
+                //this enables the clear history to work properly
+                if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
+                    storeActiveGoal();
+                }
+
+
 
 
         //here the list of goals is appeared in the main screen
@@ -100,14 +115,20 @@ public class HistoryActivity extends AppCompatActivity {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
             database = dbOpenHelper.openDataBase();
             //clear the history
-            database.execSQL("delete from "+ TABLE_NAME);
+           // database.execSQL("delete from "+ TABLE_NAME);
+            database.delete(TABLE_NAME, null, null);
             database.close();
+          //  cClear=true;
+            SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
+          //  editor.putBoolean("returnClear", cClear);
+            editor.putString("returnClearDate", curDateHistory);
+            editor.commit();
             //reload the activity instantly
             Intent intent = getIntent();
             //no animation
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            finish();
             overridePendingTransition(0, 0);
+            finish();
             startActivity(intent);
             overridePendingTransition(0, 0);
             return true;
@@ -310,10 +331,12 @@ private void saveDatabase(String portion) {
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
 
-                if(name.equals(checkIsTheSame())){
-                    exists++;
+                if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
+                    exists=1;
+                }else{
+                    exists=0;
                 }
-
+                System.out.println("To exists einai: " +exists);
             //edw htan prin
             } while (cursor.moveToNext());
         }
@@ -328,30 +351,30 @@ private void saveDatabase(String portion) {
         System.out.println(dateTM);
         if(numberTM==1 && dateSearch.equals(dateTM)){
             System.out.println(name);
-            if(name.equals(checkIsTheSame()) && exists==0){
+            if(name.equals(checkIsTheSame()) && exists!=0){
                 System.out.println("Exists in the history table");
                 databasehelp.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
                 databasehelp.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
                 databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
             }else{
-                System.out.println("insert apo to test mode");
+                System.out.println("insert apo to test mode mias kai den exist");
                 databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateTM + "')");
             }
 
         }
 
 
+            if(numberTM==0 && exists==0) {
+                if ((dateSearch.compareTo(curDateHistory) < 0) && dateSearch != null && dateSearch != "") {
+                    System.out.println("palia: " + dateSearch);
+                    System.out.println("Nea: " + curDateHistory);
+                    databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage + "','" + activeNumber + "','" + dateSearch + "')");
+                    System.out.println("insert the data to history");
+                } else {
+                    System.out.println("Date has not changed! Nothing is inserted!");
+                }
 
-            if((dateSearch.compareTo(curDateHistory)<0) && dateSearch!=null && dateSearch!="" && numberTM==0) {
-                System.out.println("palia: " +dateSearch);
-                System.out.println("Nea: " +curDateHistory);
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateSearch + "')");
-                System.out.println("insert the data to history");
-            }else{
-                System.out.println("Date has not changed! Nothing is inserted!");
             }
-            //edw ta evala
-
 
 
         //close the databases
@@ -441,5 +464,32 @@ private void saveDatabase(String portion) {
         database.close();
         System.out.println("checkIsTheSame: " +name);
         return name;
+    }
+    public String checkIsTheDate() {
+        String date = null;
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select date from history_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+
+        if (!cursor.isAfterLast()) {
+            // if(cursor.moveToFirst()){
+            do {
+                // System.out.println("Retrieve data now");
+                date = cursor.getString(cursor.getColumnIndex("date"));
+                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
+                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        System.out.println("checkIsTheSame: " +date);
+        return date;
     }
     }

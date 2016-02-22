@@ -132,6 +132,7 @@ public class ChooseActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        database.close();
         //size of the status list;
         status= new boolean[goalList.size()];
 

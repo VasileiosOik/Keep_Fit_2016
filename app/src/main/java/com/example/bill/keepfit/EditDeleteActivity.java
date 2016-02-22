@@ -48,10 +48,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
 
 
-        //The database is open!
-        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-        database = dbOpenHelper.openDataBase();
-       // Toast.makeText(this, "The data base is opened successfully.", Toast.LENGTH_LONG).show();
+//        //The database is open!
+//        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+//        database = dbOpenHelper.openDataBase();
+
 
 
 
@@ -249,7 +249,9 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
 
     public void display(View v) {
-
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
         goalList = new ArrayList<String>();
         Cursor cursor = database.rawQuery("select * from tbl_WG", null);
         cursor.moveToFirst();
@@ -264,7 +266,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
             } while (cursor.moveToNext());
         }
         cursor.close();
-
+        database.close();
         ListAdapter adapter = new ListAdapter(this, goalList);
         mainListView.setAdapter(adapter);
 

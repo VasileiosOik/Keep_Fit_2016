@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DeleteActivity extends AppCompatActivity implements View.OnClickListener{
@@ -19,6 +20,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     private static final String DB_NAME = "Mydb.db";
     private Integer helpInt;
     private String helpName;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_delete);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        tv=(TextView) findViewById(R.id.tv);
         //retract the incoming intent
         Intent intent = getIntent();
         //recover the row that we want to edit
@@ -37,6 +40,8 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         helpInt=Integer.parseInt(data[data.length-1]);
         helpName=data[data.length-4];
         System.out.println(helpName);
+
+        tv.setText(dataValue);
 
     }
 
@@ -64,7 +69,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete")
-                .setMessage("Do you want to Delete")
+                .setMessage("Do you want to Delete it?")
 
 
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {

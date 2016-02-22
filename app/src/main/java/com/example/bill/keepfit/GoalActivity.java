@@ -35,6 +35,8 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private String nameCh;
     private float percentageSteps=0;
     private String date="0";
+    private String regex = "[0-9]+";
+    private static final String DB_NAME = "Mydb.db";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,11 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         et2 = (EditText) findViewById(R.id.editsteps);
         //create database if not already exist
 
+//        //The database is open!
+//        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+//        db = dbOpenHelper.openDataBase();
+
+        /*
         db = openOrCreateDatabase("Mydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
         db.setVersion(1);
         db.setLocale(Locale.getDefault());
@@ -66,7 +73,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         db.execSQL(CREATE_TABLE_WalkingGoals);
         System.out.println("Table has created successfully!");
 
-
+*/
         }
 
     //In this method you handle the button events
@@ -78,6 +85,10 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     //This method will be called when insert button is pressed
     public void insert()
     {
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        db = dbOpenHelper.openDataBase();
+
         String name=et1.getText().toString();
         Integer steps=Integer.parseInt(et2.getText().toString());
         et1.setText("");
@@ -86,39 +97,11 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"','"+percentageSteps+"')");
         //display Toast
         Toast.makeText(this, "goal stored successfully!", Toast.LENGTH_LONG).show();
+        db.close();
         //to return to previous screen
         finish();
     }
-    /*
-    //This method will be called when display button is pressed
-    public void display(View v)
-    {
-        //use cursor to keep all data
-        //cursor can keep data of any data type
-        Cursor c=db.rawQuery("select * from tbl_WG", null);
-        tv.setText("");
-        //move cursor to first position
-        c.moveToFirst();
-        //fetch all data one by one
-        do
-        {
-            //we can use c.getString(0) here
-            //or we can get data using column index
-            String name=c.getString(c.getColumnIndex("name"));
-            Integer steps=Integer.parseInt(c.getString(1));
-            //display on text view
-            tv.append("Name: "+name+"\n" +"Steps: "+steps+"\n");
-            //put them in a list
-          //  ArrayList<String> goalList = new ArrayList<String>();
-          //  goalList.add("Name: "+name+" and Steps: "+steps);
-          //  System.out.println(goalList);
-         //   listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, goalList);
-            //move next position until end of the data
-        }while(c.moveToNext());
 
-
-    }
-    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -146,22 +129,36 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
                 else if((Integer.parseInt(et2.getText().toString().trim()))<=0){
                     Toast.makeText(GoalActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
+                }else if(et2.getText().toString().trim().contains(".") || et2.getText().toString().trim().contains("-") || et2.getText().toString().trim().contains(",")){
+                    Toast.makeText(GoalActivity.this, "Steps must contain only numbers",
+                            Toast.LENGTH_LONG).show();
+                }else if ( et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
+                        || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
+                        || et1.getText().toString().trim().contains("%") ||  et1.getText().toString().trim().contains("^")
+                        || et1.getText().toString().trim().contains("&") ||  et1.getText().toString().trim().contains("*")
+                        || et1.getText().toString().trim().contains("(") ||  et1.getText().toString().trim().contains(")")
+                        || et1.getText().toString().trim().contains("[") ||  et1.getText().toString().trim().contains("]")
+                        || et1.getText().toString().trim().contains("{") ||  et1.getText().toString().trim().contains("}")
+                        || et1.getText().toString().trim().contains(";") ||  et1.getText().toString().trim().contains(":")
+                        || et1.getText().toString().trim().contains("'") ||  et1.getText().toString().trim().contains("|")
+                        || et1.getText().toString().trim().contains(",") ||  et1.getText().toString().trim().contains("<")
+                        || et1.getText().toString().trim().contains(">") ||  et1.getText().toString().trim().contains(".")
+                        || et1.getText().toString().trim().contains("?") ||  et1.getText().toString().trim().contains("/")
+                        || et1.getText().toString().trim().contains("-") ||  et1.getText().toString().trim().contains("_")
+                        || et1.getText().toString().trim().contains("+") ||  et1.getText().toString().trim().contains("=")){
+                    Toast.makeText(GoalActivity.this, "Name cannot contain special characters",
+                            Toast.LENGTH_LONG).show();
                 }
-
                 else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
-
-                //    nameChecked().equals(et1.getText().toString().trim())
                     Toast.makeText(GoalActivity.this, "Name already exists",
                             Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().matches(".*\\d.*")){
-                    Toast.makeText(GoalActivity.this, "Name contains numbers",
+                }else if(et1.getText().toString().trim().matches(regex)){//(et1.getText().toString().trim().matches(".*\\d.*")){
+                    Toast.makeText(GoalActivity.this, "Name cannot contain only numbers",
                             Toast.LENGTH_LONG).show();
                 }
-
                 else {
                     insert();
                 }
-
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -214,6 +211,9 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public String nameChecked(){
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        db = dbOpenHelper.openDataBase();
         Cursor cursor = db.rawQuery("select name from tbl_WG where name='"+et1.getText().toString().trim()+"'", null);
         cursor.moveToFirst();
         if(!cursor.isAfterLast()) {
@@ -228,7 +228,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
             } while (cursor.moveToNext());
         }
         cursor.close();
-
+        db.close();
         return nameCh;
     }
 
