@@ -103,7 +103,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
         if(checkIsTheSame() != null && !checkIsTheSame().isEmpty() && checkIsTheSame().equals(helpName)  ) {
             System.out.println("bika sto shared preference ara 1");
-            System.out.println("ektos kai an einai test mode ara 0 sthn prwth fora");
+            System.out.println("ektos kai an einai test mode ara 0 sthn prwth fora " +activeGoal);
             activeGoal=myPrefs.getInt("MyData4", 0);
         }else{
             activeGoal=0;
@@ -141,9 +141,17 @@ public class Pedometer2Activity extends AppCompatActivity {
             database = dbOpenHelper.openDataBase();
 
             try {
-                database.execSQL("UPDATE time_tbl_WG SET active='"+0+"' WHERE name='"+checkIsTheSame()+"'");
-                System.out.println("The previous is not active, 0 has inserted: " +checkIsTheSame());
-                System.out.println("null is the name of the checkIsTheSame  after 0 has inserted " +checkIsTheSame());
+                if(numberTM==1){
+                    database.execSQL("UPDATE time_tbl_WG SET active='"+0+"' WHERE name='"+checkIsTheSame()+"' AND date='"+dateTM+"'");
+                    System.out.println("The previous is not active, 0 has inserted: " +checkIsTheSame());
+                    System.out.println("Test mode is ON");
+                    System.out.println("null is the name of the checkIsTheSame  after 0 has inserted " +checkIsTheSame());
+                }else{
+                    database.execSQL("UPDATE time_tbl_WG SET active='"+0+"' WHERE name='"+checkIsTheSame()+"'");
+                    System.out.println("The previous is not active, 0 has inserted: " +checkIsTheSame());
+                    System.out.println("Test mode is OFF");
+                    System.out.println("null is the name of the checkIsTheSame  after 0 has inserted " +checkIsTheSame());
+                }
             } catch (SQLException e) {
                 System.out.println("An error occured");
             }
@@ -368,7 +376,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         database.close();
 
         //check the time difference
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         long days = 0;
 
 
@@ -445,7 +453,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     public String getCurrentDate(){
         Date curDate = new Date();
       //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String DateToStr = format.format(curDate);
      //   System.out.println(DateToStr);
         return DateToStr;

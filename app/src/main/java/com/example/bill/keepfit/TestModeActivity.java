@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class TestModeActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private EditText et;
@@ -83,18 +84,20 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         switch (item.getItemId()) {
             case R.id.save:
               //  System.out.println(et.getText().toString());
-                if(et.getText().toString().trim().equals("")){
-                    if( myCheckBox.isChecked()==true && et.getText().toString().trim().equals("")){
-                        Toast.makeText(TestModeActivity.this, "Enter a proper Date", Toast.LENGTH_LONG).show();
-                    }else{
+                if(et.getText().toString().trim().equals("")) {
+                    if (myCheckBox.isChecked() == true && et.getText().toString().trim().equals("")) {
+                        Toast.makeText(TestModeActivity.this, "Enter a Date to continue", Toast.LENGTH_LONG).show();
+                    } else {
                         storeTheDate();
                         finish();
                     }
+
+                }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
+                    Toast.makeText(TestModeActivity.this, "Contains invalid characters (-,*)", Toast.LENGTH_LONG).show();
                 }else{
                     storeTheDate();
                     finish();
                 }
-
                 break;
             case android.R.id.home:
                 if(myBoolean==true && et.getText().toString().trim().equals(""))
@@ -120,31 +123,33 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             //dont store something
             currentDate="";
             activeTestMode=0;
+            if(myCheckBox.isChecked()==false){
+                System.out.println("Einai 0 ");
+                Toast.makeText(TestModeActivity.this, "Test mode is inactive", Toast.LENGTH_LONG).show();
+                activeTestMode=0;
+            }
+
         }else{
             currentDate=et.getText().toString().trim();
             System.out.println(currentDate);
 
-            String data[] =currentDate.split("-");
-            String year=data[data.length-1];
-            String month=data[data.length-2];
-            String day=data[data.length-3];
+          //  String data[] =currentDate.split("-");
+            //String year=data[data.length-1];
+            //String month=data[data.length-2];
+            //String day=data[data.length-3];
 
             if(myCheckBox.isChecked()==true){
                 activeTestMode=1;
-
                 System.out.println("Einai 1 ");
                 Toast.makeText(TestModeActivity.this, "Test mode is active", Toast.LENGTH_LONG).show();
             }else{
                 activeTestMode=0;
-
                 System.out.println("Einai 0 ");
-                Toast.makeText(TestModeActivity.this, "Test mode is inactive", Toast.LENGTH_LONG).show();
             }
 
-
-
-
         }
+
+        System.out.println("Einai to test mode: " +activeTestMode);
         SharedPreferences.Editor editor = getSharedPreferences("textModeSetting", MODE_PRIVATE).edit();
         editor.putString("date", currentDate);
         editor.putInt("testM", activeTestMode);
@@ -232,7 +237,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-       // System.out.println(goal_to_remember);
+        System.out.println("Paei to deutero");
         if(goal_to_remember!=null && goal_to_remember!="0"){
             String data[] = goal_to_remember.split(" ");
             String nameOfTestGoal = data[data.length - 4];

@@ -234,7 +234,7 @@ private void saveDatabase(String portion) {
 
     public String getCurrentDate(){
         Date curDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String DateToStr = format.format(curDate);
      //   System.out.println(DateToStr);
         return DateToStr;
@@ -244,7 +244,7 @@ private void saveDatabase(String portion) {
 
         long days=0;
         //the format of the date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
 
             Date oldDate = dateFormat.parse(dateTime);
