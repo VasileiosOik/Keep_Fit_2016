@@ -68,6 +68,7 @@ public class HistoryActivity extends AppCompatActivity {
         //here we initialize the listview to the list in the xml file
         mainListView = (ListView) findViewById( R.id.goal_list );
 
+
         //get the present date
         if(numberTM==0){
             curDateHistory=getCurrentDate();
@@ -82,13 +83,17 @@ public class HistoryActivity extends AppCompatActivity {
         //see what history table has inside
         print();
 
+              //  if(numberTM==0) {
+                    //this enables the clear history to work properly
+                    if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
+                        storeActiveGoal();
+                    }
 
-                //this enables the clear history to work properly
-                if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
-                    storeActiveGoal();
-                }
-
-
+               // }else{
+               //     if (checkIfTableIsEmpty() == true) {
+                 //       storeActiveGoal();
+                 //   }
+              //  }
 
 
         //here the list of goals is appeared in the main screen
@@ -118,6 +123,7 @@ public class HistoryActivity extends AppCompatActivity {
            // database.execSQL("delete from "+ TABLE_NAME);
             database.delete(TABLE_NAME, null, null);
             database.close();
+
           //  cClear=true;
             SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
           //  editor.putBoolean("returnClear", cClear);
@@ -125,6 +131,7 @@ public class HistoryActivity extends AppCompatActivity {
             editor.commit();
             //reload the activity instantly
             Intent intent = getIntent();
+
             //no animation
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             overridePendingTransition(0, 0);
