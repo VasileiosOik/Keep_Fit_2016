@@ -1,9 +1,11 @@
 package com.example.bill.keepfit;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -117,27 +119,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         //no inspection Simplifiable If Statement
         if (id == R.id.action_clear) {
-            ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-            database = dbOpenHelper.openDataBase();
-            //clear the history
-           // database.execSQL("delete from "+ TABLE_NAME);
-            database.delete(TABLE_NAME, null, null);
-            database.close();
-
-          //  cClear=true;
-            SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
-          //  editor.putBoolean("returnClear", cClear);
-            editor.putString("returnClearDate", curDateHistory);
-            editor.commit();
-            //reload the activity instantly
-            Intent intent = getIntent();
-
-            //no animation
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            overridePendingTransition(0, 0);
-            finish();
-            startActivity(intent);
-            overridePendingTransition(0, 0);
+            AlertDialog diaBox = AskOption();
+            diaBox.show();
             return true;
         }else if(id==android.R.id.home){
             onBackPressed();
@@ -472,6 +455,7 @@ private void saveDatabase(String portion) {
         System.out.println("checkIsTheSame: " +name);
         return name;
     }
+
     public String checkIsTheDate() {
         String date = null;
         //The database is open!
@@ -498,5 +482,62 @@ private void saveDatabase(String portion) {
         database.close();
         System.out.println("checkIsTheSame: " +date);
         return date;
+    }
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete Action")
+                .setMessage("Do you want to delete History?")
+
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //my deleting code
+                        deleteHistory();
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
+    private void deleteHistory() {
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+        //clear the history
+        // database.execSQL("delete from "+ TABLE_NAME);
+        database.delete(TABLE_NAME, null, null);
+        database.close();
+
+        //  cClear=true;
+        SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
+        //  editor.putBoolean("returnClear", cClear);
+        editor.putString("returnClearDate", curDateHistory);
+        editor.commit();
+        //reload the activity instantly
+        Intent intent = getIntent();
+
+        //no animation
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        overridePendingTransition(0, 0);
+        finish();
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+
     }
     }

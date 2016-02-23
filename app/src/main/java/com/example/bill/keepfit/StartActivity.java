@@ -56,6 +56,9 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private String goalName;
     private ArrayList<String>  goalList1;
     private SQLiteDatabase db;
+    private String dateTM;
+    private Integer numberTM;
+    private TextView textTestMode;
 
 
     @Override
@@ -66,6 +69,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //initialize the text view
+        textTestMode =(TextView) findViewById(R.id.textActivity2);
 
 
         //create basic table
@@ -79,6 +84,18 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         //for animation
         preferences();
+
+        //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
+        SharedPreferences testModePreferences = this.getSharedPreferences("textModeSetting", MODE_PRIVATE);
+        dateTM=testModePreferences.getString("date", null);
+        numberTM=testModePreferences.getInt("testM",0);
+
+        if(numberTM==1){
+            textTestMode.setText("Test Mode is ON");
+            textTestMode.setBackgroundColor(Color.RED);
+        }else{
+            textTestMode.setText("");
+        }
 
         //animated bar grey one
         mDecoView = (DecoView) findViewById(R.id.dynamicArcView);

@@ -68,8 +68,8 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     {
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete it?")
+                .setTitle("Delete Action")
+                .setMessage("Do you want to delete the Goal?")
 
 
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
