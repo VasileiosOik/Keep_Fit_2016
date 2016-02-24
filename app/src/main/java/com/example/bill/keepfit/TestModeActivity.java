@@ -1,9 +1,11 @@
 package com.example.bill.keepfit;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -57,11 +59,12 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 et.setVisibility(View.VISIBLE);
                 myBoolean=true;
             } else {
-                tv.setVisibility(View.GONE);
-                myBoolean=false;
                 previousDate=et.getText().toString().trim();
-                et.setText("");
-                et.setVisibility(View.GONE);
+                    myBoolean=false;
+                    tv.setVisibility(View.GONE);
+                    et.setText("");
+                    et.setVisibility(View.GONE);
+
             }
         }
 
@@ -94,7 +97,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
                 }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
                     Toast.makeText(TestModeActivity.this, "A date cannot contain any of these: -,*", Toast.LENGTH_LONG).show();
-                }else{
+                }//else if(myCheckBox.isChecked() == false && !previousDate.equals("")){
+                   // openAlert();
+               // }
+                else{
                     storeTheDate();
                     finish();
                 }
@@ -256,5 +262,42 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         prefsEditor.commit();
 
     }
+
+    private void openAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TestModeActivity.this);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Confirm of ErasingTest Mode data...");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("Are you sure you want uncheck this?");
+
+
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+                // Write your code here to invoke YES event
+                storeTheDate();
+                finish();
+              //  Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to invoke NO event
+
+             //   Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+
+    }
+
 
 }

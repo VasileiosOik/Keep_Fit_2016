@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,9 +63,9 @@ public class HistoryActivity extends AppCompatActivity {
         numberTM=testModePreferences.getInt("testM",0);
 
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the clear
-        SharedPreferences clearPreferences = this.getSharedPreferences("clearSetting", MODE_PRIVATE);
+      //  SharedPreferences clearPreferences = this.getSharedPreferences("clearSetting", MODE_PRIVATE);
        // clearMode=clearPreferences.getBoolean("returnClear", false);
-        clearDate = clearPreferences.getString("returnClearDate", "nothing");
+     //   clearDate = clearPreferences.getString("returnClearDate", "nothing");
 
 
         //here we initialize the listview to the list in the xml file
@@ -87,9 +88,9 @@ public class HistoryActivity extends AppCompatActivity {
 
               //  if(numberTM==0) {
                     //this enables the clear history to work properly
-                    if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
-                        storeActiveGoal();
-                    }
+                //    if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
+                       // storeActiveGoal();
+                 //   }
 
                // }else{
                //     if (checkIfTableIsEmpty() == true) {
@@ -119,8 +120,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         //no inspection Simplifiable If Statement
         if (id == R.id.action_clear) {
-            AlertDialog diaBox = AskOption();
-            diaBox.show();
+
+            if(checkIfTableIsEmpty()==true) {
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
+            }else{
+                Toast.makeText(HistoryActivity.this, "There is nothing to clear", Toast.LENGTH_LONG).show();
+            }
             return true;
         }else if(id==android.R.id.home){
             onBackPressed();
@@ -208,19 +214,20 @@ private void saveDatabase(String portion) {
                     Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                     Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
                     Float percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
+                    Integer modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
                    // System.out.println("Percentage is: "+percentage);
                     dateTime = cursor.getString(cursor.getColumnIndex("date"));
                    // System.out.println("Day created was: "+dateTime);
                     //hereeeeeeee test mode again
-                    if(numberTM==1 && dateTime.equals(dateTM)){
+                    if(numberTM==1  && modeTest==2){ //&& dateTime.equals(dateTM)){
                         System.out.println("here in test mode");
-                        goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
+                        goalList.add(dateTime+ "\n" +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +"Steps Walked: " + stepsDid);
 
                     }
 
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                             System.out.println("difference in days in if: " + differenceInDays());
-                            goalList.add("Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
+                            goalList.add(dateTime+ " " +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
 
                         } else {
                             //nothing
@@ -377,20 +384,28 @@ private void saveDatabase(String portion) {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
         database = dbOpenHelper.openDataBase();
 
-        String count = "SELECT count(*) FROM history_tbl_WG";
+        String count = "SELECT COUNT(*) FROM history_tbl_WG";
+
         Cursor mcursor = database.rawQuery(count, null);
         mcursor.getCount();
 
-        if(mcursor != null && mcursor.getCount()>0){
+
+        if(mcursor != null){
             mcursor.moveToFirst();
-            flag=true;
-        }
-        else {
+
+            String countName=mcursor.getString(0);
+            if(!countName.equals("0")){
+                flag=true;
+            } else {
+                flag=false;
+            }
+
+        } else {
             flag=false;
         }
 
-
-
+        System.out.println(flag);
+        mcursor.close();
         database.close();
         return flag;
     }
@@ -521,14 +536,17 @@ private void saveDatabase(String portion) {
         database = dbOpenHelper.openDataBase();
         //clear the history
         // database.execSQL("delete from "+ TABLE_NAME);
-        database.delete(TABLE_NAME, null, null);
-        database.close();
-
+        if(numberTM==0) {
+            database.delete(TABLE_NAME, null, null);
+            database.close();
+        }else{
+            deleteTestModeGoals();
+        }
         //  cClear=true;
-        SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
+      //  SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
         //  editor.putBoolean("returnClear", cClear);
-        editor.putString("returnClearDate", curDateHistory);
-        editor.commit();
+      //  editor.putString("returnClearDate", curDateHistory);
+      //  editor.commit();
         //reload the activity instantly
         Intent intent = getIntent();
 
@@ -538,6 +556,16 @@ private void saveDatabase(String portion) {
         finish();
         startActivity(intent);
         overridePendingTransition(0, 0);
+
+    }
+
+    public void deleteTestModeGoals(){
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        database.delete(TABLE_NAME, "testMode" + "='" + 2 + "'", null);
+
+        database.close();
 
     }
     }

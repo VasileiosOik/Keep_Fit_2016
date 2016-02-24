@@ -46,6 +46,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     private String dateTM;
     private Integer numberTM;
     private Integer stepsTM;
+    private int exists=0;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -324,6 +325,9 @@ public class Pedometer2Activity extends AppCompatActivity {
             prefsEditor.commit();
             //clear the edit text
             editText.setText("");
+            //here i store to history table
+            storeActiveGoal();
+
             super.finish();
       //  }
 
@@ -529,6 +533,12 @@ public class Pedometer2Activity extends AppCompatActivity {
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
+            //    if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
+             //       exists=1;
+             //   }else{
+                  //  exists=0;
+           //     }
+             //   System.out.println("To exists einai: " +exists);
 
 
             } while (cursor.moveToNext());
@@ -539,14 +549,88 @@ public class Pedometer2Activity extends AppCompatActivity {
         //open the database
         ExternalDbOpenHelper dbOpenHelper1 = new ExternalDbOpenHelper(this, "MyHistorydb.db");
         databasehelp = dbOpenHelper1.openDataBase();
+        //here test mode again
+        System.out.println("einai to test mode: " +numberTM);
+        System.out.println(dateSearch);
+        System.out.println(dateTM);
 
-        databasehelp.execSQL("insert into history_tbl_WG values('"+name+"','"+steps+"','"+stepsDid+"','"+percentage+"','"+activeNumber+"','"+dateSearch+"')");
-        System.out.println("insert the data to history");
+       // Cursor cursor1 = databasehelp.rawQuery("select * from history_tbl_WG where active='"+1+"'", null);
+       // cursor1.moveToFirst();
+     //   if (!cursor1.isAfterLast()) {
+
+        //    do {
+            //    System.out.println("Collect the data from the active goal");
+          //      name = cursor1.getString(cursor1.getColumnIndex("name"));
+          //      steps = cursor1.getInt(cursor1.getColumnIndex("allsteps"));
+          //      stepsDid = cursor1.getInt(cursor1.getColumnIndex("didsteps"));
+          //      percentage = cursor1.getFloat(cursor1.getColumnIndex("percentage"));
+          //      dateSearch = cursor1.getString(cursor1.getColumnIndex("date"));
+          //      activeNumber=cursor1.getInt(cursor1.getColumnIndex("active"));
+                //    if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
+                //       exists=1;
+                //   }else{
+                //  exists=0;
+                //     }
+                //   System.out.println("To exists einai: " +exists);
+
+
+
+        if(numberTM==1 && dateSearch.equals(dateTM)){
+            System.out.println(name);
+            if(name.equals(checkIsTheSame2())&& (checkIsTheDate().compareTo(curDate) == 0)){ //&& exists!=0 ){
+                System.out.println("Exists in the history table");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
+            }else if(!name.equals(checkIsTheSame2()) && activeNumber==1 && (checkIsTheDate().compareTo(curDate) == 0)) {
+                databasehelp.execSQL("DELETE FROM history_tbl_WG WHERE active='"+1+"' AND date='"+dateSearch+"'");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
+            }
+            else{
+                    System.out.println("insert apo to test mode mias kai den exist");
+                    databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
+                }
+            }
+
+
+        if(numberTM==0 ) {
+           // if ((dateSearch.compareTo(curDate) < 0) && dateSearch != null && dateSearch != "") {
+                System.out.println("palia: " + dateSearch);
+                System.out.println("Nea: " + curDate);
+            if(name.equals(checkIsTheSame2())&& (checkIsTheDate().compareTo(curDate) == 0)){ //&& exists!=0 ){
+                System.out.println("Exists in the history table");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
+                databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
+            }else if(!name.equals(checkIsTheSame2()) && activeNumber==1 && (checkIsTheDate().compareTo(curDate) == 0)) {
+                System.out.println("Date has not changed! Afairw to proigoumeno kai vazw to neo");
+                databasehelp.execSQL("DELETE FROM history_tbl_WG WHERE active='"+1+"'");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+            }else if(activeNumber==1 && (checkIsTheDate().compareTo(curDate) < 0)){
+                System.out.println("NEW DATE NEW insert data to history");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+            }
+            else{
+                System.out.println("insert apo to test mode mias kai den exist");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+            }
+              //  databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage + "','" + activeNumber + "','" + dateSearch + "')");
+             //   System.out.println("insert the data to history");
+           // } else {
+             //   System.out.println("Date has not changed! Nothing is inserted!");
+           // }
+
+        }
+          //  } while (cursor1.moveToNext());
+      //  }
+      //  cursor1.close();
+
         databasehelp.close();
 
 
 
     }
+
 
     public void clearCurrentTable(){
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
@@ -588,6 +672,68 @@ public class Pedometer2Activity extends AppCompatActivity {
         }
         cursor.close();
         database.close();
+    }
+
+    public String checkIsTheDate() {
+        String date = null;
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select date from history_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+
+        if (!cursor.isAfterLast()) {
+            // if(cursor.moveToFirst()){
+            do {
+                // System.out.println("Retrieve data now");
+                date = cursor.getString(cursor.getColumnIndex("date"));
+                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
+                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        System.out.println("checkIsTheSame: " +date);
+        if(date==null){
+            date="";
+        }
+        return date;
+    }
+
+    public String checkIsTheSame2() {
+        String name = null;
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select name from history_tbl_WG where active='" + 1 + "'", null);
+        cursor.moveToFirst();
+
+        if (!cursor.isAfterLast()) {
+            // if(cursor.moveToFirst()){
+            do {
+                // System.out.println("Retrieve data now");
+                name = cursor.getString(cursor.getColumnIndex("name"));
+                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
+                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
+                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        if(name==null){
+            name="";
+        }
+        System.out.println("checkIsTheSame2: " +name);
+        return name;
     }
 
 

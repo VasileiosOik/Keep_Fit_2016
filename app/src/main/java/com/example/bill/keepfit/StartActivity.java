@@ -437,6 +437,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "didsteps INTEGER, "
                         + "percentage FLOAT, "
                         + "active INTEGER,"
+                        + "testMode INTEGER,"
                         + "date STRING);";
         database.execSQL(CREATE_TABLE_HISTORY_Goals);
         database.close();
