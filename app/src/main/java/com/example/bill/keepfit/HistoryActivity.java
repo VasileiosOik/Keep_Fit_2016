@@ -62,12 +62,6 @@ public class HistoryActivity extends AppCompatActivity {
         dateTM=testModePreferences.getString("date", null);
         numberTM=testModePreferences.getInt("testM",0);
 
-        //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the clear
-      //  SharedPreferences clearPreferences = this.getSharedPreferences("clearSetting", MODE_PRIVATE);
-       // clearMode=clearPreferences.getBoolean("returnClear", false);
-     //   clearDate = clearPreferences.getString("returnClearDate", "nothing");
-
-
         //here we initialize the listview to the list in the xml file
         mainListView = (ListView) findViewById( R.id.goal_list );
 
@@ -79,24 +73,8 @@ public class HistoryActivity extends AppCompatActivity {
             curDateHistory=dateTM;
         }
 
-
-
-
-
         //see what history table has inside
         print();
-
-              //  if(numberTM==0) {
-                    //this enables the clear history to work properly
-                //    if (checkIfTableIsEmpty() == true && !clearDate.equals(curDateHistory)) {
-                       // storeActiveGoal();
-                 //   }
-
-               // }else{
-               //     if (checkIfTableIsEmpty() == true) {
-                 //       storeActiveGoal();
-                 //   }
-              //  }
 
 
         //here the list of goals is appeared in the main screen
@@ -151,37 +129,7 @@ public class HistoryActivity extends AppCompatActivity {
         startActivity(getIntent());
 
     }
-/*
-private void saveDatabase(String portion) {
-    float percentage;
-    //The database is open!
-    ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-    database = dbOpenHelper.openDataBase();
 
-
-    if (portion != null && !portion.isEmpty()) {
-        // doSomething
-
-        //we want here to update the value with a new one given by the user
-     //   try {
-            percentage=(Float.parseFloat(prefName)*100);
-
-      //  }
-      //  catch(NumberFormatException ex) {
-      //      percentage = 0; // default ??
-
-      //  }
-    }else{
-        percentage = 0;
-    }
-
-
-    System.out.println("The percentage is: " + percentage);
-    //  int percentage=(Integer.parseInt(prefName));
-    database.execSQL("UPDATE history_tbl_WG SET percentage='"+  (percentage+0.5) +"' WHERE name='"+goalName+"'");
-    System.out.println("Name of the goal from function: " + goalName);
-}
-*/
     public void display1(View v){
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
@@ -227,7 +175,7 @@ private void saveDatabase(String portion) {
 
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                             System.out.println("difference in days in if: " + differenceInDays());
-                            goalList.add(dateTime+ " " +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" + " || Steps Walked: " + stepsDid);
+                            goalList.add(dateTime+ "\n" +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" +" ||" +"\n" +"Steps Walked: " + stepsDid);
 
                         } else {
                             //nothing
@@ -302,82 +250,6 @@ private void saveDatabase(String portion) {
         return days;
     }
 
-    public void storeActiveGoal(){
-        String name="";
-        Integer steps=0;
-        Integer stepsDid=0;
-        Float percentage=0f;
-        String dateSearch="";
-        Integer activeNumber=0;
-        SQLiteDatabase databasehelp = null;
-        //here i store the active goal that i want to transfer
-        //The database is open!
-        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHelpdb.db");
-        database = dbOpenHelper.openDataBase();
-
-        Cursor cursor = database.rawQuery("select * from time_tbl_WG where active='"+1+"'", null);
-        cursor.moveToFirst();
-        if (!cursor.isAfterLast()) {
-
-            do {
-                System.out.println("Collect the data from the active goal");
-                name = cursor.getString(cursor.getColumnIndex("name"));
-                steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
-                percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
-                dateSearch = cursor.getString(cursor.getColumnIndex("date"));
-                activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
-
-                if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
-                    exists=1;
-                }else{
-                    exists=0;
-                }
-                System.out.println("To exists einai: " +exists);
-            //edw htan prin
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        //open the database
-        ExternalDbOpenHelper dbOpenHelper1 = new ExternalDbOpenHelper(this, DB_NAME);
-        databasehelp = dbOpenHelper1.openDataBase();
-        //here test mode again
-        System.out.println("einai to test mode: " +numberTM);
-        System.out.println(dateSearch);
-        System.out.println(dateTM);
-        if(numberTM==1 && dateSearch.equals(dateTM)){
-            System.out.println(name);
-            if(name.equals(checkIsTheSame()) && exists!=0){
-                System.out.println("Exists in the history table");
-                databasehelp.execSQL("UPDATE history_tbl_WG SET allsteps='"+steps+"' WHERE name='"+name+"'");
-                databasehelp.execSQL("UPDATE history_tbl_WG SET didsteps='"+stepsDid+"' WHERE name='"+name+"'");
-                databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
-            }else{
-                System.out.println("insert apo to test mode mias kai den exist");
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','" + dateTM + "')");
-            }
-
-        }
-
-
-            if(numberTM==0 && exists==0) {
-                if ((dateSearch.compareTo(curDateHistory) < 0) && dateSearch != null && dateSearch != "") {
-                    System.out.println("palia: " + dateSearch);
-                    System.out.println("Nea: " + curDateHistory);
-                    databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage + "','" + activeNumber + "','" + dateSearch + "')");
-                    System.out.println("insert the data to history");
-                } else {
-                    System.out.println("Date has not changed! Nothing is inserted!");
-                }
-
-            }
-
-
-        //close the databases
-        database.close();
-        databasehelp.close();
-    }
 
     public boolean checkIfTableIsEmpty() {
         boolean flag=false;
@@ -457,11 +329,6 @@ private void saveDatabase(String portion) {
             do {
                 // System.out.println("Retrieve data now");
                 name = cursor.getString(cursor.getColumnIndex("name"));
-                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
-                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
-                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
-
 
             } while (cursor.moveToNext());
         }
@@ -485,11 +352,6 @@ private void saveDatabase(String portion) {
             do {
                 // System.out.println("Retrieve data now");
                 date = cursor.getString(cursor.getColumnIndex("date"));
-                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
-                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
-                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
-
 
             } while (cursor.moveToNext());
         }
@@ -542,12 +404,7 @@ private void saveDatabase(String portion) {
         }else{
             deleteTestModeGoals();
         }
-        //  cClear=true;
-      //  SharedPreferences.Editor editor = getSharedPreferences("clearSetting", MODE_PRIVATE).edit();
-        //  editor.putBoolean("returnClear", cClear);
-      //  editor.putString("returnClearDate", curDateHistory);
-      //  editor.commit();
-        //reload the activity instantly
+
         Intent intent = getIntent();
 
         //no animation

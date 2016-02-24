@@ -231,7 +231,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         database = dbOpenHelper.openDataBase();
 
         //delete the rows from history table
-        database.execSQL("delete from "+TABLE_NAME+" where date='"+previousDate+"'");
+        database.execSQL("delete from "+TABLE_NAME+" where testMode='"+2+"'");
         database.close();
         System.out.println("paei to trito");
 

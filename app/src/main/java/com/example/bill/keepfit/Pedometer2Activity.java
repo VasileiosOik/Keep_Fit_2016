@@ -425,13 +425,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         database.execSQL("UPDATE time_tbl_WG SET percentage='"+percentageSteps+"' WHERE name='"+helpName+"'");
         //refresh the active part
         database.execSQL("UPDATE time_tbl_WG SET active='"+active+"' WHERE name='"+helpName+"'");
-        /*
-        if(numberTM==1){
-            database.execSQL("UPDATE time_tbl_WG SET date='"+dateTM+"' WHERE name='"+helpName+"'");
-        }else{
-            database.execSQL("UPDATE time_tbl_WG SET date='"+curDate+"' WHERE name='"+helpName+"'");
-        }
-        */
+
         database.close();
     }
 
@@ -533,13 +527,6 @@ public class Pedometer2Activity extends AppCompatActivity {
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
-            //    if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
-             //       exists=1;
-             //   }else{
-                  //  exists=0;
-           //     }
-             //   System.out.println("To exists einai: " +exists);
-
 
             } while (cursor.moveToNext());
         }
@@ -553,26 +540,6 @@ public class Pedometer2Activity extends AppCompatActivity {
         System.out.println("einai to test mode: " +numberTM);
         System.out.println(dateSearch);
         System.out.println(dateTM);
-
-       // Cursor cursor1 = databasehelp.rawQuery("select * from history_tbl_WG where active='"+1+"'", null);
-       // cursor1.moveToFirst();
-     //   if (!cursor1.isAfterLast()) {
-
-        //    do {
-            //    System.out.println("Collect the data from the active goal");
-          //      name = cursor1.getString(cursor1.getColumnIndex("name"));
-          //      steps = cursor1.getInt(cursor1.getColumnIndex("allsteps"));
-          //      stepsDid = cursor1.getInt(cursor1.getColumnIndex("didsteps"));
-          //      percentage = cursor1.getFloat(cursor1.getColumnIndex("percentage"));
-          //      dateSearch = cursor1.getString(cursor1.getColumnIndex("date"));
-          //      activeNumber=cursor1.getInt(cursor1.getColumnIndex("active"));
-                //    if(name.equals(checkIsTheSame()) && dateSearch.equals(checkIsTheDate())){
-                //       exists=1;
-                //   }else{
-                //  exists=0;
-                //     }
-                //   System.out.println("To exists einai: " +exists);
-
 
 
         if(numberTM==1 && dateSearch.equals(dateTM)){
@@ -614,11 +581,7 @@ public class Pedometer2Activity extends AppCompatActivity {
                 System.out.println("insert apo to test mode mias kai den exist");
                 databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
             }
-              //  databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage + "','" + activeNumber + "','" + dateSearch + "')");
-             //   System.out.println("insert the data to history");
-           // } else {
-             //   System.out.println("Date has not changed! Nothing is inserted!");
-           // }
+
 
         }
           //  } while (cursor1.moveToNext());
@@ -688,11 +651,6 @@ public class Pedometer2Activity extends AppCompatActivity {
             do {
                 // System.out.println("Retrieve data now");
                 date = cursor.getString(cursor.getColumnIndex("date"));
-                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
-                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
-                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
-
 
             } while (cursor.moveToNext());
         }
@@ -719,10 +677,6 @@ public class Pedometer2Activity extends AppCompatActivity {
             do {
                 // System.out.println("Retrieve data now");
                 name = cursor.getString(cursor.getColumnIndex("name"));
-                //Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                //Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
-                //Integer percentage = cursor.getInt(cursor.getColumnIndex("percentage"));
-                //dateTime = cursor.getString(cursor.getColumnIndex("date"));
 
 
             } while (cursor.moveToNext());
