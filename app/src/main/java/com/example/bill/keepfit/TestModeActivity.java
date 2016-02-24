@@ -59,10 +59,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 et.setVisibility(View.VISIBLE);
                 myBoolean=true;
             } else {
-                previousDate=et.getText().toString().trim();
+                    previousDate=et.getText().toString().trim();
                     myBoolean=false;
                     tv.setVisibility(View.GONE);
-                    et.setText("");
+                   // et.setText("");
                     et.setVisibility(View.GONE);
 
             }
@@ -86,7 +86,8 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         // Take appropriate action for each action item click
         switch (item.getItemId()) {
             case R.id.save:
-              //  System.out.println(et.getText().toString());
+                System.out.println(previousDate);
+                System.out.println(myBoolean);
                 if(et.getText().toString().trim().equals("")) {
                     if (myCheckBox.isChecked() == true && et.getText().toString().trim().equals("")) {
                         Toast.makeText(TestModeActivity.this, "Enter a Date to continue", Toast.LENGTH_LONG).show();
@@ -97,9 +98,9 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
                 }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
                     Toast.makeText(TestModeActivity.this, "A date cannot contain any of these: -,*", Toast.LENGTH_LONG).show();
-                }//else if(myCheckBox.isChecked() == false && !previousDate.equals("")){
-                   // openAlert();
-               // }
+                }else if(myBoolean == false && !previousDate.equals("")){
+                    openAlert();
+                }
                 else{
                     storeTheDate();
                     finish();
@@ -165,6 +166,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         if(activeTestMode==0){
             System.out.println("Diegrapse ton goal apo to history");
             destroyTestModeGoals();
+            et.setText("");
         }else{
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
             SharedPreferences.Editor prefsEditor = myPrefs.edit();
@@ -267,10 +269,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TestModeActivity.this);
 
         // Setting Dialog Title
-        alertDialog.setTitle("Confirm of ErasingTest Mode data...");
+        alertDialog.setTitle("Confirm of Erasing Test Mode data");
 
         // Setting Dialog Message
-        alertDialog.setMessage("Are you sure you want uncheck this?");
+        alertDialog.setMessage("Are you sure you want to exit?");
 
 
         // Setting Positive "Yes" Button

@@ -132,34 +132,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID save_button was selected
-            case R.id.delete_btn:
-                AlertDialog diaBox = AskOption();
-                diaBox.show();
-                //Toast.makeText(this, "Delete selected", Toast.LENGTH_SHORT)
-                //.show();
-                break;
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                break;
-        }
-
-        return true;
-    }
-    */
     @Override
     public void onBackPressed() {
         DeleteActivity.this.finish();

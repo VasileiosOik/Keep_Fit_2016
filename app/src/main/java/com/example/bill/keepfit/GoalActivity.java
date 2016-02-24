@@ -54,9 +54,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         et2 = (EditText) findViewById(R.id.editsteps);
         //create database if not already exist
 
-//        //The database is open!
-//        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-//        db = dbOpenHelper.openDataBase();
 
         /*
         db = openOrCreateDatabase("Mydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
@@ -169,45 +166,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.save_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID save_button was selected
-            case R.id.save:
-                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
-                    Toast.makeText(GoalActivity.this, "You haven't specified a goal",
-                            Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().equals("0")){
-                    Toast.makeText(GoalActivity.this, "Wrong name",
-                            Toast.LENGTH_LONG).show();
-                }
-                else if (nameChecked().equals(et1.getText().toString().trim())) {
-                    Toast.makeText(GoalActivity.this, "Name already exists",
-                            Toast.LENGTH_LONG).show();
-                }
-                else {
-                    insert();
-                }
-
-                break;
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                break;
-        }
-
-        return true;
-    }
-*/
 
 
     public String nameChecked(){
