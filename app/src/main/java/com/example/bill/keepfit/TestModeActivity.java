@@ -109,10 +109,11 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             case android.R.id.home:
                 if(myBoolean==true && et.getText().toString().trim().equals(""))
                 {
+                    myCheckBox.setChecked(false);
                     onBackPressed();
                 }else if(myBoolean==true && !et.getText().toString().trim().equals("")){
                     onBackPressed();
-                }else if(myBoolean==false && previousDate!=null ){
+                }else if(myBoolean==false && previousDate!=null && !previousDate.equals("") ){
                     Toast.makeText(TestModeActivity.this, "Press save to exit", Toast.LENGTH_LONG).show();
                 }else{
                     onBackPressed();

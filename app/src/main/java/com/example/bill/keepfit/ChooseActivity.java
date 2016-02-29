@@ -159,6 +159,7 @@ public class ChooseActivity extends AppCompatActivity {
         ListAdapter2 adapter = new ListAdapter2(this, goalList, checkedStatus);
         // Assign adapter to ListView
         mainListView.setAdapter(adapter);
+       // mainListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
     }
 

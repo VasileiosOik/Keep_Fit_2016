@@ -44,18 +44,19 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
     private TextView name;
     private Switch sw;
     Boolean[] checkedStatus;
-    Integer selected_position = -1;
+    private int mFieldId = 0;
 
 
 
 
-    public ListAdapter2(Context context, ArrayList<String> resource, Boolean[] checkedStatus) {
+    public ListAdapter2(Context context,ArrayList<String> resource, Boolean[] checkedStatus) {
         super(context,R.layout.toggle_button_row,resource);
         // TODO Auto-generated constructor stub
         this.context = context;
         goalList=new ArrayList<String>();
         this.goalList =resource;
         this.checkedStatus=checkedStatus;
+      //  mFieldId=textViewResourceId;
 
     }
 
