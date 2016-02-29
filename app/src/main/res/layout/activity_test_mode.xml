@@ -38,11 +38,11 @@
         android:layout_marginLeft="5dp"
         android:maxLines="1"
         android:hint="dd/mm/yyyy"
-        android:inputType="date"
         android:layout_marginTop="32dp"
         android:layout_below="@+id/toolbar_title"
         android:layout_alignParentStart="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:focusableInTouchMode="true"/>
 
     <CheckBox
         android:layout_width="wrap_content"

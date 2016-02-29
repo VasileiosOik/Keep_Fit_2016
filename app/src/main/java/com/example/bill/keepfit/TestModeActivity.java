@@ -1,5 +1,7 @@
 package com.example.bill.keepfit;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -8,18 +10,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class TestModeActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -33,6 +41,8 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     private static final String TABLE_NAME = "history_tbl_WG";
     private static final String DB_NAME = "MyHistorydb.db";
     private String previousDate;
+    int year_x, month_x,day_x;
+    final static int Dialog_ID =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +51,49 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         et = (EditText) findViewById(R.id.date);
+        //no keyboard pop up
+        et.setInputType(InputType.TYPE_NULL);
         tv = (TextView) findViewById(R.id.toolbar_title);
 
 
         myCheckBox= (CheckBox) findViewById(R.id.checkBox);
         myCheckBox.setOnCheckedChangeListener(this);
 
+        final Calendar cal= Calendar.getInstance();
+        year_x=cal.get(Calendar.YEAR);
+        month_x=cal.get(Calendar.MONTH);
+        day_x=cal.get(Calendar.DAY_OF_MONTH);
 
 
-}
+    }
+
+    protected Dialog onCreateDialog(int id){
+        if(id==Dialog_ID)
+            return new DatePickerDialog(TestModeActivity.this, dpicker, year_x,month_x,day_x);
+        return  null;
+
+    }
+
+    private DatePickerDialog.OnDateSetListener dpicker
+            =new DatePickerDialog.OnDateSetListener(){
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            year_x=year;
+            month_x=monthOfYear+1;
+            day_x=dayOfMonth;
+            updateDate();
+        }
+
+    };
+
+    private void updateDate() {
+
+        String myFormat = "dd/MM/yy"; //In which you need put here
+        et.setText(day_x+"/"+month_x+"/"+year_x);
+
+    }
+
     // / Listen Check box status change event and perform action accordingly
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -57,7 +101,20 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             if (isChecked) {
                 tv.setVisibility(View.VISIBLE);
                 et.setVisibility(View.VISIBLE);
+                et.setFocusable(true);
+                et.setFocusableInTouchMode(true);
+                et.requestFocus();
                 myBoolean=true;
+                //here i press the edittext and the date picker option pops up
+                et.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        showDialog(Dialog_ID);
+                    }
+
+                });
+
             } else {
                     previousDate=et.getText().toString().trim();
                     myBoolean=false;
@@ -74,6 +131,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
+
 
         return super.onCreateOptionsMenu(menu);
     }
