@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -43,6 +44,7 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
     private ViewHolder holder;
     private TextView name;
     private Switch sw;
+    private RadioButton rb;
     Boolean[] checkedStatus;
     private int mFieldId = 0;
 
@@ -69,6 +71,7 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
         v1=convertView;
         TextView name = (TextView) v1.findViewById(R.id.textview1);
         name.setText(goalList.get(position).toString());
+        //switches
         sw= (Switch) v1.findViewById(R.id.switch1);
         sw.setTag(position);
         sw.setOnCheckedChangeListener(ListAdapter2.this);
