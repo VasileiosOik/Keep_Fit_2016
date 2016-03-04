@@ -36,11 +36,13 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     private Boolean statusChecked;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editdelete);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         //initialize the toolbar
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -258,9 +260,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         if(!cursor.isAfterLast()) {
             do {
                 String name=cursor.getString(cursor.getColumnIndex("name"));
+                String unit=cursor.getString(cursor.getColumnIndex("unit"));
                 Integer steps=Integer.parseInt(cursor.getString(1));
 
-                goalList.add("Name: "+name+" || Steps: "+steps);
+                goalList.add("Name: "+name+" || " +unit+": "+steps);
 
 
             } while (cursor.moveToNext());

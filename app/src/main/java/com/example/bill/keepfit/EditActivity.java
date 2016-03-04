@@ -1,6 +1,7 @@
 package com.example.bill.keepfit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
@@ -19,14 +21,17 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private String helpName;
     private EditText et1;
     private EditText et2;
+    private TextView tv;
     private String regex = "[0-9]+";
     private String nameCh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         //retract the incoming intent
         Intent intent = getIntent();
@@ -47,6 +52,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         et1.setText(helpName);
         et2=(EditText) findViewById(R.id.editsteps);
         et2.setText(String.valueOf(helpInt));
+        tv=(TextView) findViewById(R.id.Number_of_steps);
+        tv.setText("New Number of " +unitReturn());
 
     }
 
@@ -207,6 +214,28 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         cursor.close();
         database.close();
         return nameCh;
+    }
+
+    public String unitReturn() {
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "Mydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        //put cursor
+        Cursor cursor = database.rawQuery("select unit from tbl_WG WHERE name='" + helpName + "'", null);
+        cursor.moveToFirst();
+        String unit = null;
+        if (!cursor.isAfterLast()) {
+            do {
+
+                unit = cursor.getString(cursor.getColumnIndex("unit"));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+
+        return unit;
     }
 
 }

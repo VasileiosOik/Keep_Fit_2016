@@ -50,7 +50,7 @@
             android:layout_marginTop="30dp"
             android:text="New Number of Steps"
             android:layout_marginLeft="90dp"
-            android:id="@+id/Number_of_steprs"
+            android:id="@+id/Number_of_steps"
             android:textSize="20sp"
             />
 

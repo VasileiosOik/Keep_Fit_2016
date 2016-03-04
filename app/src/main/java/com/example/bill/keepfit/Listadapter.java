@@ -72,4 +72,9 @@ public View getView(final int position, View convertView, ViewGroup parent) {
 
 
         }
+
+        public int getCount() {
+                // TODO Auto-generated method stub
+                return goalList.size();
+        }
 }

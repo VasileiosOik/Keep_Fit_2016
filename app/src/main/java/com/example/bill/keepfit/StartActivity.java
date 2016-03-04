@@ -61,6 +61,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private TextView textTestMode;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         //initialize the text view
         textTestMode =(TextView) findViewById(R.id.textActivity2);
@@ -211,6 +214,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 "CREATE TABLE IF NOT EXISTS tbl_WG ("
                         + "name VARCHAR PRIMARY KEY ,"
                         + "steps INTEGER, "
+                        + "unit STRING, "
                         + "percentage FLOAT);";
         db.execSQL(CREATE_TABLE_WalkingGoals);
         db.close();
@@ -260,7 +264,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-                textActivity1.setText("Steps walked so far: " +String.valueOf(Steps_so_far));
+                textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(Steps_so_far));
             }
 
             @Override
@@ -395,8 +399,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             if (prefName != null) {
                 steps_count = (Float.parseFloat(prefName)) / 2;
                 Steps_so_far= (int) prefNameSteps;
-                System.out.println("The percentage: " + steps_count);
-                System.out.println("The steps have walked so far: " +  Steps_so_far);
+                System.out.println("The percentage is: " + steps_count);
+                System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
               //  saveDatabase();
             }
 
@@ -415,6 +419,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "name VARCHAR  ,"
                         + "allsteps INTEGER, "
                         + "didsteps INTEGER, "
+                        + "unit STRING, "
                         + "percentage FLOAT, "
                         + "active INTEGER,"
                         + "date STRING);";
@@ -435,6 +440,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "name VARCHAR  ,"
                         + "allsteps INTEGER, "
                         + "didsteps INTEGER, "
+                        + "unit STRING, "
                         + "percentage FLOAT, "
                         + "active INTEGER,"
                         + "testMode INTEGER,"
@@ -496,6 +502,28 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public String unitReturn() {
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "Mydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        //put cursor
+        Cursor cursor = database.rawQuery("select unit from tbl_WG WHERE name='" + goalName + "'", null);
+        cursor.moveToFirst();
+        String unit = null;
+        if (!cursor.isAfterLast()) {
+            do {
+
+                unit = cursor.getString(cursor.getColumnIndex("unit"));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+
+        return unit;
     }
 
 }

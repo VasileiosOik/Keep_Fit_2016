@@ -156,8 +156,11 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
                 }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
                     Toast.makeText(TestModeActivity.this, "A date cannot contain any of these: -,*", Toast.LENGTH_LONG).show();
-                }else if(myBoolean == false && !previousDate.equals("")){
+                }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==true){
                     openAlert();
+                }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==false){
+                    System.out.println("DEN UPARXEI TPT");
+                    finish();
                 }
                 else{
                     storeTheDate();
@@ -170,6 +173,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                     myCheckBox.setChecked(false);
                     onBackPressed();
                 }else if(myBoolean==true && !et.getText().toString().trim().equals("")){
+                    myCheckBox.setChecked(false);
                     onBackPressed();
                 }else if(myBoolean==false && previousDate!=null && !previousDate.equals("") ){
                     Toast.makeText(TestModeActivity.this, "Press save to exit", Toast.LENGTH_LONG).show();
@@ -358,6 +362,37 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         // Showing Alert Message
         alertDialog.show();
 
+    }
+
+    public boolean checkIfTableIsEmpty() {
+        boolean flag=false;
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        String count = "SELECT COUNT(*) FROM history_tbl_WG WHERE testMode='"+2+"'";
+
+        Cursor mcursor = database.rawQuery(count, null);
+        mcursor.getCount();
+
+
+        if(mcursor != null){
+            mcursor.moveToFirst();
+
+            String countName=mcursor.getString(0);
+            if(!countName.equals("0")){
+                flag=true;
+            } else {
+                flag=false;
+            }
+
+        } else {
+            flag=false;
+        }
+
+        System.out.println(flag);
+        mcursor.close();
+        database.close();
+        return flag;
     }
 
 

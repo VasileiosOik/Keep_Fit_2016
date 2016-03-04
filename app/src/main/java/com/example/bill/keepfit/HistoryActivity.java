@@ -42,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String  clearDate="";
     private Boolean clearMode=false;
     private boolean keepValue=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         //make visible the back button in the action bar <-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         //return the data from the pedometer activity (last goal is active there)
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
@@ -161,6 +164,7 @@ public class HistoryActivity extends AppCompatActivity {
                     String name = cursor.getString(cursor.getColumnIndex("name"));
                     Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                     Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                    String unit=cursor.getString(cursor.getColumnIndex("unit"));
                     Float percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                     Integer modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
                    // System.out.println("Percentage is: "+percentage);
@@ -169,13 +173,13 @@ public class HistoryActivity extends AppCompatActivity {
                     //hereeeeeeee test mode again
                     if(numberTM==1  && modeTest==2){ //&& dateTime.equals(dateTM)){
                         System.out.println("here in test mode");
-                        goalList.add(dateTime+ "\n" +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +"Steps Walked: " + stepsDid);
+                        goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unit+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unit+" Walked: " + stepsDid);
 
                     }
 
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                             System.out.println("difference in days in if: " + differenceInDays());
-                            goalList.add(dateTime+ "\n" +"Name: " + name + " || Steps: " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%" +" ||" +"\n" +"Steps Walked: " + stepsDid);
+                            goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + stepsDid);
 
                         } else {
                             //nothing
@@ -286,6 +290,7 @@ public class HistoryActivity extends AppCompatActivity {
         String name = "";
         Integer steps = 0;
         Integer stepsDid = 0;
+        String unit="";
         Float percentage = 0f;
         String dateSearch = "";
         Integer activeNumber = 0;
@@ -304,10 +309,11 @@ public class HistoryActivity extends AppCompatActivity {
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                 stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                unit=cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber = cursor.getInt(cursor.getColumnIndex("active"));
-                System.out.println(name +" " +steps +" " +stepsDid +" " +percentage + " " +dateSearch +" " +activeNumber);
+                System.out.println(name +" " +steps +" " +stepsDid +" "+unit+" " +percentage + " " +dateSearch +" " +activeNumber);
 
             } while (cursor.moveToNext());
         }
@@ -424,5 +430,27 @@ public class HistoryActivity extends AppCompatActivity {
 
         database.close();
 
+    }
+
+    public String unitReturn() {
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
+        database = dbOpenHelper.openDataBase();
+
+        //put cursor
+        Cursor cursor = database.rawQuery("select unit from history_tbl_WG where name='" +goalName+ "'", null);
+        cursor.moveToFirst();
+        String unit = null;
+        if (!cursor.isAfterLast()) {
+            do {
+
+                unit = cursor.getString(cursor.getColumnIndex("unit"));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+
+        return unit;
     }
     }

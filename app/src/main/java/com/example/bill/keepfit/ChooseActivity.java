@@ -35,6 +35,7 @@ public class ChooseActivity extends AppCompatActivity {
     public boolean[] status;
     private Boolean[] checkedStatus;
 
+
     public ChooseActivity() {
     }
 
@@ -45,6 +46,7 @@ public class ChooseActivity extends AppCompatActivity {
 
         //for the back button in the menu
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //initialize the list view
         mainListView = (ListView) findViewById( R.id.goal_list1 );
         mainListView.setChoiceMode(mainListView.CHOICE_MODE_SINGLE);
@@ -124,9 +126,10 @@ public class ChooseActivity extends AppCompatActivity {
         if(!cursor.isAfterLast()) {
             do {
                 String name=cursor.getString(cursor.getColumnIndex("name"));
+                String unit=cursor.getString(cursor.getColumnIndex("unit"));
                 Integer steps=Integer.parseInt(cursor.getString(1));
 
-                goalList.add("Name: "+name+" || Steps: "+steps);
+                goalList.add("Name: "+name+" || " +unit+": "+steps);
 
 
             } while (cursor.moveToNext());

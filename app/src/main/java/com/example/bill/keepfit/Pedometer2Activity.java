@@ -24,8 +24,6 @@ import java.util.Locale;
 
 public class Pedometer2Activity extends AppCompatActivity {
 
-    private static SensorManager mManager;
-    private static Sensor mStepCounter;
     private static long STEP_COUNT = 0;
     private EditText editText;
     private TextView mTvStep;
@@ -46,7 +44,8 @@ public class Pedometer2Activity extends AppCompatActivity {
     private String dateTM;
     private Integer numberTM;
     private Integer stepsTM;
-    private int exists=0;
+    private String unitSelect;
+    private String helpUnit;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +56,8 @@ public class Pedometer2Activity extends AppCompatActivity {
         dateTM=testModePreferences.getString("date", null);
         numberTM=testModePreferences.getInt("testM",0);
 
+
+        //print the active goal just for reference
         print();
         //retract the incoming intent
         Intent intent = getIntent();
@@ -66,6 +67,8 @@ public class Pedometer2Activity extends AppCompatActivity {
         String data[] =dataValue.split(" ");
         //store the int value that we want to edit
         helpInt=Integer.parseInt(data[data.length-1].replace("]",""));//the total steps of one specific goal
+        helpUnit=data[data.length-2].replace(":","");
+        System.out.println("Arxikh: " +helpUnit);
         //store the name of the goal that was chosen
         helpName=data[data.length-4];
 
@@ -76,15 +79,28 @@ public class Pedometer2Activity extends AppCompatActivity {
 
 
 
-        //shared preferences
+        //shared preferences for the data number to start again
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
         float prefNameSteps = myPrefs.getFloat("MyData2", 0);
-        stepsToStartAgain=(long) prefNameSteps;
+        //here i convert the units if there is a difference between them
+        if(helpUnit.equals(PreviousUnit())) {
+            System.out.println("Oi monades einai idies");
+            stepsToStartAgain = (long) prefNameSteps;
+        }else{
+            System.out.println("Oi monades den einai idies");
+            stepsToStartAgain= (long) doTheConvertion(helpUnit,prefNameSteps);
+        }
 
         //after changing from test mode to main mode you need to start from where you ve stopped before
         if(numberTM==0){
             if(stepsToStartAfterChangingTestMode()!=null) {
-                stepsToStartAgain = stepsToStartAfterChangingTestMode();
+                //here again i check the units
+                if(helpUnit.equals(PreviousUnit())) {
+                    stepsToStartAgain = stepsToStartAfterChangingTestMode();
+                }else{
+                    stepsToStartAgain= (long) doTheConvertion(helpUnit,stepsToStartAfterChangingTestMode());
+                }
+              //  stepsToStartAgain = stepsToStartAfterChangingTestMode();
             }
         }
 
@@ -125,7 +141,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
 
         //previous steps
-        mTvStep.setText("Previous Steps: " + String.valueOf(stepsToStartAgain));
+        mTvStep.setText("Previous " +helpUnit+ ": " + String.valueOf(stepsToStartAgain));
 
        //here was the current date before
 
@@ -216,13 +232,135 @@ public class Pedometer2Activity extends AppCompatActivity {
                 }
             }
                 //editText.setText("");
-                System.out.println("Current steps: " + newStepsStore);
-                System.out.println("Total Goal steps are: " + helpInt);
+
+                newStepsStore=convertToDifferentUnit();
+                System.out.println("Current " +unitReturn()+": " + newStepsStore);
+                System.out.println("Total Goal is: " + helpInt);
 
             }
         });
 
 
+    }
+
+    private long doTheConvertion(String unit, float prefNameSteps) {
+        long numberToReturn=0;
+        System.out.println("EINAI H TIMH " +prefNameSteps);
+            if (unit.equals("Yards")) {
+                if (unitReturn().equals("Yards")) {
+                    numberToReturn = (long) prefNameSteps;
+
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (long) (prefNameSteps * (1.0936133));
+
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (long) (prefNameSteps * (1760 ));
+
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (long) (prefNameSteps * (1093));
+
+                } else {
+                    numberToReturn = (long) (prefNameSteps * (0.8333333333333334));
+
+                }
+            } else if (unit.equals("Meters")) {
+
+                if (unitReturn().equals("Meters")) {
+                    numberToReturn = (long) prefNameSteps;
+
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (long) (prefNameSteps * (0.9144));
+
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (long) (prefNameSteps * (1609));
+
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (long) (prefNameSteps * (1000));
+
+                } else {
+                    numberToReturn = (long) (prefNameSteps * (0.762));
+
+                }
+            } else if (unit.equals("Miles")) {
+                if (unitReturn().equals("Miles")) {
+                    numberToReturn = (long) prefNameSteps;
+
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (long) (prefNameSteps * (0.000568181818));
+
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (long) (prefNameSteps * (0.000621371192));
+
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (long) (prefNameSteps * (0.621371192));
+
+                } else {
+                    numberToReturn = (long) (prefNameSteps * (0.0004734848484848485));
+
+                }
+            } else if (unit.equals("Kilometres")) {
+                System.out.println("Bika kilometra");
+                if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (long) prefNameSteps;
+
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (long) (prefNameSteps * (0.0009144));
+
+                } else if (unitReturn().equals("Meters")) {
+
+                    numberToReturn = (long) (prefNameSteps * (0.001));
+
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (long) (prefNameSteps * (1.609344));
+
+                } else {
+                    numberToReturn = (long) (prefNameSteps * (0.000762));
+
+                }
+            } else if (unit.equals("Steps")) {
+                if (unitReturn().equals("Steps")) {
+                    numberToReturn = (long) prefNameSteps;
+
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (long) (prefNameSteps * (1.2));
+
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (long) (prefNameSteps * (1.31));
+
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (long) (prefNameSteps * (2112));
+
+                } else {
+                    numberToReturn = (long) (prefNameSteps * (1312));
+
+                }
+            }
+
+        return numberToReturn;
+    }
+
+    private long convertToDifferentUnit() {
+        long numberUnit=0;
+            if (helpUnit.equals("Meters")) {
+                // meters
+                newStepsStore = (long) (newStepsStore * (0.762));
+            } else if (helpUnit.equals("Yards")) {
+                // yards
+                newStepsStore = (long) (newStepsStore * (0.83333333));
+            } else if (helpUnit.equals("Kilometres")) {
+                // kilometress
+                newStepsStore = (long) (newStepsStore * (0.000762));
+            } else if (helpUnit.equals("Miles")) {
+                // miles
+                newStepsStore = (long) (newStepsStore * (0.0004734848484848485));
+            } else {
+                // steps
+                newStepsStore = newStepsStore;
+            }
+
+        numberUnit=newStepsStore;
+        System.out.println("einai oi monades: " +numberUnit);
+        return (int) numberUnit;
     }
 
     private Integer stepsToStartAfterChangingTestMode() {
@@ -257,13 +395,6 @@ public class Pedometer2Activity extends AppCompatActivity {
             newStepsStore=stepsToStartAgain+0;
         }
 
-        //split the whole string to parts
-     //   if (editText.getText().toString().trim().equals("")) {
-      //      Toast.makeText(Pedometer2Activity.this, "Insert a number", Toast.LENGTH_LONG).show();
-
-    //    }
-      //  else {
-          //  String data[] = editText.getText().toString().split(" ");
             String dataa[] = tvchoicestep.getText().toString().split(" ");
             //store the int value that we want to edit
           //  float st = Float.parseFloat(data[data.length - 1]);
@@ -303,11 +434,11 @@ public class Pedometer2Activity extends AppCompatActivity {
                     if(numberTM==1){
                         System.out.println("to test mode einai 1");
                         //fill the database with the info needed
-                        fillDatabase(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,dateTM);
+                        fillDatabase(helpName,helpInt, (int) st,unitReturn() ,Float.parseFloat(data1),activeGoal,dateTM);
                     }else{
                         System.out.println("to test mode den einai 1");
                         //fill the database with the info needed
-                        fillDatabase(helpName,helpInt, (int) st, Float.parseFloat(data1),activeGoal,curDate);
+                        fillDatabase(helpName,helpInt, (int) st,unitReturn() ,Float.parseFloat(data1),activeGoal,curDate);
                     }
 
                 }
@@ -430,7 +561,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     }
 
 
-    public void fillDatabase(String name, int allSteps, int didSteps, float percentageSteps,int active ,String curDate ){
+    public void fillDatabase(String name, int allSteps, int didSteps,String unitGoal ,float percentageSteps,int active ,String curDate ){
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
@@ -440,7 +571,7 @@ public class Pedometer2Activity extends AppCompatActivity {
       //      database.execSQL("insert into time_tbl_WG values('"+name+"','"+allSteps+"','"+didSteps+"','"+percentageSteps+"','"+active+"','"+dateTM+"')");
       //  }else{
        //     System.out.println("Eisagwgh me test mode 0");
-            database.execSQL("insert into time_tbl_WG values('"+name+"','"+allSteps+"','"+didSteps+"','"+percentageSteps+"','"+active+"','"+curDate+"')");
+            database.execSQL("insert into time_tbl_WG values('"+name+"','"+allSteps+"','"+didSteps+"','"+unitGoal+"','"+percentageSteps+"','"+active+"','"+curDate+"')");
       //  }
 
         database.close();
@@ -524,6 +655,7 @@ public class Pedometer2Activity extends AppCompatActivity {
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                 stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                unitSelect=cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber=cursor.getInt(cursor.getColumnIndex("active"));
@@ -551,11 +683,11 @@ public class Pedometer2Activity extends AppCompatActivity {
                 databasehelp.execSQL("UPDATE history_tbl_WG SET percentage='"+percentage+"' WHERE name='"+name+"'");
             }else if(!name.equals(checkIsTheSame2()) && activeNumber==1 && (checkIsTheDate().compareTo(curDate) == 0)) {
                 databasehelp.execSQL("DELETE FROM history_tbl_WG WHERE active='"+1+"' AND date='"+dateSearch+"'");
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','"+unitSelect+"','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
             }
             else{
                     System.out.println("insert apo to test mode mias kai den exist");
-                    databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
+                    databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','"+unitSelect+"','" + percentage  + "','" + activeNumber + "','"+2+"','" + dateTM + "')");
                 }
             }
 
@@ -572,14 +704,14 @@ public class Pedometer2Activity extends AppCompatActivity {
             }else if(!name.equals(checkIsTheSame2()) && activeNumber==1 && (checkIsTheDate().compareTo(curDate) == 0)) {
                 System.out.println("Date has not changed! Afairw to proigoumeno kai vazw to neo");
                 databasehelp.execSQL("DELETE FROM history_tbl_WG WHERE active='"+1+"'");
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','"+unitSelect+"','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
             }else if(activeNumber==1 && (checkIsTheDate().compareTo(curDate) < 0)){
                 System.out.println("NEW DATE NEW insert data to history");
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','"+unitSelect+"','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
             }
             else{
                 System.out.println("insert apo to test mode mias kai den exist");
-                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
+                databasehelp.execSQL("insert into history_tbl_WG values('" + name + "','" + steps + "','" + stepsDid + "','"+unitSelect+"','" + percentage  + "','" + activeNumber + "','"+0+"','" + dateSearch + "')");
             }
 
 
@@ -688,6 +820,58 @@ public class Pedometer2Activity extends AppCompatActivity {
         }
         System.out.println("checkIsTheSame2: " +name);
         return name;
+    }
+
+    public String unitReturn() {
+        String unit = "";
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "Mydb.db");
+        database = dbOpenHelper.openDataBase();
+
+            //put cursor
+            Cursor cursor = database.rawQuery("select unit from tbl_WG WHERE name='" + checkIsTheSame() + "'", null);
+            cursor.moveToFirst();
+
+            if (!cursor.isAfterLast()) {
+                do {
+
+                    unit = cursor.getString(cursor.getColumnIndex("unit"));
+
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+        database.close();
+        if(unit==null){
+            unit="";
+        }
+        System.out.println("Epistrefomeno unit: " +unit);
+        return unit;
+    }
+
+    private String PreviousUnit(){
+
+        String unitParsing="";
+        //here i extract the unit
+        //The database is open!
+        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
+        database = dbOpenHelper.openDataBase();
+
+        Cursor cursor = database.rawQuery("select unit from time_tbl_WG where active='"+1+"'", null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+
+            do {
+
+                unitParsing=cursor.getString(cursor.getColumnIndex("unit"));
+
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+
+        return unitParsing;
     }
 
 
