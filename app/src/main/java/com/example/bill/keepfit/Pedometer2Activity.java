@@ -5,22 +5,15 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class Pedometer2Activity extends AppCompatActivity {
 
@@ -88,7 +81,7 @@ public class Pedometer2Activity extends AppCompatActivity {
             stepsToStartAgain = (long) prefNameSteps;
         }else{
             System.out.println("Oi monades den einai idies");
-            stepsToStartAgain= (long) doTheConvertion(helpUnit,prefNameSteps);
+            stepsToStartAgain= (long) doTheConvertionWhenGoalsChanged(helpUnit,prefNameSteps);
         }
 
         //after changing from test mode to main mode you need to start from where you ve stopped before
@@ -98,14 +91,11 @@ public class Pedometer2Activity extends AppCompatActivity {
                 if(helpUnit.equals(PreviousUnit())) {
                     stepsToStartAgain = stepsToStartAfterChangingTestMode();
                 }else{
-                    stepsToStartAgain= (long) doTheConvertion(helpUnit,stepsToStartAfterChangingTestMode());
+                    stepsToStartAgain= (long) doTheConvertionWhenGoalsChanged(helpUnit,stepsToStartAfterChangingTestMode());
                 }
               //  stepsToStartAgain = stepsToStartAfterChangingTestMode();
             }
         }
-
-
-
 
 
         //return the current date that the goal started
@@ -114,8 +104,6 @@ public class Pedometer2Activity extends AppCompatActivity {
         }else{
             curDate=dateTM;
         }
-
-
 
 
         if(checkIsTheSame() != null && !checkIsTheSame().isEmpty() && checkIsTheSame().equals(helpName)  ) {
@@ -233,7 +221,7 @@ public class Pedometer2Activity extends AppCompatActivity {
             }
                 //editText.setText("");
 
-                newStepsStore=convertToDifferentUnit();
+                newStepsStore= convertStepsToAnotherUnit();
                 System.out.println("Current " +unitReturn()+": " + newStepsStore);
                 System.out.println("Total Goal is: " + helpInt);
 
@@ -243,7 +231,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
     }
 
-    private long doTheConvertion(String unit, float prefNameSteps) {
+    private long doTheConvertionWhenGoalsChanged(String unit, float prefNameSteps) {
         long numberToReturn=0;
         System.out.println("EINAI H TIMH " +prefNameSteps);
             if (unit.equals("Yards")) {
@@ -339,7 +327,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         return numberToReturn;
     }
 
-    private long convertToDifferentUnit() {
+    private long convertStepsToAnotherUnit() {
         long numberUnit=0;
             if (helpUnit.equals("Meters")) {
                 // meters
