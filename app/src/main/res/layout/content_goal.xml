@@ -56,12 +56,6 @@
             android:textSize="20sp"
             />
 
-        <Spinner
-            android:layout_width="144dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="90dp"/>
 
         <EditText
             android:layout_marginLeft="90dp"
@@ -70,6 +64,13 @@
             android:layout_width="137dp"
             android:inputType="number"
             android:id="@+id/editsteps" />
+
+        <Spinner
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="90dp"/>
 
 
 
