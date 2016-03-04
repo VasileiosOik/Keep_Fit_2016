@@ -505,6 +505,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     }
 
     public String unitReturn() {
+        String unit = "";
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "Mydb.db");
         database = dbOpenHelper.openDataBase();
@@ -512,7 +513,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //put cursor
         Cursor cursor = database.rawQuery("select unit from tbl_WG WHERE name='" + goalName + "'", null);
         cursor.moveToFirst();
-        String unit = null;
+
         if (!cursor.isAfterLast()) {
             do {
 

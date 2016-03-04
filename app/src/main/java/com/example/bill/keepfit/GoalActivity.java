@@ -43,7 +43,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private String regex = "[0-9]+";
     private static final String DB_NAME = "Mydb.db";
     private Spinner spinner;
-    private static final String[]paths = {"meters", "yards", "kilometres", "miles", "steps"};
+    private static final String[]paths = {"Meters", "Yards", "Kilometres", "Miles", "Steps"};
     private int positionSpinner;
     private String unit;
     private TextView tv;

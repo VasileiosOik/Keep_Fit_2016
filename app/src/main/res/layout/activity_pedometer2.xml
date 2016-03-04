@@ -36,6 +36,14 @@
         android:text=""
         android:textSize="15sp" />
 
+    <TextView
+        android:id="@+id/tv_adding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@+id/tv_current"
+        android:textSize="15sp" />
+
     <Button
         android:id="@+id/btn_start"
         android:layout_width="250dp"

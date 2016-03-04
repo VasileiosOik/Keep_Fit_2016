@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +21,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     private EditText editText;
     private TextView mTvStep;
     private TextView tvchoicestep;
+    private TextView tvAdding;
     private int helpInt;
     private String dataValue;
     private long stepsToStartAgain;
@@ -69,19 +70,21 @@ public class Pedometer2Activity extends AppCompatActivity {
         editText=(EditText) findViewById(R.id.editgoal);
         tvchoicestep=(TextView) findViewById(R.id.tv_choice_step);
         mTvStep=(TextView) findViewById(R.id.tv_current);
+        tvAdding=(TextView) findViewById(R.id.tv_adding);
 
 
 
         //shared preferences for the data number to start again
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
         float prefNameSteps = myPrefs.getFloat("MyData2", 0);
+        System.out.println("Epanekinhsh me timh: "+prefNameSteps);
         //here i convert the units if there is a difference between them
         if(helpUnit.equals(PreviousUnit())) {
             System.out.println("Oi monades einai idies");
             stepsToStartAgain = (long) prefNameSteps;
         }else{
             System.out.println("Oi monades den einai idies");
-            stepsToStartAgain= (long) doTheConvertionWhenGoalsChanged(helpUnit,prefNameSteps);
+            stepsToStartAgain= doTheConvertionWhenGoalsChanged(helpUnit,prefNameSteps);
         }
 
         //after changing from test mode to main mode you need to start from where you ve stopped before
@@ -91,7 +94,7 @@ public class Pedometer2Activity extends AppCompatActivity {
                 if(helpUnit.equals(PreviousUnit())) {
                     stepsToStartAgain = stepsToStartAfterChangingTestMode();
                 }else{
-                    stepsToStartAgain= (long) doTheConvertionWhenGoalsChanged(helpUnit,stepsToStartAfterChangingTestMode());
+                    stepsToStartAgain= doTheConvertionWhenGoalsChanged(helpUnit,stepsToStartAfterChangingTestMode());
                 }
               //  stepsToStartAgain = stepsToStartAfterChangingTestMode();
             }
@@ -130,7 +133,7 @@ public class Pedometer2Activity extends AppCompatActivity {
 
         //previous steps
         mTvStep.setText("Previous " +helpUnit+ ": " + String.valueOf(stepsToStartAgain));
-
+        tvAdding.setText("");
        //here was the current date before
 
 
@@ -163,7 +166,6 @@ public class Pedometer2Activity extends AppCompatActivity {
 
         }
 
-      //  System.out.println("I am the " + activeGoal);
 
         tvchoicestep.setText(" / " +"GOAL : " + String.valueOf(helpInt));
         findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
@@ -175,8 +177,6 @@ public class Pedometer2Activity extends AppCompatActivity {
                 } else {
 
 
-               // System.out.println("Current Steps are: " + stepsToStartAgain);
-              //  System.out.println("Total Goal steps are: " + helpInt);
                 if (stepsToStartAgain == 0) {
                     //  STEP_COUNT = 0;
                     newStepsStore = Long.parseLong(editText.getText().toString().trim());
@@ -184,6 +184,7 @@ public class Pedometer2Activity extends AppCompatActivity {
                    //     newStepsStore=helpInt;
                   //  }
                     // setStep(STEP_COUNT);
+                    newStepsStore= convertStepsToAnotherUnit();
                     System.out.println("1");
 
                 } else {
@@ -193,36 +194,25 @@ public class Pedometer2Activity extends AppCompatActivity {
                        // newStepsStore = 0;
                         //add the previous steps
                         newStepsStore = stepsToStartAgain+Long.parseLong(editText.getText().toString().trim());
+                        newStepsStore= convertStepsToAnotherUnit();
                         System.out.println("3");
-                        //   setStep(STEP_COUNT);
-
-                        //  newStepsStore=STEP_COUNT;
                     } else {
                         STEP_COUNT = stepsToStartAgain;
-                        newStepsStore = (Long.parseLong(editText.getText().toString().trim()) + STEP_COUNT);
-                        if (newStepsStore > helpInt) {
-                          //  newStepsStore = helpInt;
-                            //new
-                            System.out.println("4");
-                          //  newStepsStore=0;
-                        } else if (newStepsStore == helpInt) {
-                         //   newStepsStore = helpInt;
-                            //new
-                            System.out.println("5");
-                         //   newStepsStore=0;
-                        } else {
-                            //nothing
-                            System.out.println("6");
-                        }
-                        //   setStep(STEP_COUNT);
+                     //   newStepsStore = (Long.parseLong(editText.getText().toString().trim()) + STEP_COUNT);
+                        newStepsStore = Long.parseLong(editText.getText().toString().trim());
+                        newStepsStore= convertStepsToAnotherUnit();
+                        newStepsStore=newStepsStore+STEP_COUNT;
+                        System.out.println("4");
+                        System.out.println("Einai ta kilometres: " +newStepsStore);
                     }
 
                 }
             }
                 //editText.setText("");
 
-                newStepsStore= convertStepsToAnotherUnit();
-                System.out.println("Current " +unitReturn()+": " + newStepsStore);
+               // newStepsStore= convertStepsToAnotherUnit();
+                tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
+                System.out.println("Current " +helpUnit+": " + newStepsStore);
                 System.out.println("Total Goal is: " + helpInt);
 
             }
@@ -230,6 +220,8 @@ public class Pedometer2Activity extends AppCompatActivity {
 
 
     }
+
+
 
     private long doTheConvertionWhenGoalsChanged(String unit, float prefNameSteps) {
         long numberToReturn=0;
@@ -348,7 +340,8 @@ public class Pedometer2Activity extends AppCompatActivity {
 
         numberUnit=newStepsStore;
         System.out.println("einai oi monades: " +numberUnit);
-        return (int) numberUnit;
+        //return (int) numberUnit;
+        return numberUnit;
     }
 
     private Integer stepsToStartAfterChangingTestMode() {
@@ -386,7 +379,7 @@ public class Pedometer2Activity extends AppCompatActivity {
             String dataa[] = tvchoicestep.getText().toString().split(" ");
             //store the int value that we want to edit
           //  float st = Float.parseFloat(data[data.length - 1]);
-            st=newStepsStore;
+            st= newStepsStore;
             st1 = Float.parseFloat(dataa[dataa.length - 1]);
             //percentage of the current steps/total steps
             String data1 = String.valueOf((st / st1));
@@ -422,11 +415,11 @@ public class Pedometer2Activity extends AppCompatActivity {
                     if(numberTM==1){
                         System.out.println("to test mode einai 1");
                         //fill the database with the info needed
-                        fillDatabase(helpName,helpInt, (int) st,unitReturn() ,Float.parseFloat(data1),activeGoal,dateTM);
+                        fillDatabase(helpName,helpInt, (int) st,helpUnit ,Float.parseFloat(data1),activeGoal,dateTM);
                     }else{
                         System.out.println("to test mode den einai 1");
                         //fill the database with the info needed
-                        fillDatabase(helpName,helpInt, (int) st,unitReturn() ,Float.parseFloat(data1),activeGoal,curDate);
+                        fillDatabase(helpName,helpInt, (int) st,helpUnit ,Float.parseFloat(data1),activeGoal,curDate);
                     }
 
                 }
@@ -444,6 +437,7 @@ public class Pedometer2Activity extends AppCompatActivity {
             prefsEditor.commit();
             //clear the edit text
             editText.setText("");
+            tvAdding.setText("");
             //here i store to history table
             storeActiveGoal();
 
@@ -563,8 +557,6 @@ public class Pedometer2Activity extends AppCompatActivity {
       //  }
 
         database.close();
-        //display Toast
-      //  Toast.makeText(this, "Stored successfully in table2!", Toast.LENGTH_LONG).show();
     }
 
     public String getCurrentDate(){
@@ -625,7 +617,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         String name="";
         Integer steps=0;
         Integer stepsDid=0;
-        Float percentage=0f;
+        float percentage=0f;
         String dateSearch="";
         Integer activeNumber=0;
         SQLiteDatabase databasehelp;
@@ -728,7 +720,8 @@ public class Pedometer2Activity extends AppCompatActivity {
         String name = "";
         Integer steps = 0;
         Integer stepsDid = 0;
-        Float percentage = 0f;
+        String unit="";
+        float percentage = 0f;
         String dateSearch = "";
         Integer activeNumber = 0;
         SQLiteDatabase databasehelp;
@@ -746,10 +739,11 @@ public class Pedometer2Activity extends AppCompatActivity {
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                 stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                unit=cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
                 activeNumber = cursor.getInt(cursor.getColumnIndex("active"));
-                System.out.println(name +" " +steps +" " +stepsDid +" " +percentage + " " +dateSearch +" " +activeNumber);
+                System.out.println(name +" " +steps +" " +stepsDid +" "+ unit+ " " +percentage + " " +dateSearch +" " +activeNumber);
 
             } while (cursor.moveToNext());
         }
@@ -840,7 +834,7 @@ public class Pedometer2Activity extends AppCompatActivity {
     private String PreviousUnit(){
 
         String unitParsing="";
-        //here i extract the unit
+        //here i extract the previous active unit
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
@@ -858,7 +852,7 @@ public class Pedometer2Activity extends AppCompatActivity {
         }
         cursor.close();
         database.close();
-
+        System.out.println("Einai h proigoumenh monada: " +unitParsing);
         return unitParsing;
     }
 
