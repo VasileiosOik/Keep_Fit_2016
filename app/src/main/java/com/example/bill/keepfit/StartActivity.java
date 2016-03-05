@@ -33,6 +33,7 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -50,15 +51,18 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private DecoView mDecoView;
     private final float mSeriesMax = 50f;
     private float steps_count = 0f;
-    private int Steps_so_far=0;
+    private Double Steps_so_far=0.0;
+   // private int Steps_so_far=0;
     private String prefName;
-    private float prefNameSteps;
+    private Double prefNameSteps;
+  //  private float prefNameSteps;
     private String goalName;
     private ArrayList<String>  goalList1;
     private SQLiteDatabase db;
     private String dateTM;
     private Integer numberTM;
     private TextView textTestMode;
+    private static DecimalFormat df2 = new DecimalFormat(".##");
 
 
 
@@ -261,10 +265,16 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         final TextView textActivity1 = (TextView) findViewById(R.id.textActivity1);
 
+
         seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-                textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(Steps_so_far));
+                if(Steps_so_far==0.0){
+                    textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(0));
+                }else{
+                    textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
+                }
+               // textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
             }
 
             @Override
@@ -394,11 +404,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             // shared preferences
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
             prefName = myPrefs.getString("MyData", "0");
-            prefNameSteps = myPrefs.getFloat("MyData2", 0);
+            prefNameSteps=Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
+          //  prefNameSteps = myPrefs.getFloat("MyData2", 0);
             goalName=myPrefs.getString("MyData3", "0");
             if (prefName != null) {
                 steps_count = (Float.parseFloat(prefName)) / 2;
-                Steps_so_far= (int) prefNameSteps;
+                Steps_so_far=  prefNameSteps;
+               // Steps_so_far= (int) prefNameSteps;
                 System.out.println("The percentage is: " + steps_count);
                 System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
               //  saveDatabase();
@@ -418,7 +430,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 "CREATE TABLE IF NOT EXISTS time_tbl_WG ("
                         + "name VARCHAR  ,"
                         + "allsteps INTEGER, "
-                        + "didsteps INTEGER, "
+                        + "didsteps DOUBLE, "
                         + "unit STRING, "
                         + "percentage FLOAT, "
                         + "active INTEGER,"
@@ -439,7 +451,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 "CREATE TABLE IF NOT EXISTS history_tbl_WG ("
                         + "name VARCHAR  ,"
                         + "allsteps INTEGER, "
-                        + "didsteps INTEGER, "
+                        + "didsteps DOUBLE, "
                         + "unit STRING, "
                         + "percentage FLOAT, "
                         + "active INTEGER,"

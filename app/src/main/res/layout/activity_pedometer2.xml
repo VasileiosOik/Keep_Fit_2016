@@ -27,6 +27,7 @@
         android:text=""
         android:textSize="15sp"
         android:layout_alignTop="@+id/tv_step"
+        android:layout_marginRight="5dp"
         android:layout_alignParentEnd="true" />
 
     <TextView

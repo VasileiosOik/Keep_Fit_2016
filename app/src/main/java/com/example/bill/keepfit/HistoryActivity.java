@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class HistoryActivity extends AppCompatActivity {
     private ArrayList<String> goalList;
     private View v1;
     private String prefName;
-    private float prefNameSteps;
+    private Double prefNameSteps;
+   // private float prefNameSteps;
     private String goalName;
     private String curDateHistory;
     private String dateTime;
@@ -42,6 +44,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String  clearDate="";
     private Boolean clearMode=false;
     private boolean keepValue=false;
+    private static DecimalFormat df2 = new DecimalFormat(".##");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,8 @@ public class HistoryActivity extends AppCompatActivity {
         //return the data from the pedometer activity (last goal is active there)
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
         prefName = myPrefs.getString("MyData", "0");//percentage
-        prefNameSteps = myPrefs.getFloat("MyData2", 0);//current steps
+        prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
+       // prefNameSteps = myPrefs.getFloat("MyData2", 0);//current steps
         goalName=myPrefs.getString("MyData3", "0");//name of the current goal
 
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
@@ -163,7 +167,8 @@ public class HistoryActivity extends AppCompatActivity {
                     System.out.println("Retrieve data now and checking the date...");
                     String name = cursor.getString(cursor.getColumnIndex("name"));
                     Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                    Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                    Double stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
+                   // Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
                     String unit=cursor.getString(cursor.getColumnIndex("unit"));
                     Float percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                     Integer modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
@@ -173,13 +178,13 @@ public class HistoryActivity extends AppCompatActivity {
                     //hereeeeeeee test mode again
                     if(numberTM==1  && modeTest==2){ //&& dateTime.equals(dateTM)){
                         System.out.println("here in test mode");
-                        goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unit+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unit+" Walked: " + stepsDid);
+                        goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unit+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unit+" Walked: " + df2.format(stepsDid));
 
                     }
 
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                             System.out.println("difference in days in if: " + differenceInDays());
-                            goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + stepsDid);
+                            goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
 
                         } else {
                             //nothing
@@ -289,7 +294,8 @@ public class HistoryActivity extends AppCompatActivity {
     public void print() {
         String name = "";
         Integer steps = 0;
-        Integer stepsDid = 0;
+       // Integer stepsDid = 0;
+        Double stepsDid=0.0;
         String unit="";
         Float percentage = 0f;
         String dateSearch = "";
@@ -308,7 +314,7 @@ public class HistoryActivity extends AppCompatActivity {
                 System.out.println("Collect the data from the active goal");
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
-                stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
+                stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
                 unit=cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                 dateSearch = cursor.getString(cursor.getColumnIndex("date"));
@@ -321,51 +327,7 @@ public class HistoryActivity extends AppCompatActivity {
         database.close();
     }
 
-    public String checkIsTheSame() {
-        String name = null;
-        //The database is open!
-        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-        database = dbOpenHelper.openDataBase();
 
-        Cursor cursor = database.rawQuery("select name from history_tbl_WG where active='" + 1 + "'", null);
-        cursor.moveToFirst();
-
-        if (!cursor.isAfterLast()) {
-            // if(cursor.moveToFirst()){
-            do {
-                // System.out.println("Retrieve data now");
-                name = cursor.getString(cursor.getColumnIndex("name"));
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        database.close();
-        System.out.println("checkIsTheSame: " +name);
-        return name;
-    }
-
-    public String checkIsTheDate() {
-        String date = null;
-        //The database is open!
-        ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-        database = dbOpenHelper.openDataBase();
-
-        Cursor cursor = database.rawQuery("select date from history_tbl_WG where active='" + 1 + "'", null);
-        cursor.moveToFirst();
-
-        if (!cursor.isAfterLast()) {
-            // if(cursor.moveToFirst()){
-            do {
-                // System.out.println("Retrieve data now");
-                date = cursor.getString(cursor.getColumnIndex("date"));
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        database.close();
-        System.out.println("checkIsTheSame: " +date);
-        return date;
-    }
 
     private AlertDialog AskOption()
     {

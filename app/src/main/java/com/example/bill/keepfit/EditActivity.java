@@ -23,7 +23,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private EditText et2;
     private TextView tv;
     private String regex = "[0-9]+";
-    private String nameCh;
+    private String nameCh="";
 
 
     @Override
@@ -43,8 +43,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         //store the int value that we want to edit
         helpInt=Integer.parseInt(data[data.length-1]);
         helpName=data[data.length-4];
-        System.out.println(helpName);
-        System.out.println(helpInt);
+      //  System.out.println(helpName);
+       // System.out.println(helpInt);
 
 
         //initialize the editText
@@ -71,8 +71,15 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         //we want here to update the values with new ones given by the user
 
-        database.execSQL("UPDATE tbl_WG SET steps='"+helpSteps+"' WHERE steps='"+helpInt+"'");
-        database.execSQL("UPDATE tbl_WG SET name='"+name+"' WHERE name='"+helpName+"'");
+        database.execSQL("UPDATE tbl_WG SET steps='"+helpSteps+"' WHERE name='"+helpName+"'");
+        if(helpName.equals(name)){
+            //dont do anything
+            System.out.println("Name is the same");
+        }
+        else{
+            database.execSQL("UPDATE tbl_WG SET name='"+name+"' WHERE name='"+helpName+"'");
+        }
+
         Toast.makeText(this, "Changes applied successfully!", Toast.LENGTH_LONG).show();
         database.close();
         //to return to previous screen
@@ -97,14 +104,14 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.save:
                 System.out.println(et1.getText().toString());
-                if(et1.getText().toString().trim().equals("") || et1.getText().toString().trim().equals("")){
+                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
                     Toast.makeText(EditActivity.this, "You have to specify a value",
                             Toast.LENGTH_LONG).show();
                 }else if(et1.getText().toString().trim().equals("0")){
                     Toast.makeText(EditActivity.this, "Wrong name",
                             Toast.LENGTH_LONG).show();
                 }
-                else if((Integer.parseInt(et2.getText().toString().trim()))<=0){
+                else if((Integer.parseInt(et2.getText().toString().trim()))<=0 ){
                     Toast.makeText(EditActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
                 }else if(et2.getText().toString().trim().contains(".") || et2.getText().toString().trim().contains("-") || et2.getText().toString().trim().contains(",")){
@@ -127,14 +134,18 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                       Toast.makeText(EditActivity.this, "Name cannot contain special characters",
                             Toast.LENGTH_LONG).show();
                 }
-                else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
-                    Toast.makeText(EditActivity.this, "Name already exists",
-                            Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().matches(regex)){
+                else if (nameChecked(et1.getText().toString().trim()) != null && !nameChecked(et1.getText().toString().trim()).isEmpty() && !nameChecked(et1.getText().toString().trim()).equals(helpName)) {
+                        Toast.makeText(EditActivity.this, "Name already exists", Toast.LENGTH_LONG).show();
+                }else if(helpName.equals(et1.getText().toString().trim())){
+                    System.out.println("Bainw edw");
+                    editGoal();
+                }
+                else if(et1.getText().toString().trim().matches(regex)){
                     Toast.makeText(EditActivity.this, "Name cannot contain only numbers",
                             Toast.LENGTH_LONG).show();
                 }
                 else{
+                    System.out.println("or edw");
                     editGoal();
                 }
 
@@ -154,57 +165,29 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.check_menu, menu);
-        return true;
-    }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID save_button was selected
-            case R.id.save_btn:
-                System.out.println(et1.getText().toString());
-                if(et1.getText().toString().trim().equals("")){
-                    Toast.makeText(EditActivity.this, "You have to enter a value",
-                            Toast.LENGTH_LONG).show();
-                }
-                else{
-                    editDatabase();
-                }
-
-                break;
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                break;
-        }
-
-        return true;
-    }
-    */
     @Override
     public void onBackPressed() {
 
         EditActivity.this.finish();
     }
 
-    public String nameChecked(){
+    public String nameChecked(String name){
         //The database is open!
+        boolean isFound=false;
+        System.out.println("To name pou pernaw einai: " +name);
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
-        Cursor cursor = database.rawQuery("select name from tbl_WG where name='"+et1.getText().toString().trim()+"'", null);
+      //  Cursor cursor = database.rawQuery("select name from tbl_WG where name='"+name+"'", null);
+        Cursor cursor = database.rawQuery("select name from tbl_WG", null);
         cursor.moveToFirst();
         if(!cursor.isAfterLast()) {
             do {
                 nameCh=cursor.getString(cursor.getColumnIndex("name"));
-                System.out.println("Name is: " +nameCh);
-                if(nameCh.equals(et1.getText().toString())){
+
+                if(nameCh.equals(name)){
+                    System.out.println("to vrika sth vasi");
+                    isFound=true;
                     break;
                 }
 
@@ -213,7 +196,15 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         cursor.close();
         database.close();
-        return nameCh;
+        if(isFound==true){
+            System.out.println("To name pou epistrefw einai: " +nameCh);
+            return nameCh;
+        }else{
+            nameCh="";
+            System.out.println("To name pou epistrefw einai: " +nameCh);
+            return nameCh;
+        }
+
     }
 
     public String unitReturn() {
