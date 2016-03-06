@@ -178,13 +178,23 @@ public class HistoryActivity extends AppCompatActivity {
                     //hereeeeeeee test mode again
                     if(numberTM==1  && modeTest==2){ //&& dateTime.equals(dateTM)){
                         System.out.println("here in test mode");
-                        goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unit+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unit+" Walked: " + df2.format(stepsDid));
+                        if(unitReturn().equals("Steps")) {
+                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                        }else{
+                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
+                        }
                     }
 
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                             System.out.println("difference in days in if: " + differenceInDays());
-                            goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
+                            if(unitReturn().equals("Steps")){
+                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+
+                            }else{
+                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
+
+                            }
 
                         } else {
                             //nothing

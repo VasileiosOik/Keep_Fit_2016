@@ -1,10 +1,13 @@
 package com.example.bill.keepfit;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -63,6 +66,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private Integer numberTM;
     private TextView textTestMode;
     private static DecimalFormat df2 = new DecimalFormat(".##");
+    private static final int RESULT_SETTINGS = 1;
 
 
 
@@ -73,6 +77,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
 
@@ -263,16 +268,34 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             }
         });
 
+//        //inside circle
+//        final TextView textToGo = (TextView) findViewById(R.id.textRemaining);
+//        seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
+//            @Override
+//            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
+//                textToGo.setText(String.format("%.1d" +unitReturn()+"to goal", seriesItem.getMaxValue() - prefNameSteps));
+//
+//            }
+//
+//            @Override
+//            public void onSeriesItemDisplayProgress(float percentComplete) {
+//
+//            }
+//        });
+
         final TextView textActivity1 = (TextView) findViewById(R.id.textActivity1);
-
-
         seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 if(Steps_so_far==0.0){
                     textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(0));
                 }else{
-                    textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
+                    if(unitReturn().equals("Steps")){
+                        textActivity1.setText(unitReturn() +" walked so far: " + new Double(Steps_so_far).longValue());
+                    }else{
+                        textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
+                    }
+
                 }
                // textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
             }
@@ -512,9 +535,33 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(StartActivity.this, TestModeActivity.class);
             startActivity(i);
             return true;
+        }else if(id==R.id.menu_settings){
+            // Display the fragment as the main content.
+               Intent i = new Intent(getBaseContext(), SettingActivity.class);
+               startActivityForResult(i, RESULT_SETTINGS);
+
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        loadPref();
+
+    }
+
+    private void loadPref(){
+
+        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean my_checkbox_preference = mySharedPreferences.getBoolean("switchRef", false);
+        System.out.println("H epilogh mou einai: " +my_checkbox_preference);
+
+
+    }
+
 
     public String unitReturn() {
         String unit = "";

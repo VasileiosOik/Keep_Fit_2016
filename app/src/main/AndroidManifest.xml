@@ -42,7 +42,9 @@
         <activity android:name=".ChooseActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".Pedometer2Activity" />
-        <activity android:name=".TestModeActivity"></activity>
+        <activity android:name=".TestModeActivity" />
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".PrefsFragment"></activity>
     </application>
 
 </manifest>

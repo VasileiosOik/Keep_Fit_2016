@@ -144,8 +144,13 @@ public class PedometerActivity extends AppCompatActivity {
 
         }else
         {
+            if(helpUnit.equals("Steps")){
+                mTvStep.setText(unitReturn() +" walked : " +new Double(stepsToStartAgain).longValue());
+            }else{
+                mTvStep.setText(unitReturn() +" walked : " +String.valueOf(df2.format(stepsToStartAgain)));
+            }
             //previous steps
-            mTvStep.setText("Previous " +helpUnit+ ": " + String.valueOf(df2.format(stepsToStartAgain)));
+         //   mTvStep.setText("Previous " +helpUnit+ ": " + String.valueOf(df2.format(stepsToStartAgain)));
         }
 
         //previous steps
