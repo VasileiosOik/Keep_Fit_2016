@@ -58,6 +58,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
    // private int Steps_so_far=0;
     private String prefName;
     private Double prefNameSteps;
+    private int totalPrefSteps;
   //  private float prefNameSteps;
     private String goalName;
     private ArrayList<String>  goalList1;
@@ -77,9 +78,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
 
         //initialize the text view
         textTestMode =(TextView) findViewById(R.id.textActivity2);
@@ -181,7 +179,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
                 Intent i = new Intent(StartActivity.this, ChooseActivity.class);
                 startActivity(i);
-                //   startActivityForResult(i, 1);
+
 
             }
         });
@@ -202,14 +200,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         drawer.requestLayout();
 
 
-        //here we initialize the listview to the list in the xml file
-     //  mainListView = (ListView) findViewById( R.id.goal_list );
-     //   registerForContextMenu(mainListView);
-     //   mainListView.setChoiceMode(mainListView.CHOICE_MODE_SINGLE);
-
-        //here the list of goals is appeared in the main screen
-     //   display(v1);
-
     }
 
     private void createTableRow() {
@@ -229,13 +219,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         db.close();
      //   System.out.println("Table has created successfully!");
 
-        //delete the table
-        // db.execSQL("DROP TABLE IF EXISTS tbl_WG");
-        //  System.out.println("Table dropped!");
 
-        //create the table 2nd way
-        // db.execSQL("create table if not exists tbl_WG(name varchar primary key, steps int, percentage float)");
-        //  System.out.println("Table has created successfully!");
     }
 
     private void createBackSeries() {
@@ -258,7 +242,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 float percentFilled = ((currentPosition - seriesItem.getMinValue()) / (seriesItem.getMaxValue() - seriesItem.getMinValue()));
-               // System.out.println("here: " + percentFilled);
                 textPercentage.setText(String.format("%.0f%%", percentFilled * 100f));
             }
 
@@ -268,20 +251,30 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             }
         });
 
-//        //inside circle
-//        final TextView textToGo = (TextView) findViewById(R.id.textRemaining);
-//        seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
-//            @Override
-//            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-//                textToGo.setText(String.format("%.1d" +unitReturn()+"to goal", seriesItem.getMaxValue() - prefNameSteps));
-//
-//            }
-//
-//            @Override
-//            public void onSeriesItemDisplayProgress(float percentComplete) {
-//
-//            }
-//        });
+        //inside circle
+        final TextView textToGo = (TextView) findViewById(R.id.textRemaining);
+        seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
+            @Override
+            public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
+                Double resultRemain;
+                if(totalPrefSteps==0 && prefNameSteps==null){
+                     resultRemain=0.0;
+                }else{
+                    resultRemain=  totalPrefSteps - prefNameSteps;
+                }
+
+                if(resultRemain==0.0){
+                  //  textToGo.setText("0.0" + " " +unitReturn()+" to goal " +totalPrefSteps);
+                }else{
+                    textToGo.setText(df2.format(resultRemain)+ " " +unitReturn()+" to goal " +totalPrefSteps);
+                }
+            }
+
+            @Override
+            public void onSeriesItemDisplayProgress(float percentComplete) {
+
+            }
+        });
 
         final TextView textActivity1 = (TextView) findViewById(R.id.textActivity1);
         seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
@@ -297,7 +290,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                     }
 
                 }
-               // textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
             }
 
             @Override
@@ -428,6 +420,9 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
             prefName = myPrefs.getString("MyData", "0");
             prefNameSteps=Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
+            System.out.println("Einai ta steps pou eginan: " +prefNameSteps);
+            totalPrefSteps=  myPrefs.getInt("MyData5", 0);
+            System.out.println("Einai: " +totalPrefSteps);
           //  prefNameSteps = myPrefs.getFloat("MyData2", 0);
             goalName=myPrefs.getString("MyData3", "0");
             if (prefName != null) {
@@ -436,7 +431,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                // Steps_so_far= (int) prefNameSteps;
                 System.out.println("The percentage is: " + steps_count);
                 System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
-              //  saveDatabase();
             }
 
         }

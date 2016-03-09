@@ -36,15 +36,11 @@ import java.util.Arrays;
 /**
  * Created by Bill on 07/02/2016.
  */
-public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheckedChangeListener{//, View.OnClickListener{
+public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheckedChangeListener{
     private  ArrayList<String> goalList= null;
     private Context context;
     private View v1;
-    private SharedPreferences.Editor editor;
-    private ViewHolder holder;
-    private TextView name;
     private Switch sw;
-    private RadioButton rb;
     Boolean[] checkedStatus;
     private int mFieldId = 0;
 
@@ -76,11 +72,6 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
         sw.setTag(position);
         sw.setOnCheckedChangeListener(ListAdapter2.this);
         sw.setChecked(checkedStatus[position]);
-        //new 
-       // sw.setOnCheckedChangeListener(null);
-       // sw.setChecked(checkedStatus[position]);
-      //  sw.setOnCheckedChangeListener(ListAdapter2.this);
-
 
         return convertView;
     }
@@ -100,71 +91,19 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
         editor.putBoolean("MyGoal", isChecked);
         editor.putString("MyGoal1", goalList.get(index).toString().trim());
         editor.apply();
-
     }
 
-/*
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        // First turn off the switch of any other item that may be on
-      //  Arrays.fill(checkedStatus, false);
-
-        Integer index = (Integer) buttonView.getTag();
-        checkedStatus[index] = isChecked;
-        notifyDataSetChanged();  // don't forget to tell ListView that data is updated
-
-
-
-        String key = index.toString();
-
-        //save the data for the status
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("status", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (isChecked) {
-            editor.putInt("last_index", index);
-          //  editor.putBoolean("MyGoal", isChecked);
-        } else {
-            editor.remove("last_index");// nothing's checked, so erase pref
-          //  editor.remove("MyGoal");
-        }
-        editor.putBoolean(key, isChecked);
-        editor.putBoolean("MyGoal", isChecked);
-        editor.putString("MyGoal1", goalList.get(index).toString().trim());
-        editor.apply();
-    }
-*/
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
         return position;
     }
-/*
-    @Override
-    public void onClick(View v) {
-        for(int i=0;i<goalList.size(); i++) {
-            if (sw.isChecked()) {
-                checkedStatus[i] = true;
-              //  selected_position = pos;
-            } else {
-                checkedStatus[i] = false;
-            }
 
-        }
-    }
-*/
 
     public int getCount() {
         // TODO Auto-generated method stub
         return goalList.size();
-    }
-
-    public class ViewHolder{
-        //put all of your textviews and image views and
-        //all views here like this
-        TextView textName;
-        Switch switchButton;
     }
 
 

@@ -21,4 +21,11 @@
 
     <string name="menu_settings">Preferences</string>
 
+    <string-array name="spinner_data">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+    </string-array>
+
 </resources>

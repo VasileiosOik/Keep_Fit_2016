@@ -145,9 +145,9 @@ public class PedometerActivity extends AppCompatActivity {
         }else
         {
             if(helpUnit.equals("Steps")){
-                mTvStep.setText(unitReturn() +" walked : " +new Double(stepsToStartAgain).longValue());
+                mTvStep.setText(helpUnit +" walked : " +new Double(stepsToStartAgain).longValue());
             }else{
-                mTvStep.setText(unitReturn() +" walked : " +String.valueOf(df2.format(stepsToStartAgain)));
+                mTvStep.setText(helpUnit +" walked : " +String.valueOf(df2.format(stepsToStartAgain)));
             }
             //previous steps
          //   mTvStep.setText("Previous " +helpUnit+ ": " + String.valueOf(df2.format(stepsToStartAgain)));
@@ -234,7 +234,14 @@ public class PedometerActivity extends AppCompatActivity {
                 //editText.setText("");
 
                 // newStepsStore= convertStepsToAnotherUnit();
-                tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
+                if(editText.getText().toString().trim().equals("")){
+                    tvAdding.setText("Add Steps: " +0);
+
+                }else{
+                    tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
+
+                }
+              //  tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
                 System.out.println("Current " +helpUnit+": " + newStepsStore);
                 System.out.println("Total Goal is: " + helpInt);
 
@@ -412,6 +419,8 @@ public class PedometerActivity extends AppCompatActivity {
         prefsEditor.putString("MyData", data1);//percentage
         prefsEditor.putString("MyData2", String.valueOf(st));//current steps
         prefsEditor.putString("MyData3", helpName);//name of the current goal
+        System.out.println("EINAI TO TOTAL: "+helpInt);
+        prefsEditor.putInt("MyData5", helpInt);
         System.out.println("Steps to start again are: " +  st);
 
 

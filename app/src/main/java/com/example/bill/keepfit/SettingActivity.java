@@ -22,8 +22,6 @@ public class SettingActivity  extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         // Load the preferences from an XML resource
-      //  getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
-      //  PreferenceManager.setDefaultValues(SettingActivity.this, R.xml.preferences, false);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
 
     }

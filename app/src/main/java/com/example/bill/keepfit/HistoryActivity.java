@@ -5,16 +5,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -33,18 +41,15 @@ public class HistoryActivity extends AppCompatActivity {
     private View v1;
     private String prefName;
     private Double prefNameSteps;
-   // private float prefNameSteps;
     private String goalName;
     private String curDateHistory;
     private String dateTime;
     private String dateTM;
     private Integer numberTM;
     private int exists=0;
-    private Boolean cClear=false;
-    private String  clearDate="";
-    private Boolean clearMode=false;
-    private boolean keepValue=false;
     private static DecimalFormat df2 = new DecimalFormat(".##");
+    private MenuItem mSpinnerItem1 = null;
+    private ArrayAdapter spinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +62,11 @@ public class HistoryActivity extends AppCompatActivity {
 
 
 
+
         //return the data from the pedometer activity (last goal is active there)
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
         prefName = myPrefs.getString("MyData", "0");//percentage
-        prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
-       // prefNameSteps = myPrefs.getFloat("MyData2", 0);//current steps
+        prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));//current steps
         goalName=myPrefs.getString("MyData3", "0");//name of the current goal
 
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
@@ -87,14 +92,47 @@ public class HistoryActivity extends AppCompatActivity {
         //here the list of goals is appeared in the main screen
         display1(v1);
 
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_clear, menu);
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.history_menu, menu);
+        mSpinnerItem1 = menu.findItem( R.id.spinner1);
+        //spinner with choices
+        View view1 = mSpinnerItem1.getActionView();
+        if (view1 instanceof Spinner)
+        {
+            Spinner spinner = (Spinner) view1;
+            spinnerAdapter=ArrayAdapter.createFromResource(this, R.array.spinner_data, android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(spinnerAdapter);
+
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+
+        }
+
         return true;
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,7 +141,6 @@ public class HistoryActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //no inspection Simplifiable If Statement
         if (id == R.id.action_clear) {
 
             if(checkIfTableIsEmpty()==true) {
@@ -116,6 +153,9 @@ public class HistoryActivity extends AppCompatActivity {
         }else if(id==android.R.id.home){
             onBackPressed();
         }
+
+
+
 
 
         return super.onOptionsItemSelected(item);
@@ -140,13 +180,10 @@ public class HistoryActivity extends AppCompatActivity {
     public void display1(View v){
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-      //  System.out.println(goal_to_remember);
         if(goal_to_remember.equals("0")){
             //dont show anything
         }else {
             String data[] = goal_to_remember.split(" ");
-            //store the int value that we want to edit
-            //  helpInt=Integer.parseInt(data[data.length-1].replace("]",""));//the total steps of one specific goal
             //store the name of the goal that was chosen
             String nameOfCurrentGoal = data[data.length - 4];
             System.out.println(nameOfCurrentGoal);
@@ -157,26 +194,20 @@ public class HistoryActivity extends AppCompatActivity {
             //here i retrieve the data i want
             goalList = new ArrayList<String>();
 
-          //  Cursor cursor = database.rawQuery("select * from history_tbl_WG where name='" + nameOfCurrentGoal + "'", null);
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
-         //   System.out.println("edw");
             if (!cursor.isAfterLast()) {
-           //     System.out.println("edw1");
                 do {
                     System.out.println("Retrieve data now and checking the date...");
                     String name = cursor.getString(cursor.getColumnIndex("name"));
                     Integer steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                     Double stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
-                   // Integer stepsDid = cursor.getInt(cursor.getColumnIndex("didsteps"));
                     String unit=cursor.getString(cursor.getColumnIndex("unit"));
                     Float percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
                     Integer modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
-                   // System.out.println("Percentage is: "+percentage);
                     dateTime = cursor.getString(cursor.getColumnIndex("date"));
-                   // System.out.println("Day created was: "+dateTime);
                     //hereeeeeeee test mode again
-                    if(numberTM==1  && modeTest==2){ //&& dateTime.equals(dateTM)){
+                    if(numberTM==1  && modeTest==2){
                         System.out.println("here in test mode");
                         if(unitReturn().equals("Steps")) {
                             goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
@@ -193,7 +224,6 @@ public class HistoryActivity extends AppCompatActivity {
 
                             }else{
                                 goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
-
                             }
 
                         } else {
@@ -221,7 +251,6 @@ public class HistoryActivity extends AppCompatActivity {
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String DateToStr = format.format(curDate);
-     //   System.out.println(DateToStr);
         return DateToStr;
     }
 
@@ -233,17 +262,10 @@ public class HistoryActivity extends AppCompatActivity {
         try {
 
             Date oldDate = dateFormat.parse(dateTime);
-         //   System.out.println(oldDate);
-          //  System.out.println("Now date: " +oldDate);
+
 
             Date currentDate =  dateFormat.parse(curDateHistory);
-         //   System.out.println("Now date: " +currentDate);
 
-          //  long diff = currentDate.getTime() - oldDate.getTime();
-        //    long seconds = diff / 1000;
-        //    long minutes = seconds / 60;
-        //    long hours = minutes / 60;
-        //    days = hours / 24;
 
             if(oldDate.compareTo(currentDate)==0){
                 days=0;
@@ -251,15 +273,6 @@ public class HistoryActivity extends AppCompatActivity {
             }else{
                 days=1;
             }
-            /*
-            if (oldDate.before(currentDate)) {
-
-                Log.e("oldDate", "is previous date");
-                Log.e("Difference: ", " seconds: " + seconds + " minutes: " + minutes + " hours: " + hours + " days: " + days);
-              //  System.out.println("The days passed are: " +days);
-
-            }
-            */
 
         } catch (ParseException e) {
 
@@ -304,7 +317,6 @@ public class HistoryActivity extends AppCompatActivity {
     public void print() {
         String name = "";
         Integer steps = 0;
-       // Integer stepsDid = 0;
         Double stepsDid=0.0;
         String unit="";
         Float percentage = 0f;
@@ -375,7 +387,6 @@ public class HistoryActivity extends AppCompatActivity {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
         //clear the history
-        // database.execSQL("delete from "+ TABLE_NAME);
         if(numberTM==0) {
             database.delete(TABLE_NAME, null, null);
             database.close();
@@ -425,4 +436,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         return unit;
     }
+
+
+
     }

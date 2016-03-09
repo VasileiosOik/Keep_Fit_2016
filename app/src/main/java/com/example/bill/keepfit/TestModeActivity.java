@@ -203,10 +203,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             currentDate=et.getText().toString().trim();
             System.out.println(currentDate);
 
-          //  String data[] =currentDate.split("-");
-            //String year=data[data.length-1];
-            //String month=data[data.length-2];
-            //String day=data[data.length-3];
 
             if(myCheckBox.isChecked()==true){
                 activeTestMode=1;
@@ -325,7 +321,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         prefsEditor.putString("MyData2", String.valueOf(0));
       //  prefsEditor.putFloat("MyData2", 0f);//current steps
         prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
-        prefsEditor.putInt("MyData4", 0);
+        prefsEditor.putInt("MyData4", 0);// 0
         prefsEditor.commit();
 
     }

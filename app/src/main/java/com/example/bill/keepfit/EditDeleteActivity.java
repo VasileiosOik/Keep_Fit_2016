@@ -46,11 +46,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        //here
-        //initialize the toolbar
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
-
         //here we retrieve the state of the editable
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         my_checkbox_preference = mySharedPreferences.getBoolean("switchRef", false);
@@ -204,14 +199,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -219,10 +207,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-     //   if (id == R.id.action_settings) {
-     //       return true;
-      //  }else
          if(id==android.R.id.home){
             onBackPressed();
         }
@@ -258,10 +242,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
                 String name=cursor.getString(cursor.getColumnIndex("name"));
                 String unit=cursor.getString(cursor.getColumnIndex("unit"));
                 Integer steps=Integer.parseInt(cursor.getString(1));
-
                 goalList.add("Name: "+name+" || " +unit+": "+steps);
-
-
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -278,6 +259,4 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         startActivity(getIntent());
 
     }
-
-
 }

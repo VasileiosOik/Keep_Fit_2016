@@ -35,8 +35,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar toolbar;
     private SQLiteDatabase db;
     private EditText et1,et2;
-    private ListView mainListView ;
-    private ArrayAdapter<String> listAdapter ;
     private String nameCh;
     private float percentageSteps=0;
     private String date="0";
@@ -65,37 +63,11 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(GoalActivity.this);
 
-
-
-
-
-        //initialize a tool bar
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-      //  setSupportActionBar(toolbar);
-
-
         //initialize the edittext objects
         et1 = (EditText) findViewById(R.id.editname);
         et2 = (EditText) findViewById(R.id.editsteps);
         //create database if not already exist
 
-
-        /*
-        db = openOrCreateDatabase("Mydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
-        db.setVersion(1);
-        db.setLocale(Locale.getDefault());
-
-
-        //create new table if not already exist 1st way
-        final String CREATE_TABLE_WalkingGoals =
-                "CREATE TABLE IF NOT EXISTS tbl_WG ("
-                        + "name VARCHAR PRIMARY KEY ,"
-                        + "steps INTEGER, "
-                        + "percentage FLOAT);";
-        db.execSQL(CREATE_TABLE_WalkingGoals);
-        System.out.println("Table has created successfully!");
-
-*/
         }
 
     //In this method you handle the button events
@@ -153,9 +125,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
                 else if((Integer.parseInt(et2.getText().toString().trim()))<=0){
                     Toast.makeText(GoalActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
-                }else if(et2.getText().toString().trim().contains(".") || et2.getText().toString().trim().contains("-") || et2.getText().toString().trim().contains(",")){
-                    Toast.makeText(GoalActivity.this, "Steps must contain only numbers",
-                            Toast.LENGTH_LONG).show();
                 }else if ( et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
                         || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
                         || et1.getText().toString().trim().contains("%") ||  et1.getText().toString().trim().contains("^")
@@ -176,7 +145,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
                 else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
                     Toast.makeText(GoalActivity.this, "Name already exists",
                             Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().matches(regex)){//(et1.getText().toString().trim().matches(".*\\d.*")){
+                }else if(et1.getText().toString().trim().matches(regex)){
                     Toast.makeText(GoalActivity.this, "Name cannot contain only numbers",
                             Toast.LENGTH_LONG).show();
                 }
@@ -208,8 +177,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
                 if(nameCh.equals(et1.getText().toString())){
                     break;
                 }
-
-
             } while (cursor.moveToNext());
         }
         cursor.close();

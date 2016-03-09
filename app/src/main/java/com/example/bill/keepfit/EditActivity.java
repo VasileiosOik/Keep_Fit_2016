@@ -43,8 +43,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         //store the int value that we want to edit
         helpInt=Integer.parseInt(data[data.length-1]);
         helpName=data[data.length-4];
-      //  System.out.println(helpName);
-       // System.out.println(helpInt);
+
 
 
         //initialize the editText
@@ -114,9 +113,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 else if((Integer.parseInt(et2.getText().toString().trim()))<=0 ){
                     Toast.makeText(EditActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
-                }else if(et2.getText().toString().trim().contains(".") || et2.getText().toString().trim().contains("-") || et2.getText().toString().trim().contains(",")){
-                    Toast.makeText(EditActivity.this, "Steps must contain only numbers",
-                            Toast.LENGTH_LONG).show();
                 }else if ( et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
                     || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
                     || et1.getText().toString().trim().contains("%") ||  et1.getText().toString().trim().contains("^")
@@ -145,10 +141,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.LENGTH_LONG).show();
                 }
                 else{
-                    System.out.println("or edw");
                     editGoal();
                 }
-
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -178,7 +172,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("To name pou pernaw einai: " +name);
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
-      //  Cursor cursor = database.rawQuery("select name from tbl_WG where name='"+name+"'", null);
         Cursor cursor = database.rawQuery("select name from tbl_WG", null);
         cursor.moveToFirst();
         if(!cursor.isAfterLast()) {
@@ -218,9 +211,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         String unit = null;
         if (!cursor.isAfterLast()) {
             do {
-
                 unit = cursor.getString(cursor.getColumnIndex("unit"));
-
             } while (cursor.moveToNext());
         }
         cursor.close();
