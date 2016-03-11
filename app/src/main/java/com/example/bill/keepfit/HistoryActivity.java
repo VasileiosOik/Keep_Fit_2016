@@ -889,9 +889,9 @@ public class HistoryActivity extends AppCompatActivity {
                     //hereeeeeeee test mode again
                     if(numberTM==1  && modeTest==2){
                         System.out.println("here in test mode");
-                        if(unitReturn().equals("Steps")) {
-                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
-                        }else{
+                     //   if(unitReturn().equals("Steps")) {
+                     //       goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                     //   }else{
                             if(unitForMenu==1){
                                 if(unit.equals("Yards")){
                                     System.out.println("BIKA1");
@@ -934,7 +934,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 }else{
                                     System.out.println("BIKA5");
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+
                                 }
 
                             }else if(unitForMenu==3){
@@ -958,7 +959,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 }else{
                                     System.out.println("BIKA5");
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+
                                 }
 
                             }else if(unitForMenu==4){
@@ -1016,15 +1018,15 @@ public class HistoryActivity extends AppCompatActivity {
                             }
                           //  goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
-                        }
+                    //    }
                     }
 
                     if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0) {
                         System.out.println("difference in days in if: " + differenceInDays());
-                        if(unitReturn().equals("Steps")){
-                            goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                    //    if(unitReturn().equals("Steps")){
+                    //        goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
 
-                        }else{
+                    //    }else{
                             if(unitForMenu==1){
                                 if(unit.equals("Yards")){
                                     System.out.println("BIKA1");
@@ -1067,7 +1069,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 }else{
                                     System.out.println("BIKA5");
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+
                                 }
 
                             }else if(unitForMenu==3){
@@ -1091,7 +1094,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 }else{
                                     System.out.println("BIKA5");
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+
                                 }
 
                             }else if(unitForMenu==4){
@@ -1146,7 +1150,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                                 }
 
-                            }
+                        //    }
                            // goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
                         }
 
