@@ -21,7 +21,6 @@
             android:layout_gravity="center"
             android:id="@+id/toolbar_title" />
 
-
     </android.support.design.widget.AppBarLayout>
 
 
@@ -35,27 +34,43 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".HistoryActivity">
 
+
+        <Spinner
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner2" />
+        <Spinner
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner1"
+            android:layout_alignEnd="@+id/scrollView1" />
+
+
+
         <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="45dp">
 
-            android:layout_alignParentTop="true">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
+
                 <ListView android:id="@+id/goal_list"
                     android:layout_width="fill_parent"
-                    android:layout_height="459dp"
+                    android:layout_height="360dp"
                     android:textSize="20sp"
                     android:choiceMode="singleChoice"
                     android:dividerHeight="5.0sp" />
             </LinearLayout>
         </ScrollView>
+
+
 
     </RelativeLayout>
 

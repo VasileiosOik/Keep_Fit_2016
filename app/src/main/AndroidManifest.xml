@@ -43,7 +43,8 @@
         <activity android:name=".HistoryActivity" />
         <activity android:name=".TestModeActivity" />
         <activity android:name=".SettingActivity" />
-        <activity android:name=".PrefsFragment"></activity>
+        <activity android:name=".PrefsFragment" />
+        <activity android:name=".DatePickerActivity"></activity>
     </application>
 
 </manifest>

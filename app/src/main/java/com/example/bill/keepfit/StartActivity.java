@@ -261,11 +261,15 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                      resultRemain=0.0;
                 }else{
                     resultRemain=  totalPrefSteps - prefNameSteps;
+                  //  System.out.print("To apot einai: " +resultRemain);
                 }
 
                 if(resultRemain==0.0){
-                  //  textToGo.setText("0.0" + " " +unitReturn()+" to goal " +totalPrefSteps);
-                }else{
+                    textToGo.setText("Goal Reached!");
+                }else if(resultRemain<0.0){
+                    textToGo.setText("Goal Reached! " +"\n" +"Above " +unitReturn() +" " +df2.format(Math.abs(resultRemain)) );
+                }
+                else{
                     textToGo.setText(df2.format(resultRemain)+ " " +unitReturn()+" to goal " +totalPrefSteps);
                 }
             }
