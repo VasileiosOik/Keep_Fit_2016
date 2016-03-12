@@ -119,7 +119,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                     previousDate=et.getText().toString().trim();
                     myBoolean=false;
                     tv.setVisibility(View.GONE);
-                   // et.setText("");
+                    et.setText("");
                     et.setVisibility(View.GONE);
 
             }
@@ -153,12 +153,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                         storeTheDate();
                         finish();
                     }
-
-                }else if(et.getText().toString().trim().contains("-") || et.getText().toString().trim().contains(".")) {
-                    Toast.makeText(TestModeActivity.this, "A date cannot contain any of these: -,*", Toast.LENGTH_LONG).show();
                 }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==true){
                     openAlert();
                 }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==false){
+                    et.setText("");
                     System.out.println("DEN UPARXEI TPT");
                     finish();
                 }
@@ -168,14 +166,18 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 }
                 break;
             case android.R.id.home:
-                if(myBoolean==true && et.getText().toString().trim().equals(""))
+                if(myBoolean==true && et.getText().toString().trim().equals("") )
                 {
                     myCheckBox.setChecked(false);
                     onBackPressed();
-                }else if(myBoolean==true && !et.getText().toString().trim().equals("")){
+                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==false){
+                    myCheckBox.setChecked(true);
+                    onBackPressed();
+                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==true){
                     myCheckBox.setChecked(false);
                     onBackPressed();
-                }else if(myBoolean==false && previousDate!=null && !previousDate.equals("") ){
+                }
+                else if(myBoolean==false && previousDate!=null && !previousDate.equals("") ){
                     Toast.makeText(TestModeActivity.this, "Press save to exit", Toast.LENGTH_LONG).show();
                 }else{
                     onBackPressed();
@@ -343,7 +345,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 // Write your code here to invoke YES event
                 storeTheDate();
                 finish();
-              //  Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -352,7 +353,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             public void onClick(DialogInterface dialog, int which) {
                 // Write your code here to invoke NO event
 
-             //   Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });

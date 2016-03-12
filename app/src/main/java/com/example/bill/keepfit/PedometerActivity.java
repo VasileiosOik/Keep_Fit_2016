@@ -201,21 +201,13 @@ public class PedometerActivity extends AppCompatActivity {
 
 
                     if (stepsToStartAgain == 0) {
-                        //  STEP_COUNT = 0;
                         newStepsStore = Double.parseDouble(editText.getText().toString().trim());
-                        // if(newStepsStore>helpInt){
-                        //     newStepsStore=helpInt;
-                        //  }
-                        // setStep(STEP_COUNT);
                         newStepsStore= convertStepsToAnotherUnit();
                         System.out.println("1");
 
                     } else {
                         System.out.println("2");
                         if (stepsToStartAgain > helpInt) {
-                            //  STEP_COUNT = 0;
-                            // newStepsStore = 0;
-                            //add the previous steps
                             newStepsStore = stepsToStartAgain+Double.parseDouble(editText.getText().toString().trim());
                             newStepsStore= convertStepsToAnotherUnit();
                             System.out.println("3");
@@ -579,14 +571,9 @@ public class PedometerActivity extends AppCompatActivity {
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
-        //insert data into able
-        //   if(numberTM==1){
-        //      System.out.println("Eisagwgh me test mode 1");
-        //      database.execSQL("insert into time_tbl_WG values('"+name+"','"+allSteps+"','"+didSteps+"','"+percentageSteps+"','"+active+"','"+dateTM+"')");
-        //  }else{
-        //     System.out.println("Eisagwgh me test mode 0");
+
         database.execSQL("insert into time_tbl_WG values('"+name+"','"+allSteps+"','"+didSteps+"','"+unitGoal+"','"+percentageSteps+"','"+active+"','"+curDate+"')");
-        //  }
+
 
         database.close();
     }
@@ -884,7 +871,6 @@ public class PedometerActivity extends AppCompatActivity {
         }
         cursor.close();
         database.close();
-      //  System.out.println("Einai h proigoumenh monada: " +unitParsing);
         return unitParsing;
     }
 

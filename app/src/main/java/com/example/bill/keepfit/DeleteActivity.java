@@ -36,6 +36,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
 
         //split the whole string to parts
         String data[] =dataValue.split(" ");
+
         //store the int value that we want to delete
         helpInt=Integer.parseInt(data[data.length-1]);
         helpName=data[data.length-4];
@@ -120,8 +121,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.delete_btn:
                 AlertDialog diaBox = AskOption();
                 diaBox.show();
-                //Toast.makeText(this, "Delete selected", Toast.LENGTH_SHORT)
-                //.show();
                 break;
             case android.R.id.home:
                 onBackPressed();

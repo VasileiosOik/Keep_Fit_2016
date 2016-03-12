@@ -28,7 +28,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     private ArrayAdapter<String> listAdapter ;
     private ListView mainListView;
     private View v1;
-    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
     private ArrayList<String> goalList;
     private String dataValue;
     private String name;

@@ -72,6 +72,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //set the content of the history screen
         setContentView(R.layout.activity_history);
+
         //make visible the back button in the action bar <-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -80,7 +81,6 @@ public class HistoryActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter_state = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, state);
         adapter_state.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDays.setAdapter(adapter_state);
-      //  spinnerDays.setOnItemSelectedListener(this);
 
         spinnerDays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -146,7 +146,6 @@ public class HistoryActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter_state1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, state1);
         adapter_state1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPercentage.setAdapter(adapter_state1);
-      //  spinnerPercentage.setOnItemSelectedListener(this);
 
         spinnerPercentage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -808,9 +807,9 @@ public class HistoryActivity extends AppCompatActivity {
             convertedDate1 = dateFormat.parse(stDate1);
             convertedDate2= dateFormat.parse(stDate2);
             tDate=dateFormat.parse(testDate);
-            System.out.println("Einai h prwth: " +convertedDate1);
-            System.out.println("Einai h Deuterh: " +convertedDate2);
-            System.out.println("Einai h eksetazomenh: " +tDate);
+//            System.out.println("Einai h prwth: " +convertedDate1);
+//            System.out.println("Einai h Deuterh: " +convertedDate2);
+//            System.out.println("Einai h eksetazomenh: " +tDate);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

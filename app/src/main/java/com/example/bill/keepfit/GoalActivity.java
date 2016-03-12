@@ -194,21 +194,18 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                // Whatever you want to happen when the first item gets selected
                 positionSpinner=0;
                 unit="Meters";
                 tv.setText("Number of Meters");
                 tv.invalidate();
                 break;
             case 1:
-                // Whatever you want to happen when the second item gets selected
                 positionSpinner=1;
                 unit="Yards";
                 tv.setText("Number of Yards");
                 tv.invalidate();
                 break;
             case 2:
-                // Whatever you want to happen when the thrid item gets selected
                 positionSpinner=2;
                 unit="Kilometres";
                 tv.setText("Number of Kilometres");
