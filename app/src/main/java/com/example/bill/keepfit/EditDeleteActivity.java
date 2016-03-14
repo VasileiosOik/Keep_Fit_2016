@@ -218,7 +218,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     // Physical back button click handler
     @Override
     public void onBackPressed() {
-        //Beginning.this.finish();
+        //this.finish();
         super.finish();
 
     }

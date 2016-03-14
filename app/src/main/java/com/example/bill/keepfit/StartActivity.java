@@ -491,14 +491,18 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         if (id == R.id.nav_history) {
-            // Handle the camera action
+            // Handle the History action
             Intent i = new Intent(StartActivity.this, HistoryActivity.class);
             startActivity(i);
 
         }
-        /*else if (id == R.id.nav_gallery) {
+        // Handle the Statistics action
+        else if (id == R.id.nav_statistics) {
+            Intent i = new Intent(StartActivity.this, StatisticsActivity.class);
+            startActivity(i);
 
-        } else if (id == R.id.nav_slideshow) {
+        }
+        /*else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

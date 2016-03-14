@@ -119,7 +119,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                     previousDate=et.getText().toString().trim();
                     myBoolean=false;
                     tv.setVisibility(View.GONE);
-                    et.setText("");
                     et.setVisibility(View.GONE);
 
             }
@@ -146,6 +145,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             case R.id.save:
                 System.out.println(previousDate);
                 System.out.println(myBoolean);
+                System.out.println(et.getText().toString().trim());
                 if(et.getText().toString().trim().equals("")) {
                     if (myCheckBox.isChecked() == true && et.getText().toString().trim().equals("")) {
                         Toast.makeText(TestModeActivity.this, "Enter a Date to continue", Toast.LENGTH_LONG).show();
@@ -154,13 +154,16 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                         finish();
                     }
                 }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==true){
+                    System.out.println("bika sto alert");
                     openAlert();
                 }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==false){
-                    et.setText("");
                     System.out.println("DEN UPARXEI TPT");
+                    et.setText("");
+                    storeTheDate();
                     finish();
                 }
                 else{
+                    System.out.println("Apothikeuw");
                     storeTheDate();
                     finish();
                 }
@@ -170,10 +173,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 {
                     myCheckBox.setChecked(false);
                     onBackPressed();
-                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==false){
+                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==true){
                     myCheckBox.setChecked(true);
                     onBackPressed();
-                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==true){
+                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==false){
                     myCheckBox.setChecked(false);
                     onBackPressed();
                 }

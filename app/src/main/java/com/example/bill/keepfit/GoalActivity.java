@@ -1,9 +1,6 @@
 package com.example.bill.keepfit;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -66,7 +63,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         //initialize the edittext objects
         et1 = (EditText) findViewById(R.id.editname);
         et2 = (EditText) findViewById(R.id.editsteps);
-        //create database if not already exist
 
         }
 

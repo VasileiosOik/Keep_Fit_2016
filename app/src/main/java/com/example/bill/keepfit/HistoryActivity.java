@@ -116,8 +116,6 @@ public class HistoryActivity extends AppCompatActivity {
                     }else{
                         value=0;
                     }
-
-
                     if(value<1)
                     {
                         Intent b = new Intent(HistoryActivity.this, DatePickerActivity.class);
@@ -126,10 +124,7 @@ public class HistoryActivity extends AppCompatActivity {
                         System.out.println("Bika mia fora");
                         choiceView(v1);
                     }
-
                     
-
-
                 }
 
             }
@@ -525,7 +520,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         Cursor cursor = database.rawQuery("select unit from history_tbl_WG where name='" +goalName+ "'", null);
         cursor.moveToFirst();
-        String unit = null;
+        String unit = "";
         if (!cursor.isAfterLast()) {
             do {
 
@@ -798,8 +793,8 @@ public class HistoryActivity extends AppCompatActivity {
     boolean isWithinRange(String testDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SharedPreferences datePickerPref = getSharedPreferences("myDatePicker", MODE_PRIVATE);
-        stDate1=datePickerPref.getString("date1", null);
-        stDate2=datePickerPref.getString("date2",null);
+        stDate1=datePickerPref.getString("date1", curDateHistory);
+        stDate2=datePickerPref.getString("date2",curDateHistory);
         Date convertedDate1 = null;
         Date convertedDate2=null;
         Date tDate=null;
@@ -893,71 +888,71 @@ public class HistoryActivity extends AppCompatActivity {
                      //   }else{
                             if(unitForMenu==1){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.0009144));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.001)));
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.609344)));
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                       goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000762)));
                                 }
 
                             }else if(unitForMenu==2){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.000568181818));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000621371192)));
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.621371192)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
 
                                 }
 
                             }else if(unitForMenu==3){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.9144));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1609)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1000)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
 
                                 }
@@ -965,51 +960,51 @@ public class HistoryActivity extends AppCompatActivity {
                             }else if(unitForMenu==4){
 
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.0936133));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1760)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1093)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.8333333333333334)));
                                 }
 
                             }else{
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.2)));
 
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.31));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(2112)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1312)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                                 }
@@ -1028,71 +1023,71 @@ public class HistoryActivity extends AppCompatActivity {
                     //    }else{
                             if(unitForMenu==1){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.0009144));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.001)));
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.609344)));
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000762)));
                                 }
 
                             }else if(unitForMenu==2){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.000568181818));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000621371192)));
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.621371192)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
 
                                 }
 
                             }else if(unitForMenu==3){
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.9144));
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1609)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1000)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
 
                                 }
@@ -1100,51 +1095,51 @@ public class HistoryActivity extends AppCompatActivity {
                             }else if(unitForMenu==4){
 
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.0936133));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1760)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1093)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.8333333333333334)));
                                 }
 
                             }else{
                                 if(unit.equals("Yards")){
-                                    System.out.println("BIKA1");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.2)));
 
 
                                 }else if(unit.equals("Meters")){
-                                    System.out.println("BIKA2");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.31));
 
 
                                 }else if(unit.equals("Miles")){
-                                    System.out.println("BIKA3");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(2112)));
 
 
                                 }else if(unit.equals("Kilometres")){
-                                    System.out.println("BIKA4");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1312)));
 
                                 }else{
-                                    System.out.println("BIKA5");
+                                    
                                     goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                                 }
