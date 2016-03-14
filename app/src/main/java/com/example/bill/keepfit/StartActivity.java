@@ -267,7 +267,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 if(resultRemain==0.0){
                     textToGo.setText("Goal Reached!");
                 }else if(resultRemain<0.0){
-                    textToGo.setText("Goal Reached! " +"\n" +"Above " +unitReturn() +" " +df2.format(Math.abs(resultRemain)) );
+                    textToGo.setText("Goal Reached! " +"\n" +"Above " +unitReturn() +": " +df2.format(Math.abs(resultRemain)) );
                 }
                 else{
                     textToGo.setText(df2.format(resultRemain)+ " " +unitReturn()+" to goal " +totalPrefSteps);
