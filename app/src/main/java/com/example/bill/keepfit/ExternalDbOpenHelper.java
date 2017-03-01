@@ -1,8 +1,5 @@
 package com.example.bill.keepfit;
 
-/**
- * Created by Bill on 22/01/2016.
- */
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +14,7 @@ import android.util.Log;
 public class ExternalDbOpenHelper extends SQLiteOpenHelper {
 
     //Path to the device folder with databases
-    public static String DB_PATH;
+    private static String DB_PATH;
 
     //Database file name
     public static String DB_NAME;
@@ -39,7 +36,7 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
     }
 
     //This piece of code will create a database if it’s not yet created
-    public void createDataBase() {
+    private void createDataBase() {
         boolean dbExist = checkDataBase();
         if (!dbExist) {
             this.getReadableDatabase();
@@ -49,8 +46,6 @@ public class ExternalDbOpenHelper extends SQLiteOpenHelper {
                 Log.e(this.getClass().toString(), "Copying error");
                 throw new Error("Error copying database!");
             }
-        } else {
-          //  Log.i(this.getClass().toString(), "Database already exists");
         }
     }
 

@@ -35,7 +35,6 @@ public class HistoryActivity extends AppCompatActivity {
     private ListView mainListView;
     private ArrayList<String> goalList;
     private View v1;
-    private String prefName;
     private Double prefNameSteps;
     private String goalName;
     private String curDateHistory;
@@ -60,7 +59,6 @@ public class HistoryActivity extends AppCompatActivity {
     private String date1,date2;
     private int stateOption=0;
     private int perCentage;
-    private String stDate1;
     private String stDate2;
     private int positionSpinner;
     private int value=1;
@@ -74,11 +72,14 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         //make visible the back button in the action bar <-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //spinner 2
         spinnerDays = (Spinner) findViewById(R.id.spinner2);
-        ArrayAdapter<String> adapter_state = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, state);
+        ArrayAdapter<String> adapter_state = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, state);
         adapter_state.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDays.setAdapter(adapter_state);
 
@@ -91,40 +92,44 @@ public class HistoryActivity extends AppCompatActivity {
                 spinnerDays.setSelection(pos);
                 String selState = (String) spinnerDays.getSelectedItem();
 
-                if(selState.equals("Monthly View")){
-                    stateOption=2;
-                    positionSpinner=0;
-                    value=0;
-                    choiceView(v1);
-                }else if(selState.equals("Week View")){
-                    stateOption=3;
-                    positionSpinner=0;
-                    value=0;
-                    choiceView(v1);
-                }else if(selState.equals("Normal View")){
-                    stateOption=1;
-                    positionSpinner=0;
-                    value=0;
-                    display1(v1);
-                }else if(selState.equals("Specific Period")){
-                    positionSpinner=3;
-                    stateOption=4;
+                switch (selState) {
+                    case "Monthly View":
+                        stateOption = 2;
+                        positionSpinner = 0;
+                        value = 0;
+                        choiceView();
+                        break;
+                    case "Week View":
+                        stateOption = 3;
+                        positionSpinner = 0;
+                        value = 0;
+                        choiceView();
+                        break;
+                    case "Normal View":
+                        stateOption = 1;
+                        positionSpinner = 0;
+                        value = 0;
+                        display1(v1);
+                        break;
+                    case "Specific Period":
+                        positionSpinner = 3;
+                        stateOption = 4;
 
-                    SharedPreferences preferences = HistoryActivity.this.getSharedPreferences("nbRepet", MODE_PRIVATE);
-                    if(value==1){
-                        value = preferences.getInt("nbRepet", 0);
-                    }else{
-                        value=0;
-                    }
-                    if(value<1)
-                    {
-                        Intent b = new Intent(HistoryActivity.this, DatePickerActivity.class);
-                        startActivity(b);
-                    }else{
-                        System.out.println("Bika mia fora");
-                        choiceView(v1);
-                    }
-                    
+                        SharedPreferences preferences = HistoryActivity.this.getSharedPreferences("nbRepet", MODE_PRIVATE);
+                        if (value == 1) {
+                            value = preferences.getInt("nbRepet", 0);
+                        } else {
+                            value = 0;
+                        }
+                        if (value < 1) {
+                            Intent b = new Intent(HistoryActivity.this, DatePickerActivity.class);
+                            startActivity(b);
+                        } else {
+                            System.out.println("Bika mia fora");
+                            choiceView();
+                        }
+
+                        break;
                 }
 
             }
@@ -138,7 +143,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         //spinner 1
         spinnerPercentage = (Spinner) findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, state1);
+        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, state1);
         adapter_state1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPercentage.setAdapter(adapter_state1);
 
@@ -150,38 +155,48 @@ public class HistoryActivity extends AppCompatActivity {
                 spinnerPercentage.setSelection(pos);
                 String selState1 = (String) spinnerPercentage.getSelectedItem();
 
-                if(selState1.equals("More Views") ) {
-                    stateOption=1;
-                  //  display1(v1);
-                }else if(selState1.equals("Completed")){
-                    stateOption=6;
-                    choiceView(v1);
-                }else if(selState1.equals("% Above")){
-                    stateOption=7;
-                    showEdit();
-                }else if(selState1.equals("% Below")) {
-                    stateOption = 8;
-                    showEdit();
-                }else if(selState1.equals("Kilometres")){
-                    unitForMenu=1;
-                    unitToInsert="Kilometres";
-                    unitChoiceToDisplay(v1);
-                }else if(selState1.equals("Meters")){
-                    unitForMenu=2;
-                    unitToInsert="Meters";
-                    unitChoiceToDisplay(v1);
-                }else if(selState1.equals("Miles")){
-                    unitForMenu=3;
-                    unitToInsert="Miles";
-                    unitChoiceToDisplay(v1);
-                }else if(selState1.equals("Yards")){
-                    unitForMenu=4;
-                    unitToInsert="Yards";
-                    unitChoiceToDisplay(v1);
-                }else if(selState1.equals("Steps")){
-                    unitForMenu=5;
-                    unitToInsert="Steps";
-                    unitChoiceToDisplay(v1);
+                switch (selState1) {
+                    case "More Views":
+                        stateOption = 1;
+                        //  display1(v1);
+                        break;
+                    case "Completed":
+                        stateOption = 6;
+                        choiceView();
+                        break;
+                    case "% Above":
+                        stateOption = 7;
+                        showEdit();
+                        break;
+                    case "% Below":
+                        stateOption = 8;
+                        showEdit();
+                        break;
+                    case "Kilometres":
+                        unitForMenu = 1;
+                        unitToInsert = "Kilometres";
+                        unitChoiceToDisplay(v1);
+                        break;
+                    case "Meters":
+                        unitForMenu = 2;
+                        unitToInsert = "Meters";
+                        unitChoiceToDisplay(v1);
+                        break;
+                    case "Miles":
+                        unitForMenu = 3;
+                        unitToInsert = "Miles";
+                        unitChoiceToDisplay(v1);
+                        break;
+                    case "Yards":
+                        unitForMenu = 4;
+                        unitToInsert = "Yards";
+                        unitChoiceToDisplay(v1);
+                        break;
+                    case "Steps":
+                        unitForMenu = 5;
+                        unitToInsert = "Steps";
+                        unitChoiceToDisplay(v1);
+                        break;
                 }
 
             }
@@ -194,7 +209,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         //return the data from the pedometer activity (last goal is active there)
         SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
-        prefName = myPrefs.getString("MyData", "0");//percentage
+        String prefName = myPrefs.getString("MyData", "0");
         prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));//current steps
         goalName=myPrefs.getString("MyData3", "0");//name of the current goal
 
@@ -244,7 +259,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         if (id == R.id.action_clear) {
 
-            if(checkIfTableIsEmpty()==true) {
+            if(checkIfTableIsEmpty()) {
                 AlertDialog diaBox = AskOption();
                 diaBox.show();
             }else{
@@ -266,7 +281,7 @@ public class HistoryActivity extends AppCompatActivity {
         prefs = getSharedPreferences("nbRepet",Context.MODE_PRIVATE);
         editor = prefs.edit();
         editor.putInt("nbRepet", 0);
-        editor.commit();
+        editor.apply();
         super.finish();
 
     }
@@ -282,9 +297,7 @@ public class HistoryActivity extends AppCompatActivity {
     public void display1(View v){
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-        if(goal_to_remember.equals("0")){
-            //dont show anything
-        }else {
+        if(!goal_to_remember.equals("0")){
             String data[] = goal_to_remember.split(" ");
             //store the name of the goal that was chosen
             String nameOfCurrentGoal = data[data.length - 4];
@@ -294,7 +307,7 @@ public class HistoryActivity extends AppCompatActivity {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -312,7 +325,7 @@ public class HistoryActivity extends AppCompatActivity {
                     if(numberTM==1  && modeTest==2){
                         System.out.println("here in test mode");
                         if(unitReturn().equals("Steps")) {
-                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                         }else{
                             goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -386,7 +399,7 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     public boolean checkIfTableIsEmpty() {
-        boolean flag=false;
+        boolean flag;
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
         database = dbOpenHelper.openDataBase();
 
@@ -417,9 +430,9 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public void print() {
-        String name = "";
+        String name;
         Integer steps = 0;
-        Double stepsDid=0.0;
+        Double stepsDid;
         String unit="";
         Float percentage = 0f;
         String dateSearch = "";
@@ -454,7 +467,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private AlertDialog AskOption()
     {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+        return new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete Action")
                 .setMessage("Do you want to delete History?")
@@ -477,7 +490,6 @@ public class HistoryActivity extends AppCompatActivity {
                     }
                 })
                 .create();
-        return myQuittingDialogBox;
 
     }
 
@@ -535,12 +547,10 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
 
-    private void choiceView(View v) {
+    private void choiceView() {
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-        if(goal_to_remember.equals("0")){
-            //dont show anything
-        }else {
+        if(!goal_to_remember.equals("0")){
             String data[] = goal_to_remember.split(" ");
             //store the name of the goal that was chosen
             String nameOfCurrentGoal = data[data.length - 4];
@@ -550,7 +560,7 @@ public class HistoryActivity extends AppCompatActivity {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -577,7 +587,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if(numberTM==1  && modeTest==2 && (currentMonth-month==1) ){
                             System.out.println("here in test mode");
                             if(unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                             }else{
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -587,7 +597,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && (currentMonth-month==1)) {
                             System.out.println("difference in days in if: " + differenceInDays());
                             if(unitReturn().equals("Steps")){
-                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
 
                             }else{
                                 goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
@@ -639,7 +649,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && percentage>=1.00) {
                             System.out.println("difference in days in if: " + differenceInDays());
                             if(unitReturn().equals("Steps")){
-                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
 
                             }else{
                                 goalList.add(dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
@@ -655,7 +665,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if(numberTM==1  && modeTest==2 && (percentage*100>=perCentage) ){
                             System.out.println("here in test mode");
                             if(unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                             }else{
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -705,7 +715,7 @@ public class HistoryActivity extends AppCompatActivity {
                        Boolean checkRange= isWithinRange(dateTime);
                         System.out.println("Einai to apot: " +checkRange);
                         //hereeeeeeee test mode again
-                        if (numberTM == 1 && modeTest == 2 && checkRange==true) {
+                        if (numberTM == 1 && modeTest == 2 && checkRange) {
                             System.out.println("here in test mode");
                             if (unitReturn().equals("Steps")) {
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
@@ -716,10 +726,10 @@ public class HistoryActivity extends AppCompatActivity {
                             }
                         }
 
-                        if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && checkRange==true) {
+                        if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && checkRange) {
                             System.out.println("difference in days in if: " + differenceInDays());
                             if (unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + Double.valueOf(stepsDid).longValue());
 
                             } else {
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));
@@ -774,10 +784,9 @@ public class HistoryActivity extends AppCompatActivity {
 
        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
            public void onClick(DialogInterface dialog, int whichButton) {
-               View v2=null;
                // Do something with value!
                perCentage=Integer.parseInt(input.getText().toString().trim());
-               choiceView(v2);
+               choiceView();
            }
        });
 
@@ -793,7 +802,7 @@ public class HistoryActivity extends AppCompatActivity {
     boolean isWithinRange(String testDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SharedPreferences datePickerPref = getSharedPreferences("myDatePicker", MODE_PRIVATE);
-        stDate1=datePickerPref.getString("date1", curDateHistory);
+        String stDate1 = datePickerPref.getString("date1", curDateHistory);
         stDate2=datePickerPref.getString("date2",curDateHistory);
         Date convertedDate1 = null;
         Date convertedDate2=null;
@@ -815,7 +824,7 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        save(positionSpinner);
+        save();
     }
 
     @Override
@@ -824,7 +833,7 @@ public class HistoryActivity extends AppCompatActivity {
         spinnerDays.setSelection(load());
     }
 
-    private void save(final int isSelected) {
+    private void save() {
         int selectedPosition;
         SharedPreferences preferences = HistoryActivity.this.getSharedPreferences("nbRepet", MODE_PRIVATE);
         value = preferences.getInt("nbRepet", 0);
@@ -838,23 +847,21 @@ public class HistoryActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
        // selectedPosition = isSelected;
         editor.putInt("spinnerDaysSelection", selectedPosition);
-        editor.commit();
+        editor.apply();
     }
 
     private int load() {
 
 
         SharedPreferences prefs = getSharedPreferences("spinnerDaysState", MODE_PRIVATE);
-        int iPos=prefs.getInt("spinnerDaysSelection",0);
-        return iPos;
+        return prefs.getInt("spinnerDaysSelection",0);
+
     }
 
     public void unitChoiceToDisplay(View v){
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-        if(goal_to_remember.equals("0")){
-            //dont show anything
-        }else {
+        if(!goal_to_remember.equals("0")){
             String data[] = goal_to_remember.split(" ");
             //store the name of the goal that was chosen
             String nameOfCurrentGoal = data[data.length - 4];
@@ -864,7 +871,7 @@ public class HistoryActivity extends AppCompatActivity {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -887,126 +894,156 @@ public class HistoryActivity extends AppCompatActivity {
                      //       goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
                      //   }else{
                             if(unitForMenu==1){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.0009144));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.001)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.0009144));
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.609344)));
+                                        break;
+                                    case "Meters":
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                      goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.001)));
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000762)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1.609344)));
+
+                                        break;
+                                    case "Kilometres":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.000762)));
+                                        break;
                                 }
 
                             }else if(unitForMenu==2){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.000568181818));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000621371192)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.000568181818));
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.000621371192)));
+
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.621371192)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.621371192)));
 
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.762)));
+
+                                        break;
                                 }
 
                             }else if(unitForMenu==3){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.9144));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.9144));
 
+                                        break;
+                                    case "Meters":
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1609)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1000)));
+                                        break;
+                                    case "Miles":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1609)));
 
+
+                                        break;
+                                    case "Kilometres":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1000)));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.0004734848484848485)));
+
+                                        break;
                                 }
 
                             }else if(unitForMenu==4){
 
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                switch (unit) {
+                                    case "Yards":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.0936133));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 1.0936133));
 
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1760)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1760)));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1093)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.8333333333333334)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1093)));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.8333333333333334)));
+                                        break;
                                 }
 
                             }else{
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.2)));
+                                switch (unit) {
+                                    case "Yards":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1.2)));
 
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.31));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 1.31));
 
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(2112)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (2112)));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1312)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1312)));
 
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+
+                                        break;
                                 }
 
                             }
@@ -1022,126 +1059,156 @@ public class HistoryActivity extends AppCompatActivity {
 
                     //    }else{
                             if(unitForMenu==1){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.0009144));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.001)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.0009144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.0009144));
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.609344)));
+                                        break;
+                                    case "Meters":
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.001))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.001)));
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000762)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1.609344))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1.609344)));
+
+                                        break;
+                                    case "Kilometres":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.000762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.000762)));
+                                        break;
                                 }
 
                             }else if(unitForMenu==2){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.000568181818));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.000621371192)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.000568181818)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.000568181818));
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.000621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.000621371192)));
+
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.621371192)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.762)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.621371192))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.621371192)));
 
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.762))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.762)));
+
+                                        break;
                                 }
 
                             }else if(unitForMenu==3){
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*0.9144));
+                                switch (unit) {
+                                    case "Yards":
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (0.9144)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 0.9144));
 
+                                        break;
+                                    case "Meters":
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1609)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1000)));
+                                        break;
+                                    case "Miles":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.0004734848484848485)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1609))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1609)));
 
+
+                                        break;
+                                    case "Kilometres":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1000))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1000)));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.0004734848484848485))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.0004734848484848485)));
+
+                                        break;
                                 }
 
                             }else if(unitForMenu==4){
 
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                switch (unit) {
+                                    case "Yards":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.0936133));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (1.0936133)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 1.0936133));
 
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1760)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1760))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1760)));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1093)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(0.8333333333333334)));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1093))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1093)));
+
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((0.8333333333333334))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (0.8333333333333334)));
+                                        break;
                                 }
 
                             }else{
-                                if(unit.equals("Yards")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1.2)));
+                                switch (unit) {
+                                    case "Yards":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1.2))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1.2)));
 
 
-                                }else if(unit.equals("Meters")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*(1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*1.31));
+                                        break;
+                                    case "Meters":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * (1.31)) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * 1.31));
 
 
-                                }else if(unit.equals("Miles")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(2112)));
+                                        break;
+                                    case "Miles":
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((2112))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (2112)));
 
 
-                                }else if(unit.equals("Kilometres")){
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps*((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid*(1312)));
+                                        break;
+                                    case "Kilometres":
 
-                                }else{
-                                    
-                                    goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitToInsert + ": " + df2.format(steps * ((1312))) + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitToInsert + " Walked: " + df2.format(stepsDid * (1312)));
 
+                                        break;
+                                    default:
+
+                                        goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+
+                                        break;
                                 }
 
                         //    }

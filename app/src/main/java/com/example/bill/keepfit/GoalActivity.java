@@ -5,55 +5,44 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 public class GoalActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private Toolbar toolbar;
     private SQLiteDatabase db;
     private EditText et1,et2;
     private String nameCh;
-    private float percentageSteps=0;
-    private String date="0";
-    private String regex = "[0-9]+";
     private static final String DB_NAME = "Mydb.db";
     private Spinner spinner;
     private static final String[]paths = {"Meters", "Yards", "Kilometres", "Miles", "Steps"};
     private int positionSpinner;
     private String unit;
     private TextView tv;
-    private ListAdapter listHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tv= (TextView) findViewById(R.id.Number_of_steprs);
 
         spinner = (Spinner)findViewById(R.id.spinner);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(GoalActivity.this,
+        ArrayAdapter<String>adapter = new ArrayAdapter<>(GoalActivity.this,
                 android.R.layout.simple_spinner_item,paths);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -85,7 +74,8 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         et2.setText("");
         System.out.println("H monada einai: " +unit);
         //insert data into able
-        db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"','"+unit+"','"+percentageSteps+"')");
+        float percentageSteps = 0;
+        db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"','"+unit+"','"+ percentageSteps +"')");
         //display Toast
         Toast.makeText(this, "goal stored successfully!", Toast.LENGTH_LONG).show();
         db.close();
@@ -111,6 +101,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             // action with ID save_button was selected
             case R.id.save:
+                String regex = "[0-9]+";
                 if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
                     Toast.makeText(GoalActivity.this, "You haven't specified a goal",
                             Toast.LENGTH_LONG).show();
@@ -243,18 +234,16 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     private void save(final int isSelected) {
         SharedPreferences sharedPreferences = this.getSharedPreferences("spinnerState",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        int selectedPosition = isSelected;
-        editor.putInt("spinnerSelection", selectedPosition);
+        editor.putInt("spinnerSelection", isSelected);
         editor.putString("spinnerName", unit);
-        editor.commit();
+        editor.apply();
     }
 
     private int load() {
 
 
         SharedPreferences prefs = getSharedPreferences("spinnerState", MODE_PRIVATE);
-        int iPos=prefs.getInt("spinnerSelection",0);
-        return iPos;
-    }
+        return prefs.getInt("spinnerSelection",0);
 
+    }
 }

@@ -67,28 +67,35 @@ public class TabFragment2 extends Fragment {
                 spinnerUnit.setSelection(pos);
                 String selState1 = (String) spinnerUnit.getSelectedItem();
 
-                if(selState1.equals("More Views") ) {
-                    stateOption=1;
-                }else if(selState1.equals("Kilometres")){
-                    unitForMenu=1;
-                    unitToInsert="Kilometres";
+                switch (selState1) {
+                    case "More Views":
+                        stateOption = 1;
+                        break;
+                    case "Kilometres":
+                        unitForMenu = 1;
+                        unitToInsert = "Kilometres";
 
-                }else if(selState1.equals("Meters")){
-                    unitForMenu=2;
-                    unitToInsert="Meters";
+                        break;
+                    case "Meters":
+                        unitForMenu = 2;
+                        unitToInsert = "Meters";
 
-                }else if(selState1.equals("Miles")){
-                    unitForMenu=3;
-                    unitToInsert="Miles";
+                        break;
+                    case "Miles":
+                        unitForMenu = 3;
+                        unitToInsert = "Miles";
 
-                }else if(selState1.equals("Yards")){
-                    unitForMenu=4;
-                    unitToInsert="Yards";
+                        break;
+                    case "Yards":
+                        unitForMenu = 4;
+                        unitToInsert = "Yards";
 
-                }else if(selState1.equals("Steps")){
-                    unitForMenu=5;
-                    unitToInsert="Steps";
+                        break;
+                    case "Steps":
+                        unitForMenu = 5;
+                        unitToInsert = "Steps";
 
+                        break;
                 }
 
             }
@@ -137,8 +144,7 @@ public class TabFragment2 extends Fragment {
     public String getCurrentDate(){
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String DateToStr = format.format(curDate);
-        return DateToStr;
+        return format.format(curDate);
     }
 
     public void display1(View v){
@@ -156,7 +162,7 @@ public class TabFragment2 extends Fragment {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -166,7 +172,7 @@ public class TabFragment2 extends Fragment {
             String unit="";
             float percentage=0f;
             int modeTest=0;
-            long daysDifference=0;
+            long daysDifference;
             if (!cursor.isAfterLast()) {
                 do {
                     System.out.println("Retrieve data now and checking the date...");
@@ -254,7 +260,7 @@ public class TabFragment2 extends Fragment {
 
 
                     if(unitReturn().equals("Steps")) {
-                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                     }else{
                         goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -264,7 +270,7 @@ public class TabFragment2 extends Fragment {
                 if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && (currentMonth-month==1)) {
                     System.out.println("difference in days in if: " + differenceInDays());
                     if(unitReturn().equals("Steps")){
-                        goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
 
                     }else{
                         goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));

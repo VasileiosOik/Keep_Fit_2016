@@ -7,28 +7,21 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class TestModeActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private EditText et;
@@ -36,7 +29,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     private CheckBox myCheckBox;
     private TextView tv;
     private  boolean myBoolean = false;
-    private  String currentDate;
     private SQLiteDatabase database;
     private static final String TABLE_NAME = "history_tbl_WG";
     private static final String DB_NAME = "MyHistorydb.db";
@@ -48,7 +40,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_mode);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         et = (EditText) findViewById(R.id.date);
         //no keyboard pop up
@@ -89,7 +84,6 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
     private void updateDate() {
 
-        String myFormat = "dd/MM/yy"; //In which you need put here
         et.setText(day_x+"/"+month_x+"/"+year_x);
 
     }
@@ -147,16 +141,16 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 System.out.println(myBoolean);
                 System.out.println(et.getText().toString().trim());
                 if(et.getText().toString().trim().equals("")) {
-                    if (myCheckBox.isChecked() == true && et.getText().toString().trim().equals("")) {
+                    if (myCheckBox.isChecked() && et.getText().toString().trim().equals("")) {
                         Toast.makeText(TestModeActivity.this, "Enter a Date to continue", Toast.LENGTH_LONG).show();
                     } else {
                         storeTheDate();
                         finish();
                     }
-                }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==true){
+                }else if(!myBoolean && !previousDate.equals("") && checkIfTableIsEmpty()){
                     System.out.println("bika sto alert");
                     openAlert();
-                }else if(myBoolean == false && !previousDate.equals("") && checkIfTableIsEmpty()==false){
+                }else if(!myBoolean && !previousDate.equals("") && checkIfTableIsEmpty()){
                     System.out.println("DEN UPARXEI TPT");
                     et.setText("");
                     storeTheDate();
@@ -169,18 +163,18 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 }
                 break;
             case android.R.id.home:
-                if(myBoolean==true && et.getText().toString().trim().equals("") )
+                if(myBoolean && et.getText().toString().trim().equals("") )
                 {
                     myCheckBox.setChecked(false);
                     onBackPressed();
-                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==true){
+                }else if(myBoolean && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==true){
                     myCheckBox.setChecked(true);
                     onBackPressed();
-                }else if(myBoolean==true && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==false){
+                }else if(myBoolean && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()==false){
                     myCheckBox.setChecked(false);
                     onBackPressed();
                 }
-                else if(myBoolean==false && previousDate!=null && !previousDate.equals("") ){
+                else if(!myBoolean && previousDate!=null && !previousDate.equals("") ){
                     Toast.makeText(TestModeActivity.this, "Press save to exit", Toast.LENGTH_LONG).show();
                 }else{
                     onBackPressed();
@@ -194,22 +188,23 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
     private void storeTheDate() {
 
+        String currentDate;
         if(et.getText().toString().trim().equals("")){
             //dont store something
-            currentDate="";
+            currentDate ="";
             activeTestMode=0;
-            if(myCheckBox.isChecked()==false){
+            if(!myCheckBox.isChecked()){
                 System.out.println("Einai 0 ");
                 Toast.makeText(TestModeActivity.this, "Test mode is inactive", Toast.LENGTH_LONG).show();
                 activeTestMode=0;
             }
 
         }else{
-            currentDate=et.getText().toString().trim();
+            currentDate =et.getText().toString().trim();
             System.out.println(currentDate);
 
 
-            if(myCheckBox.isChecked()==true){
+            if(myCheckBox.isChecked()){
                 activeTestMode=1;
                 System.out.println("Einai 1 ");
                 Toast.makeText(TestModeActivity.this, "Test mode is active", Toast.LENGTH_LONG).show();
@@ -225,7 +220,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         editor.putString("date", currentDate);
         editor.putInt("testM", activeTestMode);
         editor.putBoolean("returnDate", myBoolean);
-        editor.commit();
+        editor.apply();
 
         if(activeTestMode==0){
             System.out.println("Diegrapse ton goal apo to history");
@@ -239,7 +234,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
            // prefsEditor.putFloat("MyData2", 0f);//current steps
             prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
             prefsEditor.putInt("MyData4", 0);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         //yes or no???????
         previousDate=null;
@@ -261,14 +256,14 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("check", isChecked);
-        editor.commit();
+        editor.apply();
     }
 
     private boolean load() {
 
 
         SharedPreferences prefs = getSharedPreferences("textModeSetting", MODE_PRIVATE);
-        if((prefs.getBoolean("returnDate", false))==true){
+        if((prefs.getBoolean("returnDate", false))){
             et.setText(prefs.getString("date", null));
         }else{
             et.setText("");
@@ -327,7 +322,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
       //  prefsEditor.putFloat("MyData2", 0f);//current steps
         prefsEditor.putString("MyData3", String.valueOf(0));//name of the current goal
         prefsEditor.putInt("MyData4", 0);// 0
-        prefsEditor.commit();
+        prefsEditor.apply();
 
     }
 
@@ -366,7 +361,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     }
 
     public boolean checkIfTableIsEmpty() {
-        boolean flag=false;
+        boolean flag;
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
         database = dbOpenHelper.openDataBase();
 

@@ -60,7 +60,7 @@ public class TabFragment3 extends Fragment {
         final View v = inflater.inflate(R.layout.tab_fragment_3, container,false);
 
         spinnerUnit = (Spinner) v.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, state1);
+        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, state1);
         adapter_state1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUnit.setAdapter(adapter_state1);
 
@@ -72,42 +72,49 @@ public class TabFragment3 extends Fragment {
                 spinnerUnit.setSelection(pos);
                 String selState1 = (String) spinnerUnit.getSelectedItem();
 
-                if(selState1.equals("More Views") ) {
-                    stateOption = 0;
-                }else if(selState1.equals("Specific Period")){
-                    SharedPreferences preferences = getActivity().getSharedPreferences("nbRepet", getContext().MODE_PRIVATE);
-                    stateOption = 1;
-                    if(value==1){
-                        value = preferences.getInt("nbRepet", 0);
-                    }else{
-                        value=0;
-                    }
+                switch (selState1) {
+                    case "More Views":
+                        stateOption = 0;
+                        break;
+                    case "Specific Period":
+                        SharedPreferences preferences = getActivity().getSharedPreferences("nbRepet", getContext().MODE_PRIVATE);
+                        stateOption = 1;
+                        if (value == 1) {
+                            value = preferences.getInt("nbRepet", 0);
+                        } else {
+                            value = 0;
+                        }
 
 
-                    if(value<1)
-                    {
-                        Intent b = new Intent(getActivity(), DatePickerActivity.class);
-                        startActivity(b);
-                    }else{
-                        System.out.println("Bika mia fora");
-                        display1(v1);
-                    }
+                        if (value < 1) {
+                            Intent b = new Intent(getActivity(), DatePickerActivity.class);
+                            startActivity(b);
+                        } else {
+                            System.out.println("Bika mia fora");
+                            display1(v1);
+                        }
 
-                }else if(selState1.equals("Kilometres")){
-                    unitForMenu=1;
-                    unitToInsert="Kilometres";
-                }else if(selState1.equals("Meters")){
-                    unitForMenu=2;
-                    unitToInsert="Meters";
-                }else if(selState1.equals("Miles")){
-                    unitForMenu=3;
-                    unitToInsert="Miles";
-                }else if(selState1.equals("Yards")){
-                    unitForMenu=4;
-                    unitToInsert="Yards";
-                }else if(selState1.equals("Steps")){
-                    unitForMenu=5;
-                    unitToInsert="Steps";
+                        break;
+                    case "Kilometres":
+                        unitForMenu = 1;
+                        unitToInsert = "Kilometres";
+                        break;
+                    case "Meters":
+                        unitForMenu = 2;
+                        unitToInsert = "Meters";
+                        break;
+                    case "Miles":
+                        unitForMenu = 3;
+                        unitToInsert = "Miles";
+                        break;
+                    case "Yards":
+                        unitForMenu = 4;
+                        unitToInsert = "Yards";
+                        break;
+                    case "Steps":
+                        unitForMenu = 5;
+                        unitToInsert = "Steps";
+                        break;
                 }
 
             }
@@ -156,8 +163,7 @@ public class TabFragment3 extends Fragment {
     public String getCurrentDate(){
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String DateToStr = format.format(curDate);
-        return DateToStr;
+        return format.format(curDate);
     }
 
     public void display1(View v){
@@ -175,7 +181,7 @@ public class TabFragment3 extends Fragment {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -269,19 +275,19 @@ public class TabFragment3 extends Fragment {
                 Boolean checkRange= isWithinRange(dateTime);
                 System.out.println("Einai to apot: " +checkRange);
                 //hereeeeeeee test mode again
-                if(numberTM==1  && modeTest==2 && checkRange==true){
+                if(numberTM==1  && modeTest==2 && checkRange){
                     System.out.println("here in test mode");
 
 
                     if(unitReturn().equals("Steps")) {
-                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                     }else{
                         goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                     }
                 }
 
-                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && checkRange==true) {
+                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && checkRange) {
                     System.out.println("difference in days in if: " + differenceInDays());
                     if(unitReturn().equals("Steps")){
                         goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
@@ -310,7 +316,7 @@ public class TabFragment3 extends Fragment {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
         database = dbOpenHelper.openDataBase();
         //here i retrieve the data i want
-        goalList = new ArrayList<String>();
+        goalList = new ArrayList<>();
 
         Cursor cursor = database.rawQuery("select * from history_tbl_WG where didsteps='" + min + "'", null);
         cursor.moveToFirst();
@@ -339,22 +345,22 @@ public class TabFragment3 extends Fragment {
                 System.out.println("Einai to apot: " +checkRange);
 
                 //hereeeeeeee test mode again
-                if(numberTM==1  && modeTest==2 &&  checkRange==true){
+                if(numberTM==1  && modeTest==2 && checkRange){
                     System.out.println("here in test mode");
 
 
                     if(unitReturn().equals("Steps")) {
-                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                     }else{
                         goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                     }
                 }
 
-                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && checkRange==true) {
+                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && checkRange) {
                     System.out.println("difference in days in if: " + differenceInDays());
                     if(unitReturn().equals("Steps")){
-                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
 
                     }else{
                         goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
@@ -485,7 +491,7 @@ public class TabFragment3 extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
       //  selectedPosition = isSelected;
         editor.putInt("spinnerUnitSelection", selectedPosition);
-        editor.commit();
+        editor.apply();
     }
 
     private int load() {

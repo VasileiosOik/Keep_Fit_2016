@@ -1,28 +1,23 @@
 package com.example.bill.keepfit;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.preference.PreferenceFragment;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -55,16 +50,12 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private final float mSeriesMax = 50f;
     private float steps_count = 0f;
     private Double Steps_so_far=0.0;
-   // private int Steps_so_far=0;
-    private String prefName;
     private Double prefNameSteps;
     private int totalPrefSteps;
   //  private float prefNameSteps;
     private String goalName;
     private ArrayList<String>  goalList1;
-    private SQLiteDatabase db;
     private String dateTM;
-    private Integer numberTM;
     private TextView textTestMode;
     private static DecimalFormat df2 = new DecimalFormat(".##");
     private static final int RESULT_SETTINGS = 1;
@@ -98,9 +89,9 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
         SharedPreferences testModePreferences = this.getSharedPreferences("textModeSetting", MODE_PRIVATE);
         dateTM=testModePreferences.getString("date", null);
-        numberTM=testModePreferences.getInt("testM",0);
+        Integer numberTM = testModePreferences.getInt("testM", 0);
 
-        if(numberTM==1){
+        if(numberTM ==1){
             textTestMode.setText("Test Mode is ON");
             textTestMode.setBackgroundColor(Color.RED);
         }else{
@@ -204,7 +195,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
     private void createTableRow() {
         //create the table
-        db = openOrCreateDatabase("Mydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+        SQLiteDatabase db = openOrCreateDatabase("Mydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
         db.setVersion(1);
         db.setLocale(Locale.getDefault());
 
@@ -288,7 +279,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                     textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(0));
                 }else{
                     if(unitReturn().equals("Steps")){
-                        textActivity1.setText(unitReturn() +" walked so far: " + new Double(Steps_so_far).longValue());
+                        textActivity1.setText(unitReturn() +" walked so far: " + Double.valueOf(Steps_so_far).longValue());
                     }else{
                         textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
                     }
@@ -414,7 +405,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             SharedPreferences settings = getSharedPreferences("hasRunBefore", 0);
             SharedPreferences.Editor edit = settings.edit();
             edit.putBoolean("hasRun", true); //set to has run
-            edit.commit(); //apply
+            edit.apply(); //apply
             //code for if this is the first time the app has run
             steps_count=0f;
         }
@@ -422,20 +413,18 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             //code if the app HAS run before
             // shared preferences
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
-            prefName = myPrefs.getString("MyData", "0");
+            String prefName = myPrefs.getString("MyData", "0");
             prefNameSteps=Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
             System.out.println("Einai ta steps pou eginan: " +prefNameSteps);
             totalPrefSteps=  myPrefs.getInt("MyData5", 0);
             System.out.println("Einai: " +totalPrefSteps);
           //  prefNameSteps = myPrefs.getFloat("MyData2", 0);
             goalName=myPrefs.getString("MyData3", "0");
-            if (prefName != null) {
-                steps_count = (Float.parseFloat(prefName)) / 2;
-                Steps_so_far=  prefNameSteps;
-               // Steps_so_far= (int) prefNameSteps;
-                System.out.println("The percentage is: " + steps_count);
-                System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
-            }
+            steps_count = (Float.parseFloat(prefName)) / 2;
+            Steps_so_far=  prefNameSteps;
+            // Steps_so_far= (int) prefNameSteps;
+            System.out.println("The percentage is: " + steps_count);
+            System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
 
         }
     }
@@ -502,16 +491,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             startActivity(i);
 
         }
-        /*else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

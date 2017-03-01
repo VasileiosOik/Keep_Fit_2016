@@ -10,39 +10,42 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class DeleteActivity extends AppCompatActivity implements View.OnClickListener{
-    private SQLiteDatabase database;
     private static final String TABLE_NAME = "tbl_WG";
     private static final String DB_NAME = "Mydb.db";
-    private Integer helpInt;
     private String helpName;
-    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tv=(TextView) findViewById(R.id.tv);
+        TextView tv = (TextView) findViewById(R.id.tv);
         //retract the incoming intent
         Intent intent = getIntent();
         //recover the row that we want to edit
         String dataValue = intent.getExtras().getString("string");
 
         //split the whole string to parts
-        String data[] =dataValue.split(" ");
+        if(dataValue!=null){
+            String data[] =dataValue.split(" ");
+            //store the int value that we want to delete
+            //Integer helpInt = Integer.parseInt(data[data.length - 1]);
+            helpName=data[data.length-4];
+            System.out.println(helpName);
 
-        //store the int value that we want to delete
-        helpInt=Integer.parseInt(data[data.length-1]);
-        helpName=data[data.length-4];
-        System.out.println(helpName);
+            tv.setText(dataValue);
+        }
 
-        tv.setText(dataValue);
+
+
 
     }
 
@@ -55,7 +58,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
 
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-        database = dbOpenHelper.openDataBase();
+        SQLiteDatabase database = dbOpenHelper.openDataBase();
 
         database.delete(TABLE_NAME, "name" + "='" + helpName + "'", null);
 
@@ -67,7 +70,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
 
     private AlertDialog AskOption()
     {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+        return new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete Action")
                 .setMessage("Do you want to delete the Goal?")
@@ -93,7 +96,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 })
                 .create();
-        return myQuittingDialogBox;
 
     }
 

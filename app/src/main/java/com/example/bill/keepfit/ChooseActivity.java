@@ -10,33 +10,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
-//importnant Library
-import android.view.ActionMode;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import java.util.ArrayList;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ChooseActivity extends AppCompatActivity {
     private ListView mainListView;
-    private ArrayList<String> goalList;
-    private SQLiteDatabase database;
     private static final String DB_NAME = "Mydb.db";
     private View v1;
     public boolean[] status;
     private Boolean[] checkedStatus;
 
 
-    public ChooseActivity() {
+    public ChooseActivity(View v1) {
+        this.v1 = v1;
     }
 
     @Override
@@ -45,11 +34,14 @@ public class ChooseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose);
 
         //for the back button in the menu
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initialize the list view
         mainListView = (ListView) findViewById( R.id.goal_list1 );
-        mainListView.setChoiceMode(mainListView.CHOICE_MODE_SINGLE);
+        mainListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
         //display the options
         display(v1);
@@ -82,15 +74,15 @@ public class ChooseActivity extends AppCompatActivity {
 
                 }
                 //start the new activity only when only one switch is on
-                for (int i = 0; i < checkedStatus.length; i++){
-                    if(checkedStatus[i]==true && onlyOne==1) {
+                for (Boolean checkedStatu : checkedStatus) {
+                    if (checkedStatu && onlyOne == 1) {
                         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
-                        String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
+                        String goal_to_remember = sharedPreferences.getString("MyGoal1", "0");
                         Intent b = new Intent(ChooseActivity.this, PedometerActivity.class);
                         b.putExtra("string", goal_to_remember);
                         startActivity(b);
                         ChooseActivity.this.finish();
-                    }else {
+                    } else {
                         count++;
                     }
                 }
@@ -117,9 +109,9 @@ public class ChooseActivity extends AppCompatActivity {
     public void display(View v) {
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
-        database = dbOpenHelper.openDataBase();
+        SQLiteDatabase database = dbOpenHelper.openDataBase();
         //initialize
-        goalList = new ArrayList<String>();
+        ArrayList<String> goalList = new ArrayList<>();
         //put cursor
         Cursor cursor = database.rawQuery("select * from tbl_WG", null);
         cursor.moveToFirst();

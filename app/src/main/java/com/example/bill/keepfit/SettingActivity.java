@@ -1,17 +1,7 @@
 package com.example.bill.keepfit;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Switch;
-import android.widget.Toast;
-
-import java.util.prefs.Preferences;
+import android.preference.PreferenceActivity;
 
 public class SettingActivity  extends PreferenceActivity {
 

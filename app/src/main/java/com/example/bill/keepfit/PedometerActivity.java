@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,6 @@ public class PedometerActivity extends AppCompatActivity {
     private static Double STEP_COUNT = 0.0;
 
     private EditText editText;
-    private TextView mTvStep;
     private TextView tvchoicestep;
     private TextView tvAdding;
     private int helpInt;
@@ -66,7 +63,7 @@ public class PedometerActivity extends AppCompatActivity {
         //recover the row that we want to edit
         dataValue = intent.getExtras().getString("string");
         //split the whole string to parts
-        String data[] =dataValue.split(" ");
+        String data[] = dataValue != null ? dataValue.split(" ") : new String[0];
         //store the int value that we want to edit
         helpInt=Integer.parseInt(data[data.length-1].replace("]",""));//the total steps of one specific goal
         helpUnit=data[data.length-2].replace(":","");
@@ -77,7 +74,7 @@ public class PedometerActivity extends AppCompatActivity {
         //initialize the Texts
         editText=(EditText) findViewById(R.id.editgoal);
         tvchoicestep=(TextView) findViewById(R.id.tv_choice_step);
-        mTvStep=(TextView) findViewById(R.id.tv_current);
+        TextView mTvStep = (TextView) findViewById(R.id.tv_current);
         tvAdding=(TextView) findViewById(R.id.tv_adding);
 
 
@@ -145,7 +142,7 @@ public class PedometerActivity extends AppCompatActivity {
         }else
         {
             if(helpUnit.equals("Steps")){
-                mTvStep.setText(helpUnit +" walked : " +new Double(stepsToStartAgain).longValue());
+                mTvStep.setText(helpUnit +" walked : " +Double.valueOf(stepsToStartAgain).longValue());
             }else{
                 mTvStep.setText(helpUnit +" walked : " +String.valueOf(df2.format(stepsToStartAgain)));
             }
@@ -228,10 +225,8 @@ public class PedometerActivity extends AppCompatActivity {
                 // newStepsStore= convertStepsToAnotherUnit();
                 if(editText.getText().toString().trim().equals("")){
                     tvAdding.setText("Add Steps: " +0);
-
                 }else{
                     tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
-
                 }
               //  tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
                 System.out.println("Current " +helpUnit+": " + newStepsStore);
@@ -248,116 +243,128 @@ public class PedometerActivity extends AppCompatActivity {
     private Double doTheConvertionWhenGoalsChanged(String unit, Double prefNameSteps) {
         Double numberToReturn=0.0;
         System.out.println("EINAI H TIMH " +prefNameSteps);
-        if (unit.equals("Yards")) {
-            if (unitReturn().equals("Yards")) {
-                numberToReturn =  prefNameSteps;
+        switch (unit) {
+            case "Yards":
+                if (unitReturn().equals("Yards")) {
+                    numberToReturn = prefNameSteps;
 
-            } else if (unitReturn().equals("Meters")) {
-                numberToReturn =  (prefNameSteps * (1.0936133));
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (prefNameSteps * (1.0936133));
 
-            } else if (unitReturn().equals("Miles")) {
-                numberToReturn =  (prefNameSteps * (1760 ));
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (prefNameSteps * (1760));
 
-            } else if (unitReturn().equals("Kilometres")) {
-                numberToReturn =  (prefNameSteps * (1093));
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (prefNameSteps * (1093));
 
-            } else {
-                numberToReturn =  (prefNameSteps * (0.8333333333333334));
+                } else {
+                    numberToReturn = (prefNameSteps * (0.8333333333333334));
 
-            }
-        } else if (unit.equals("Meters")) {
+                }
+                break;
+            case "Meters":
 
-            if (unitReturn().equals("Meters")) {
-                numberToReturn =  prefNameSteps;
+                if (unitReturn().equals("Meters")) {
+                    numberToReturn = prefNameSteps;
 
-            } else if (unitReturn().equals("Yards")) {
-                numberToReturn =  (prefNameSteps * (0.9144));
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (prefNameSteps * (0.9144));
 
-            } else if (unitReturn().equals("Miles")) {
-                numberToReturn =  (prefNameSteps * (1609));
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (prefNameSteps * (1609));
 
-            } else if (unitReturn().equals("Kilometres")) {
-                numberToReturn =  (prefNameSteps * (1000));
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (prefNameSteps * (1000));
 
-            } else {
-                numberToReturn =  (prefNameSteps * (0.762));
+                } else {
+                    numberToReturn = (prefNameSteps * (0.762));
 
-            }
-        } else if (unit.equals("Miles")) {
+                }
+                break;
+            case "Miles":
 
-            if (unitReturn().equals("Miles")) {
-                numberToReturn =  prefNameSteps;
+                if (unitReturn().equals("Miles")) {
+                    numberToReturn = prefNameSteps;
 
-            } else if (unitReturn().equals("Yards")) {
-                numberToReturn =  (prefNameSteps * (0.000568181818));
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (prefNameSteps * (0.000568181818));
 
-            } else if (unitReturn().equals("Meters")) {
-                numberToReturn =  (prefNameSteps * (0.000621371192));
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (prefNameSteps * (0.000621371192));
 
-            } else if (unitReturn().equals("Kilometres")) {
-                numberToReturn =  (prefNameSteps * (0.621371192));
+                } else if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = (prefNameSteps * (0.621371192));
 
-            } else {
-                numberToReturn =  (prefNameSteps * (0.0004734848484848485));
+                } else {
+                    numberToReturn = (prefNameSteps * (0.0004734848484848485));
 
-            }
-        } else if (unit.equals("Kilometres")) {
-            System.out.println("Bika kilometra");
-            if (unitReturn().equals("Kilometres")) {
-                numberToReturn =  prefNameSteps;
+                }
+                break;
+            case "Kilometres":
+                System.out.println("Bika kilometra");
+                if (unitReturn().equals("Kilometres")) {
+                    numberToReturn = prefNameSteps;
 
-            } else if (unitReturn().equals("Yards")) {
-                numberToReturn = (prefNameSteps * (0.0009144));
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (prefNameSteps * (0.0009144));
 
-            } else if (unitReturn().equals("Meters")) {
+                } else if (unitReturn().equals("Meters")) {
 
-                numberToReturn =  (prefNameSteps * (0.001));
+                    numberToReturn = (prefNameSteps * (0.001));
 
-            } else if (unitReturn().equals("Miles")) {
-                System.out.println("Proigoumeno miles");
-                numberToReturn =  (prefNameSteps * (1.609344));
-            } else {
-                numberToReturn = (prefNameSteps * (0.000762));
-            }
-        } else if (unit.equals("Steps")) {
-            if (unitReturn().equals("Steps")) {
-                numberToReturn =  prefNameSteps;
+                } else if (unitReturn().equals("Miles")) {
+                    System.out.println("Proigoumeno miles");
+                    numberToReturn = (prefNameSteps * (1.609344));
+                } else {
+                    numberToReturn = (prefNameSteps * (0.000762));
+                }
+                break;
+            case "Steps":
+                if (unitReturn().equals("Steps")) {
+                    numberToReturn = prefNameSteps;
 
-            } else if (unitReturn().equals("Yards")) {
-                numberToReturn =  (prefNameSteps * (1.2));
+                } else if (unitReturn().equals("Yards")) {
+                    numberToReturn = (prefNameSteps * (1.2));
 
-            } else if (unitReturn().equals("Meters")) {
-                numberToReturn =  (prefNameSteps * (1.31));
+                } else if (unitReturn().equals("Meters")) {
+                    numberToReturn = (prefNameSteps * (1.31));
 
-            } else if (unitReturn().equals("Miles")) {
-                numberToReturn =  (prefNameSteps * (2112));
+                } else if (unitReturn().equals("Miles")) {
+                    numberToReturn = (prefNameSteps * (2112));
 
-            } else {
-                numberToReturn =  (prefNameSteps * (1312));
+                } else {
+                    numberToReturn = (prefNameSteps * (1312));
 
-            }
+                }
+                break;
         }
 
         return numberToReturn;
     }
 
     private Double convertStepsToAnotherUnit() {
-        Double numberUnit=0.0;
-        if (helpUnit.equals("Meters")) {
-            // meters
-            newStepsStore =  (newStepsStore * (0.762));
-        } else if (helpUnit.equals("Yards")) {
-            // yards
-            newStepsStore =  (newStepsStore * (0.83333333));
-        } else if (helpUnit.equals("Kilometres")) {
-            // kilometress
-            newStepsStore =  (newStepsStore * (0.000762));
-        } else if (helpUnit.equals("Miles")) {
-            // miles
-            newStepsStore = (newStepsStore * (0.0004734848484848485));
-        } else {
-            // steps
-            newStepsStore = newStepsStore;
+        Double numberUnit;
+        switch (helpUnit) {
+            case "Meters":
+                // meters
+                newStepsStore = (newStepsStore * (0.762));
+                break;
+            case "Yards":
+                // yards
+                newStepsStore = (newStepsStore * (0.83333333));
+                break;
+            case "Kilometres":
+                // kilometress
+                newStepsStore = (newStepsStore * (0.000762));
+                break;
+            case "Miles":
+                // miles
+                newStepsStore = (newStepsStore * (0.0004734848484848485));
+                break;
+            default:
+                // steps
+                newStepsStore = newStepsStore;
+                break;
         }
 
         numberUnit=newStepsStore;
@@ -423,15 +430,15 @@ public class PedometerActivity extends AppCompatActivity {
             //check if the name exists in the table
             boolean b=rowNameExists(helpName);
             //check again if exists with the same date
-            if(b==true && dateFound(dateTM)==true){
+            if(b && dateFound(dateTM)){
                 //for the test mode check if is active or not
                 System.out.println("To b einai true");
                 if(numberTM==1){
                     System.out.println("to test mode einai 1");
-                    updateDB(helpName,helpInt,  st, Float.parseFloat(data1),activeGoal,dateTM);
+                    updateDB(helpInt,  st, Float.parseFloat(data1),activeGoal,dateTM);
                 }else{
                     System.out.println("to test mode den einai 1");
-                    updateDB(helpName,helpInt,  st, Float.parseFloat(data1),activeGoal,curDate);
+                    updateDB(helpInt,  st, Float.parseFloat(data1),activeGoal,curDate);
                 }
 
             }else{
@@ -451,14 +458,14 @@ public class PedometerActivity extends AppCompatActivity {
             System.out.println("Einai idi active");
             if(numberTM==1){
                 System.out.println("to test mode einai 1");
-                updateDB(helpName,helpInt,  st, Float.parseFloat(data1),activeGoal,dateTM);
+                updateDB(helpInt,  st, Float.parseFloat(data1),activeGoal,dateTM);
             }else{
                 System.out.println("to test mode den einai 1");
-                updateDB(helpName,helpInt,  st, Float.parseFloat(data1),activeGoal,curDate);
+                updateDB(helpInt,  st, Float.parseFloat(data1),activeGoal,curDate);
             }
 
         }
-        prefsEditor.commit();
+        prefsEditor.apply();
         //clear the edit text
         editText.setText("");
         tvAdding.setText("");
@@ -496,7 +503,7 @@ public class PedometerActivity extends AppCompatActivity {
     }
 
     public long checkDifInTime() {
-        String nameFIrstActive = "";
+        String nameFIrstActive;
         nameFIrstActive = checkIsTheSame();
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
@@ -552,7 +559,7 @@ public class PedometerActivity extends AppCompatActivity {
         return days;
     }
 
-    public void updateDB(String name, int allSteps, double didSteps, float percentageSteps,int active ,String curDate){
+    public void updateDB(int allSteps, double didSteps, float percentageSteps, int active, String curDate){
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
@@ -582,9 +589,8 @@ public class PedometerActivity extends AppCompatActivity {
         Date curDate = new Date();
         //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String DateToStr = format.format(curDate);
         //   System.out.println(DateToStr);
-        return DateToStr;
+        return format.format(curDate);
     }
 
     public boolean rowNameExists(String name){
@@ -736,10 +742,10 @@ public class PedometerActivity extends AppCompatActivity {
 
 
     public void print() {
-        String name = "";
-        Integer steps = 0;
-        double stepsDid = 0;
-        String unit="";
+        String name;
+        Integer steps;
+        double stepsDid;
+        String unit;
         float percentage = 0f;
         String dateSearch = "";
         Integer activeNumber = 0;

@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,8 +25,6 @@ import java.util.Date;
 public class TabFragment1 extends Fragment {
     private ListView mainListView;
     private ArrayList<String> goalList;
-    private View v1;
-    private String prefName;
     private Double prefNameSteps;
     private String goalName;
     private String curDateHistory;
@@ -36,7 +33,6 @@ public class TabFragment1 extends Fragment {
     private Integer numberTM;
     private int currentMonth;
     private SQLiteDatabase database;
-    private static final String TABLE_NAME = "history_tbl_WG";
     private static final String DB_NAME = "MyHistorydb.db";
     private static DecimalFormat df2 = new DecimalFormat(".##");
     private int count = 0;
@@ -55,7 +51,7 @@ public class TabFragment1 extends Fragment {
         View v = inflater.inflate(R.layout.tab_fragment_1, container,false);
 
         spinnerUnit = (Spinner) v.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, state1);
+        ArrayAdapter<String> adapter_state1 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, state1);
         adapter_state1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUnit.setAdapter(adapter_state1);
 
@@ -67,28 +63,35 @@ public class TabFragment1 extends Fragment {
                 spinnerUnit.setSelection(pos);
                 String selState1 = (String) spinnerUnit.getSelectedItem();
 
-                if(selState1.equals("More Views") ) {
-                    stateOption=1;
-                }else if(selState1.equals("Kilometres")){
-                    unitForMenu=1;
-                    unitToInsert="Kilometres";
+                switch (selState1) {
+                    case "More Views":
+                        stateOption = 1;
+                        break;
+                    case "Kilometres":
+                        unitForMenu = 1;
+                        unitToInsert = "Kilometres";
 
-                }else if(selState1.equals("Meters")){
-                    unitForMenu=2;
-                    unitToInsert="Meters";
+                        break;
+                    case "Meters":
+                        unitForMenu = 2;
+                        unitToInsert = "Meters";
 
-                }else if(selState1.equals("Miles")){
-                    unitForMenu=3;
-                    unitToInsert="Miles";
+                        break;
+                    case "Miles":
+                        unitForMenu = 3;
+                        unitToInsert = "Miles";
 
-                }else if(selState1.equals("Yards")){
-                    unitForMenu=4;
-                    unitToInsert="Yards";
+                        break;
+                    case "Yards":
+                        unitForMenu = 4;
+                        unitToInsert = "Yards";
 
-                }else if(selState1.equals("Steps")){
-                    unitForMenu=5;
-                    unitToInsert="Steps";
+                        break;
+                    case "Steps":
+                        unitForMenu = 5;
+                        unitToInsert = "Steps";
 
+                        break;
                 }
 
             }
@@ -101,7 +104,7 @@ public class TabFragment1 extends Fragment {
 
         //return the data from the pedometer activity (last goal is active there)
         SharedPreferences myPrefs = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        prefName = myPrefs.getString("MyData", "0");//percentage
+        String prefName = myPrefs.getString("MyData", "0");
         prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));//current steps
         goalName=myPrefs.getString("MyData3", "0");//name of the current goal
 
@@ -137,8 +140,7 @@ public class TabFragment1 extends Fragment {
     public String getCurrentDate(){
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        String DateToStr = format.format(curDate);
-        return DateToStr;
+        return format.format(curDate);
     }
 
     public void display1(View v){
@@ -156,7 +158,7 @@ public class TabFragment1 extends Fragment {
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
             database = dbOpenHelper.openDataBase();
             //here i retrieve the data i want
-            goalList = new ArrayList<String>();
+            goalList = new ArrayList<>();
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
@@ -205,13 +207,13 @@ public class TabFragment1 extends Fragment {
             database.close();
 
 
-            if(max!=min){
-                goalList = new ArrayList<String>();
+            if(min != max){
+                goalList = new ArrayList<>();
                 findMinAndPrint(min);
                 findMaxAndPrint(max);
                 System.out.println("KSANAAAA EDWWWWW");
             }else{
-                goalList = new ArrayList<String>();
+                goalList = new ArrayList<>();
                 System.out.println("BIKAAAAA EDWWWWWW");
                 findMaxAndPrint(max);
             }
@@ -236,9 +238,9 @@ public class TabFragment1 extends Fragment {
         cursor.moveToFirst();
         String name="";
         int steps=0;
-        double stepsDid=0.0;
+        double stepsDid;
         String unit="";
-        float percentage=0f;
+        float percentage;
         int modeTest=0;
         long daysDifference=0;
         if (!cursor.isAfterLast()) {
@@ -330,7 +332,7 @@ public class TabFragment1 extends Fragment {
 
 
                     if(unitReturn().equals("Steps")) {
-                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                     }else{
                         goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -340,7 +342,7 @@ public class TabFragment1 extends Fragment {
                 if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && (daysDifference>=1 && daysDifference<=7)) {
                     System.out.println("difference in days in if: " + differenceInDays());
                     if(unitReturn().equals("Steps")){
-                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
 
                     }else{
                         goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
@@ -420,7 +422,7 @@ public class TabFragment1 extends Fragment {
         {
             e.printStackTrace();
         }
-        return (Date1.getTime() - Date2.getTime())/(24*60*60*1000);
+        return ((Date1 != null ? Date1.getTime() : 0) - Date2.getTime())/(24*60*60*1000);
     }
 
 }

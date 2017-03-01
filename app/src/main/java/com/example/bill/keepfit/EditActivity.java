@@ -1,7 +1,6 @@
 package com.example.bill.keepfit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +16,9 @@ import android.widget.Toast;
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
     private SQLiteDatabase database;
     private static final String DB_NAME = "Mydb.db";
-    private Integer helpInt;
     private String helpName;
     private EditText et1;
     private EditText et2;
-    private TextView tv;
-    private String regex = "[0-9]+";
     private String nameCh="";
 
 
@@ -30,7 +26,11 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //retract the incoming intent
@@ -39,9 +39,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         String dataValue = intent.getExtras().getString("string");
 
         //split the whole string to parts
-        String data[] =dataValue.split(" ");
+        String data[] = dataValue != null ? dataValue.split(" ") : new String[0];
         //store the int value that we want to edit
-        helpInt=Integer.parseInt(data[data.length-1]);
+        Integer helpInt = Integer.parseInt(data[data.length - 1]);
         helpName=data[data.length-4];
 
 
@@ -51,7 +51,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         et1.setText(helpName);
         et2=(EditText) findViewById(R.id.editsteps);
         et2.setText(String.valueOf(helpInt));
-        tv=(TextView) findViewById(R.id.Number_of_steps);
+        TextView tv = (TextView) findViewById(R.id.Number_of_steps);
         tv.setText("New Number of " +unitReturn());
 
     }
@@ -103,6 +103,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.save:
                 System.out.println(et1.getText().toString());
+                String regex = "[0-9]+";
                 if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
                     Toast.makeText(EditActivity.this, "You have to specify a value",
                             Toast.LENGTH_LONG).show();
@@ -189,7 +190,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         cursor.close();
         database.close();
-        if(isFound==true){
+        if(isFound){
             System.out.println("To name pou epistrefw einai: " +nameCh);
             return nameCh;
         }else{

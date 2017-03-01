@@ -18,10 +18,8 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
 
 private OnDateRangeSelectedListener onDateRangeSelectedListener;
 
-private TabHost tabHost;
-private DatePicker startDatePicker;
+        private DatePicker startDatePicker;
 private DatePicker endDatePicker;
-private Button butSetDateRange;
         boolean is24HourMode;
 
 public DateRangePickerFragment(){
@@ -46,18 +44,18 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState){
         View root=inflater.inflate(R.layout.date_range_picker,container,false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        tabHost=(TabHost)root.findViewById(R.id.tabHost);
-        butSetDateRange=(Button)root.findViewById(R.id.but_set_time_range);
+        TabHost tabHost = (TabHost) root.findViewById(R.id.tabHost);
+        Button butSetDateRange = (Button) root.findViewById(R.id.but_set_time_range);
         startDatePicker=(DatePicker)root.findViewById(R.id.start_date_picker);
         endDatePicker=(DatePicker)root.findViewById(R.id.end_date_picker);
         butSetDateRange.setOnClickListener(this);
         tabHost.findViewById(R.id.tabHost);
         tabHost.setup();
-        TabHost.TabSpec startDatePage=tabHost.newTabSpec("start");
+        TabHost.TabSpec startDatePage= tabHost.newTabSpec("start");
         startDatePage.setContent(R.id.start_date_group);
         startDatePage.setIndicator(getString(R.string.title_tab_start_date));
 
-        TabHost.TabSpec endDatePage=tabHost.newTabSpec("end");
+        TabHost.TabSpec endDatePage= tabHost.newTabSpec("end");
         endDatePage.setContent(R.id.end_date_group);
         endDatePage.setIndicator(getString(R.string.ttile_tab_end_date));
 
@@ -73,15 +71,11 @@ public void onStart(){
         if(getDialog()==null)
                 return;
 
-        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        getDialog().getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
 
 
-public void setOnDateRangeSelectedListener(OnDateRangeSelectedListener callback){
-        this.onDateRangeSelectedListener=callback;
-        }
-
-@Override
+        @Override
 public void onClick(View v){
         dismiss();
         onDateRangeSelectedListener.onDateRangeSelected(startDatePicker.getDayOfMonth(),startDatePicker.getMonth()+1,startDatePicker.getYear(),

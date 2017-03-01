@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class DatePickerActivity extends AppCompatActivity implements DateRangePickerFragment.OnDateRangeSelectedListener {
 
@@ -19,14 +17,17 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         setContentView(R.layout.activity_date_picker);
 
         //make visible the back button in the action bar <-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences prefs;
         SharedPreferences.Editor editor;
         prefs = getSharedPreferences("nbRepet", Context.MODE_PRIVATE);
         editor = prefs.edit();
         editor.putInt("nbRepet", 1);
-        editor.commit();
+        editor.apply();
 
         DateRangePickerFragment dateRangePickerFragment= DateRangePickerFragment.newInstance(DatePickerActivity.this,false);
         dateRangePickerFragment.show(getFragmentManager(),"datePicker");
@@ -64,7 +65,7 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         SharedPreferences.Editor prefsDateEditor = datePickerPref.edit();
         prefsDateEditor.putString("date1", st1);
         prefsDateEditor.putString("date2", st2);
-        prefsDateEditor.commit();
+        prefsDateEditor.apply();
         this.finish();
     }
 
