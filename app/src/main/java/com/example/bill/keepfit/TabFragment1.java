@@ -19,10 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
-/**
- * Created by Bill on 12/03/2016.
- */
+
 public class TabFragment1 extends Fragment {
     private ListView mainListView;
     private ArrayList<String> goalList;
@@ -32,7 +31,6 @@ public class TabFragment1 extends Fragment {
     private String dateTime;
     private String dateTM;
     private Integer numberTM;
-    private int currentMonth;
     private SQLiteDatabase database;
     private static final String DB_NAME = "MyHistorydb.db";
     private static DecimalFormat df2 = new DecimalFormat(".##");
@@ -120,6 +118,7 @@ public class TabFragment1 extends Fragment {
 
 
         //get the present date
+        int currentMonth;
         if (numberTM == 0) {
             curDateHistory = getCurrentDate();
             String[] data = curDateHistory.split("/");
@@ -164,7 +163,7 @@ public class TabFragment1 extends Fragment {
             String name = "";
             int steps = 0;
             double stepsDid = 0.0;
-            String unit = "";
+            String unit;
             float percentage = 0f;
             int modeTest = 0;
             long daysDifference = 0;
@@ -205,7 +204,7 @@ public class TabFragment1 extends Fragment {
             database.close();
 
 
-            if (min != max) {
+            if (!Objects.equals(min, max)) {
                 goalList = new ArrayList<>();
                 findMinAndPrint(min);
                 findMaxAndPrint(max);
@@ -234,7 +233,7 @@ public class TabFragment1 extends Fragment {
 
         Cursor cursor = database.rawQuery("select * from history_tbl_WG where didsteps='" + max + "'", null);
         cursor.moveToFirst();
-        String name = "";
+        String name;
         int steps = 0;
         double stepsDid;
         String unit = "";
@@ -272,7 +271,7 @@ public class TabFragment1 extends Fragment {
                 if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && (daysDifference >= 1 && daysDifference <= 7)) {
                     System.out.println("difference in days in if: " + differenceInDays());
                     if (unitReturn().equals("Steps")) {
-                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + new Double(stepsDid).longValue());
+                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + Double.valueOf(stepsDid).longValue());
 
                     } else {
                         goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));

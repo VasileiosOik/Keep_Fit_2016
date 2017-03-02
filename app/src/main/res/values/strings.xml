@@ -31,5 +31,15 @@
     <string name="title_tab_start_date">Start Date</string>
     <string name="ttile_tab_end_date">End Date</string>
     <string name="but_done">Done</string>
+    <string name="editSet">"New Number of "</string>
+    <string name="meterNum">Number of Meters</string>
+    <string name="YardsNum">Number of Yards</string>
+    <string name="kiloNum">Number of Kilometres</string>
+    <string name="milesNum">Number of Miles</string>
+    <string name="stepsNum">Number of Steps</string>
+    <string name="stepsAdd">"Add Steps: "</string>
+    <string name="stepsAdd1">"Add Steps: "</string>
+    <string name="testmodeON">Test Mode is ON</string>
+    <string name="goal">Goal Reached!</string>
 
 </resources>

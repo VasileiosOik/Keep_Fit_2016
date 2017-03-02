@@ -178,31 +178,31 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 positionSpinner = 0;
                 unit = "Meters";
-                tv.setText("Number of Meters");
+                tv.setText(R.string.meterNum);
                 tv.invalidate();
                 break;
             case 1:
                 positionSpinner = 1;
                 unit = "Yards";
-                tv.setText("Number of Yards");
+                tv.setText(R.string.YardsNum);
                 tv.invalidate();
                 break;
             case 2:
                 positionSpinner = 2;
                 unit = "Kilometres";
-                tv.setText("Number of Kilometres");
+                tv.setText(R.string.kiloNum);
                 tv.invalidate();
                 break;
             case 3:
                 positionSpinner = 3;
                 unit = "Miles";
-                tv.setText("Number of Miles");
+                tv.setText(R.string.milesNum);
                 tv.invalidate();
                 break;
             case 4:
                 positionSpinner = 4;
                 unit = "Steps";
-                tv.setText("Number of Steps");
+                tv.setText(R.string.stepsNum);
                 tv.invalidate();
                 break;
         }

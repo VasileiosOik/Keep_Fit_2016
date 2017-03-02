@@ -431,10 +431,9 @@ public class HistoryActivity extends AppCompatActivity {
         Integer steps = 0;
         Double stepsDid;
         String unit = "";
-        Float percentage = 0f;
+        Float percentage;
         String dateSearch = "";
         Integer activeNumber = 0;
-        SQLiteDatabase databasehelp;
         //here i store the active goal that i want to transfer
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHistorydb.db");
@@ -761,7 +760,7 @@ public class HistoryActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (Date1.getTime() - Date2.getTime()) / (24 * 60 * 60 * 1000);
+        return ((Date1 != null ? Date1.getTime() : 0) - Date2.getTime()) / (24 * 60 * 60 * 1000);
     }
 
     public void showEdit() {
@@ -1228,4 +1227,19 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
 
+    public ArrayAdapter<String> getListAdapter() {
+        return listAdapter;
+    }
+
+    public void setListAdapter(ArrayAdapter<String> listAdapter) {
+        this.listAdapter = listAdapter;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 }

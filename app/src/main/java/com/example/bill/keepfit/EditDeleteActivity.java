@@ -105,7 +105,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
             }
         } else {
-            if (name.equals(name1)) {
+            if (name != null && name.equals(name1)) {
                 switch (item.getItemId()) {
                     case R.id.edit_btn:
                         //here i store the position of each of the items in the row
@@ -176,11 +176,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         statusChecked = sharedPreferences.getBoolean("MyGoal", false);
         String prefName = sharedPreferences.getString("MyGoal1", "0");
         index = info.position;
-        String dataValue = prefName;
-        if (!dataValue.equals("0")) {
+        if (!prefName.equals("0")) {
 
             //split the whole string to parts
-            String data[] = dataValue.split(" ");
+            String data[] = prefName.split(" ");
             //store the int value that we want to edit
             name = data[data.length - 4];
 
@@ -255,5 +254,9 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         finish();
         startActivity(getIntent());
 
+    }
+
+    public void setV1(View v1) {
+        this.v1 = v1;
     }
 }

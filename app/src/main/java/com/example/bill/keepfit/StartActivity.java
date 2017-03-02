@@ -35,6 +35,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static java.lang.String.*;
+
 public class StartActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SQLiteDatabase database;
     private static final String TABLE_NAME = "tbl_WG";
@@ -91,7 +93,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         Integer numberTM = testModePreferences.getInt("testM", 0);
 
         if (numberTM == 1) {
-            textTestMode.setText("Test Mode is ON");
+            textTestMode.setText(R.string.testmodeON);
             textTestMode.setBackgroundColor(Color.RED);
         } else {
             textTestMode.setText("");
@@ -231,7 +233,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 float percentFilled = ((currentPosition - seriesItem.getMinValue()) / (seriesItem.getMaxValue() - seriesItem.getMinValue()));
-                textPercentage.setText(String.format("%.0f%%", percentFilled * 100f));
+                textPercentage.setText(format("%.0f%%", percentFilled * 100f));
             }
 
             @Override
@@ -254,7 +256,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 }
 
                 if (resultRemain == 0.0) {
-                    textToGo.setText("Goal Reached!");
+                    textToGo.setText(R.string.goal);
                 } else if (resultRemain < 0.0) {
                     textToGo.setText("Goal Reached! " + "\n" + "Above " + unitReturn() + ": " + df2.format(Math.abs(resultRemain)));
                 } else {
@@ -273,12 +275,12 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 if (Steps_so_far == 0.0) {
-                    textActivity1.setText(unitReturn() + " walked so far: " + String.valueOf(0));
+                    textActivity1.setText(unitReturn() + " walked so far: " + valueOf(0));
                 } else {
                     if (unitReturn().equals("Steps")) {
-                        textActivity1.setText(unitReturn() + " walked so far: " + Double.valueOf(Steps_so_far).longValue());
+                        textActivity1.setText(unitReturn() + " walked so far: " + Steps_so_far.longValue());
                     } else {
-                        textActivity1.setText(unitReturn() + " walked so far: " + String.valueOf(df2.format(Steps_so_far)));
+                        textActivity1.setText(unitReturn() + " walked so far: " + valueOf(df2.format(Steps_so_far)));
                     }
 
                 }
@@ -409,7 +411,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             // shared preferences
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
             String prefName = myPrefs.getString("MyData", "0");
-            prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
+            prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", valueOf(0.0)));
             System.out.println("Einai ta steps pou eginan: " + prefNameSteps);
             totalPrefSteps = myPrefs.getInt("MyData5", 0);
             System.out.println("Einai: " + totalPrefSteps);

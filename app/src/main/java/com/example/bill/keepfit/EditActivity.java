@@ -51,7 +51,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         et2 = (EditText) findViewById(R.id.editsteps);
         et2.setText(String.valueOf(helpInt));
         TextView tv = (TextView) findViewById(R.id.Number_of_steps);
-        tv.setText("New Number of " + unitReturn());
+        tv.setText(String.format("%s%s", getString(R.string.editSet), unitReturn()));
 
     }
 

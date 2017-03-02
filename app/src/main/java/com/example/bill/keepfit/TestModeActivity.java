@@ -26,7 +26,6 @@ import java.util.Calendar;
 
 public class TestModeActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private EditText et;
-    private Integer activeTestMode = 0;
     private CheckBox myCheckBox;
     private TextView tv;
     private boolean myBoolean = false;
@@ -62,6 +61,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
 
     }
+
 
     protected Dialog onCreateDialog(int id) {
         if (id == Dialog_ID)
@@ -166,10 +166,10 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
                 if (myBoolean && et.getText().toString().trim().equals("")) {
                     myCheckBox.setChecked(false);
                     onBackPressed();
-                } else if (myBoolean && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty() == true) {
+                } else if (myBoolean && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty()) {
                     myCheckBox.setChecked(true);
                     onBackPressed();
-                } else if (myBoolean && !et.getText().toString().trim().equals("") && checkIfTableIsEmpty() == false) {
+                } else if (myBoolean && !et.getText().toString().trim().equals("") && !checkIfTableIsEmpty()) {
                     myCheckBox.setChecked(false);
                     onBackPressed();
                 } else if (!myBoolean && previousDate != null && !previousDate.equals("")) {
@@ -187,6 +187,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     private void storeTheDate() {
 
         String currentDate;
+        Integer activeTestMode = 0;
         if (et.getText().toString().trim().equals("")) {
             //dont store something
             currentDate = "";
@@ -304,7 +305,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         String goal_to_remember = sharedPreferences.getString("MyGoal1", "0");
         System.out.println("Paei to deutero");
-        if (goal_to_remember != null && goal_to_remember != "0") {
+        if (!goal_to_remember.equals("0")) {
             String data[] = goal_to_remember.split(" ");
             String nameOfTestGoal = data[data.length - 4];
 
@@ -372,18 +373,16 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             mcursor.moveToFirst();
 
             String countName = mcursor.getString(0);
-            if (!countName.equals("0")) {
-                flag = true;
-            } else {
-                flag = false;
-            }
+            flag = !countName.equals("0");
 
         } else {
             flag = false;
         }
 
         System.out.println(flag);
-        mcursor.close();
+        if (mcursor != null) {
+            mcursor.close();
+        }
         database.close();
         return flag;
     }

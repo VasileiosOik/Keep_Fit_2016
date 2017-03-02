@@ -24,7 +24,6 @@ public class PedometerActivity extends AppCompatActivity {
     private TextView tvchoicestep;
     private TextView tvAdding;
     private int helpInt;
-    private String dataValue;
 
     private Double stepsToStartAgain;
     private String helpName;
@@ -35,9 +34,6 @@ public class PedometerActivity extends AppCompatActivity {
     private static final String DB_NAME = "MyHelpdb.db";
     private static final String TABLE_NAME = "time_tbl_WG";
     private int activeGoal = 0;
-
-    private Double st;
-    private Double st1;
 
     private String dateTime;
     private String dateTM;
@@ -63,7 +59,7 @@ public class PedometerActivity extends AppCompatActivity {
         //retract the incoming intent
         Intent intent = getIntent();
         //recover the row that we want to edit
-        dataValue = intent.getExtras().getString("string");
+        String dataValue = intent.getExtras().getString("string");
         //split the whole string to parts
         String data[] = dataValue != null ? dataValue.split(" ") : new String[0];
         //store the int value that we want to edit
@@ -141,7 +137,7 @@ public class PedometerActivity extends AppCompatActivity {
 
         } else {
             if (helpUnit.equals("Steps")) {
-                mTvStep.setText(helpUnit + " walked : " + Double.valueOf(stepsToStartAgain).longValue());
+                mTvStep.setText(helpUnit + " walked : " + stepsToStartAgain.longValue());
             } else {
                 mTvStep.setText(helpUnit + " walked : " + String.valueOf(df2.format(stepsToStartAgain)));
             }
@@ -223,9 +219,9 @@ public class PedometerActivity extends AppCompatActivity {
 
                 // newStepsStore= convertStepsToAnotherUnit();
                 if (editText.getText().toString().trim().equals("")) {
-                    tvAdding.setText("Add Steps: " + 0);
+                    tvAdding.setText(String.format("%s%d", getString(R.string.stepsAdd), 0));
                 } else {
-                    tvAdding.setText("Add Steps: " + Long.parseLong(editText.getText().toString().trim()));
+                    tvAdding.setText(String.format("%s%d", getString(R.string.stepsAdd1), Long.parseLong(editText.getText().toString().trim())));
                 }
                 //  tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
                 System.out.println("Current " + helpUnit + ": " + newStepsStore);
@@ -406,8 +402,8 @@ public class PedometerActivity extends AppCompatActivity {
         String dataa[] = tvchoicestep.getText().toString().split(" ");
         //store the int value that we want to edit
         //  float st = Float.parseFloat(data[data.length - 1]);
-        st = newStepsStore;
-        st1 = Double.parseDouble(dataa[dataa.length - 2]);
+        Double st = newStepsStore;
+        Double st1 = Double.parseDouble(dataa[dataa.length - 2]);
         //percentage of the current steps/total steps
         String data1 = String.valueOf((st / st1));
         //use of shared preferences
@@ -740,10 +736,9 @@ public class PedometerActivity extends AppCompatActivity {
         Integer steps;
         double stepsDid;
         String unit;
-        float percentage = 0f;
-        String dateSearch = "";
-        Integer activeNumber = 0;
-        SQLiteDatabase databasehelp;
+        float percentage;
+        String dateSearch;
+        Integer activeNumber;
         //here i store the active goal that i want to transfer
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, "MyHelpdb.db");
