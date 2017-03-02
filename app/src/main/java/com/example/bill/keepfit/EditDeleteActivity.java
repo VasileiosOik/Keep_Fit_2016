@@ -27,8 +27,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     private String name;
     private String name1;
     private Boolean statusChecked;
-    private boolean my_checkbox_preference=false;
-
+    private boolean my_checkbox_preference = false;
 
 
     @Override
@@ -36,7 +35,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editdelete);
 
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -45,10 +44,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         //here we retrieve the state of the editable
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         my_checkbox_preference = mySharedPreferences.getBoolean("switchRef", false);
-        System.out.println("H epilogh mou einai: " +my_checkbox_preference);
+        System.out.println("H epilogh mou einai: " + my_checkbox_preference);
 
         //here we initialize the listview to the list in the xml file
-        mainListView = (ListView) findViewById( R.id.goal_list );
+        mainListView = (ListView) findViewById(R.id.goal_list);
         registerForContextMenu(mainListView);
         mainListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
@@ -61,10 +60,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if(my_checkbox_preference) {
-            MenuInflater inflater=getMenuInflater();
+        if (my_checkbox_preference) {
+            MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.main_context_menu, menu);
-        }else{
+        } else {
             System.out.println("Den ginetai tpt");
         }
 
@@ -74,13 +73,70 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     public boolean onContextItemSelected(MenuItem item) {
         int index;
         //!!!!!!!!!!!!!!!!!because it is an object you have to cast!!!!!!!!!!!!!!!
-        AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
 
-            //it returns the names
-            updateChoices(info, goalList);
+        //it returns the names
+        updateChoices(info, goalList);
 
-            if (name == null && name1 == null) {
+        if (name == null && name1 == null) {
+            switch (item.getItemId()) {
+                case R.id.edit_btn:
+                    //here i store the position of each of the items in the row
+                    index = info.position;
+
+                    Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
+                    a.putExtra("string", goalList.get(index));
+                    startActivity(a);
+                    break;
+
+                case R.id.delete_btn:
+                    index = info.position;
+
+
+                    Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
+                    b.putExtra("string", goalList.get(index));
+                    startActivity(b);
+
+
+                    break;
+                default:
+                    return super.onContextItemSelected(item);
+
+            }
+        } else {
+            if (name.equals(name1)) {
+                switch (item.getItemId()) {
+                    case R.id.edit_btn:
+                        //here i store the position of each of the items in the row
+                        index = info.position;
+                        if (name.equals(name1) && statusChecked) {
+                            Toast.makeText(EditDeleteActivity.this, "You cannot edit a current goal",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
+                            a.putExtra("string", goalList.get(index));
+                            startActivity(a);
+                            return true;
+                        }
+                        break;
+                    case R.id.delete_btn:
+                        index = info.position;
+                        if (name.equals(name1) && statusChecked) {
+                            Toast.makeText(EditDeleteActivity.this, "You cannot delete a current goal",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
+                            b.putExtra("string", goalList.get(index));
+                            startActivity(b);
+                            return true;
+                        }
+                        break;
+                    default:
+                        return super.onContextItemSelected(item);
+
+                }
+            } else {
                 switch (item.getItemId()) {
                     case R.id.edit_btn:
                         //here i store the position of each of the items in the row
@@ -105,93 +161,36 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
                         return super.onContextItemSelected(item);
 
                 }
-            } else {
-                if (name.equals(name1)) {
-                    switch (item.getItemId()) {
-                        case R.id.edit_btn:
-                            //here i store the position of each of the items in the row
-                            index = info.position;
-                            if (name.equals(name1) && statusChecked) {
-                                Toast.makeText(EditDeleteActivity.this, "You cannot edit a current goal",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
-                                a.putExtra("string", goalList.get(index));
-                                startActivity(a);
-                                return true;
-                            }
-                            break;
-                        case R.id.delete_btn:
-                            index = info.position;
-                            if (name.equals(name1) && statusChecked) {
-                                Toast.makeText(EditDeleteActivity.this, "You cannot delete a current goal",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
-                                b.putExtra("string", goalList.get(index));
-                                startActivity(b);
-                                return true;
-                            }
-                            break;
-                        default:
-                            return super.onContextItemSelected(item);
-
-                    }
-                } else {
-                    switch (item.getItemId()) {
-                        case R.id.edit_btn:
-                            //here i store the position of each of the items in the row
-                            index = info.position;
-
-                            Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
-                            a.putExtra("string", goalList.get(index));
-                            startActivity(a);
-                            break;
-
-                        case R.id.delete_btn:
-                            index = info.position;
-
-
-                            Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
-                            b.putExtra("string", goalList.get(index));
-                            startActivity(b);
-
-
-                            break;
-                        default:
-                            return super.onContextItemSelected(item);
-
-                    }
-                }
             }
-
+        }
 
 
         return super.onContextItemSelected(item);
 
     }
+
     //checks here if it is a currnet goal or not
     private void updateChoices(AdapterView.AdapterContextMenuInfo info, ArrayList<String> goalList) {
         int index;
         SharedPreferences sharedPreferences = EditDeleteActivity.this.getSharedPreferences("status", MODE_PRIVATE);
-        statusChecked=sharedPreferences.getBoolean("MyGoal", false);
-        String prefName=sharedPreferences.getString("MyGoal1", "0");
-        index=info.position;
+        statusChecked = sharedPreferences.getBoolean("MyGoal", false);
+        String prefName = sharedPreferences.getString("MyGoal1", "0");
+        index = info.position;
         String dataValue = prefName;
-        if(!dataValue.equals("0")){
+        if (!dataValue.equals("0")) {
 
             //split the whole string to parts
             String data[] = dataValue.split(" ");
             //store the int value that we want to edit
-            name=data[data.length-4];
+            name = data[data.length - 4];
 
             String dataValue1 = goalList.get(index);
             //split the whole string to parts
-            String data1[] =dataValue1.split(" ");
+            String data1[] = dataValue1.split(" ");
             //store the int value that we want to edit
-            name1=data1[data1.length-4];
-            System.out.println("Here: " +name);
-            System.out.println("Here: " +name1);
+            name1 = data1[data1.length - 4];
+            System.out.println("Here: " + name);
+            System.out.println("Here: " + name1);
 
         }
 
@@ -205,7 +204,7 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-         if(id==android.R.id.home){
+        if (id == android.R.id.home) {
             onBackPressed();
         }
 
@@ -235,12 +234,12 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         goalList = new ArrayList<>();
         Cursor cursor = database.rawQuery("select * from tbl_WG", null);
         cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
+        if (!cursor.isAfterLast()) {
             do {
-                String name=cursor.getString(cursor.getColumnIndex("name"));
-                String unit=cursor.getString(cursor.getColumnIndex("unit"));
-                Integer steps=Integer.parseInt(cursor.getString(1));
-                goalList.add("Name: "+name+" || " +unit+": "+steps);
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String unit = cursor.getString(cursor.getColumnIndex("unit"));
+                Integer steps = Integer.parseInt(cursor.getString(1));
+                goalList.add("Name: " + name + " || " + unit + ": " + steps);
             } while (cursor.moveToNext());
         }
         cursor.close();

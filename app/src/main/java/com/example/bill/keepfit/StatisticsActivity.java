@@ -14,7 +14,7 @@ public class StatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
 
         //make visible the back button in the action bar <-
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,7 +56,7 @@ public class StatisticsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id==android.R.id.home){
+        if (id == android.R.id.home) {
             onBackPressed();
         }
 

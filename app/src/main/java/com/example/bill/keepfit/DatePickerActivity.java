@@ -17,7 +17,7 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         setContentView(R.layout.activity_date_picker);
 
         //make visible the back button in the action bar <-
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -29,8 +29,8 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         editor.putInt("nbRepet", 1);
         editor.apply();
 
-        DateRangePickerFragment dateRangePickerFragment= DateRangePickerFragment.newInstance(DatePickerActivity.this,false);
-        dateRangePickerFragment.show(getFragmentManager(),"datePicker");
+        DateRangePickerFragment dateRangePickerFragment = DateRangePickerFragment.newInstance(DatePickerActivity.this, false);
+        dateRangePickerFragment.show(getFragmentManager(), "datePicker");
     }
 
     @Override
@@ -57,9 +57,9 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
 
     @Override
     public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
-        Log.d("range : ","from: "+startDay+"-"+startMonth+"-"+startYear+" to : "+endDay+"-"+endMonth+"-"+endYear );
-        String st1=startDay+"/"+startMonth+"/"+startYear;
-        String st2=endDay+"/"+endMonth+"/"+endYear;
+        Log.d("range : ", "from: " + startDay + "-" + startMonth + "-" + startYear + " to : " + endDay + "-" + endMonth + "-" + endYear);
+        String st1 = startDay + "/" + startMonth + "/" + startYear;
+        String st2 = endDay + "/" + endMonth + "/" + endYear;
 
         SharedPreferences datePickerPref = this.getSharedPreferences("myDatePicker", MODE_PRIVATE);
         SharedPreferences.Editor prefsDateEditor = datePickerPref.edit();

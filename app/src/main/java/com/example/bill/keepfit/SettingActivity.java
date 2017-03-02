@@ -3,8 +3,7 @@ package com.example.bill.keepfit;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class SettingActivity  extends PreferenceActivity {
-
+public class SettingActivity extends PreferenceActivity {
 
 
     @Override

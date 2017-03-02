@@ -20,11 +20,11 @@ import android.widget.Toast;
 public class GoalActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private SQLiteDatabase db;
-    private EditText et1,et2;
+    private EditText et1, et2;
     private String nameCh;
     private static final String DB_NAME = "Mydb.db";
     private Spinner spinner;
-    private static final String[]paths = {"Meters", "Yards", "Kilometres", "Miles", "Steps"};
+    private static final String[] paths = {"Meters", "Yards", "Kilometres", "Miles", "Steps"};
     private int positionSpinner;
     private String unit;
     private TextView tv;
@@ -34,16 +34,16 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal);
 
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tv= (TextView) findViewById(R.id.Number_of_steprs);
+        tv = (TextView) findViewById(R.id.Number_of_steprs);
 
-        spinner = (Spinner)findViewById(R.id.spinner);
-        ArrayAdapter<String>adapter = new ArrayAdapter<>(GoalActivity.this,
-                android.R.layout.simple_spinner_item,paths);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(GoalActivity.this,
+                android.R.layout.simple_spinner_item, paths);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -53,7 +53,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         et1 = (EditText) findViewById(R.id.editname);
         et2 = (EditText) findViewById(R.id.editsteps);
 
-        }
+    }
 
     //In this method you handle the button events
     @Override
@@ -62,20 +62,19 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //This method will be called when insert button is pressed
-    public void insert()
-    {
+    public void insert() {
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         db = dbOpenHelper.openDataBase();
 
-        String name=et1.getText().toString();
-        Integer steps=Integer.parseInt(et2.getText().toString());
+        String name = et1.getText().toString();
+        Integer steps = Integer.parseInt(et2.getText().toString());
         et1.setText("");
         et2.setText("");
-        System.out.println("H monada einai: " +unit);
+        System.out.println("H monada einai: " + unit);
         //insert data into able
         float percentageSteps = 0;
-        db.execSQL("insert into tbl_WG values('"+name+"','"+steps+"','"+unit+"','"+ percentageSteps +"')");
+        db.execSQL("insert into tbl_WG values('" + name + "','" + steps + "','" + unit + "','" + percentageSteps + "')");
         //display Toast
         Toast.makeText(this, "goal stored successfully!", Toast.LENGTH_LONG).show();
         db.close();
@@ -102,41 +101,38 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
             // action with ID save_button was selected
             case R.id.save:
                 String regex = "[0-9]+";
-                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
+                if (et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")) {
                     Toast.makeText(GoalActivity.this, "You haven't specified a goal",
                             Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().equals("0")){
+                } else if (et1.getText().toString().trim().equals("0")) {
                     Toast.makeText(GoalActivity.this, "Wrong name",
                             Toast.LENGTH_LONG).show();
-                }
-                else if((Integer.parseInt(et2.getText().toString().trim()))<=0){
+                } else if ((Integer.parseInt(et2.getText().toString().trim())) <= 0) {
                     Toast.makeText(GoalActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
-                }else if ( et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
+                } else if (et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
                         || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
-                        || et1.getText().toString().trim().contains("%") ||  et1.getText().toString().trim().contains("^")
-                        || et1.getText().toString().trim().contains("&") ||  et1.getText().toString().trim().contains("*")
-                        || et1.getText().toString().trim().contains("(") ||  et1.getText().toString().trim().contains(")")
-                        || et1.getText().toString().trim().contains("[") ||  et1.getText().toString().trim().contains("]")
-                        || et1.getText().toString().trim().contains("{") ||  et1.getText().toString().trim().contains("}")
-                        || et1.getText().toString().trim().contains(";") ||  et1.getText().toString().trim().contains(":")
-                        || et1.getText().toString().trim().contains("'") ||  et1.getText().toString().trim().contains("|")
-                        || et1.getText().toString().trim().contains(",") ||  et1.getText().toString().trim().contains("<")
-                        || et1.getText().toString().trim().contains(">") ||  et1.getText().toString().trim().contains(".")
-                        || et1.getText().toString().trim().contains("?") ||  et1.getText().toString().trim().contains("/")
-                        || et1.getText().toString().trim().contains("-") ||  et1.getText().toString().trim().contains("_")
-                        || et1.getText().toString().trim().contains("+") ||  et1.getText().toString().trim().contains("=")){
+                        || et1.getText().toString().trim().contains("%") || et1.getText().toString().trim().contains("^")
+                        || et1.getText().toString().trim().contains("&") || et1.getText().toString().trim().contains("*")
+                        || et1.getText().toString().trim().contains("(") || et1.getText().toString().trim().contains(")")
+                        || et1.getText().toString().trim().contains("[") || et1.getText().toString().trim().contains("]")
+                        || et1.getText().toString().trim().contains("{") || et1.getText().toString().trim().contains("}")
+                        || et1.getText().toString().trim().contains(";") || et1.getText().toString().trim().contains(":")
+                        || et1.getText().toString().trim().contains("'") || et1.getText().toString().trim().contains("|")
+                        || et1.getText().toString().trim().contains(",") || et1.getText().toString().trim().contains("<")
+                        || et1.getText().toString().trim().contains(">") || et1.getText().toString().trim().contains(".")
+                        || et1.getText().toString().trim().contains("?") || et1.getText().toString().trim().contains("/")
+                        || et1.getText().toString().trim().contains("-") || et1.getText().toString().trim().contains("_")
+                        || et1.getText().toString().trim().contains("+") || et1.getText().toString().trim().contains("=")) {
                     Toast.makeText(GoalActivity.this, "Name cannot contain special characters",
                             Toast.LENGTH_LONG).show();
-                }
-                else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
+                } else if (nameChecked() != null && nameChecked().equals(et1.getText().toString().trim())) {
                     Toast.makeText(GoalActivity.this, "Name already exists",
                             Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().matches(regex)){
+                } else if (et1.getText().toString().trim().matches(regex)) {
                     Toast.makeText(GoalActivity.this, "Name cannot contain only numbers",
                             Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     insert();
                 }
                 break;
@@ -150,18 +146,17 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    public String nameChecked(){
+    public String nameChecked() {
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         db = dbOpenHelper.openDataBase();
-        Cursor cursor = db.rawQuery("select name from tbl_WG where name='"+et1.getText().toString().trim()+"'", null);
+        Cursor cursor = db.rawQuery("select name from tbl_WG where name='" + et1.getText().toString().trim() + "'", null);
         cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
+        if (!cursor.isAfterLast()) {
             do {
-                nameCh=cursor.getString(cursor.getColumnIndex("name"));
-                System.out.println("Name is: " +nameCh);
-                if(nameCh.equals(et1.getText().toString())){
+                nameCh = cursor.getString(cursor.getColumnIndex("name"));
+                System.out.println("Name is: " + nameCh);
+                if (nameCh.equals(et1.getText().toString())) {
                     break;
                 }
             } while (cursor.moveToNext());
@@ -181,32 +176,32 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                positionSpinner=0;
-                unit="Meters";
+                positionSpinner = 0;
+                unit = "Meters";
                 tv.setText("Number of Meters");
                 tv.invalidate();
                 break;
             case 1:
-                positionSpinner=1;
-                unit="Yards";
+                positionSpinner = 1;
+                unit = "Yards";
                 tv.setText("Number of Yards");
                 tv.invalidate();
                 break;
             case 2:
-                positionSpinner=2;
-                unit="Kilometres";
+                positionSpinner = 2;
+                unit = "Kilometres";
                 tv.setText("Number of Kilometres");
                 tv.invalidate();
                 break;
             case 3:
-                positionSpinner=3;
-                unit="Miles";
+                positionSpinner = 3;
+                unit = "Miles";
                 tv.setText("Number of Miles");
                 tv.invalidate();
                 break;
             case 4:
-                positionSpinner=4;
-                unit="Steps";
+                positionSpinner = 4;
+                unit = "Steps";
                 tv.setText("Number of Steps");
                 tv.invalidate();
                 break;
@@ -232,7 +227,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void save(final int isSelected) {
-        SharedPreferences sharedPreferences = this.getSharedPreferences("spinnerState",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("spinnerState", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("spinnerSelection", isSelected);
         editor.putString("spinnerName", unit);
@@ -243,7 +238,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
 
 
         SharedPreferences prefs = getSharedPreferences("spinnerState", MODE_PRIVATE);
-        return prefs.getInt("spinnerSelection",0);
+        return prefs.getInt("spinnerSelection", 0);
 
     }
 }

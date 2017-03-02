@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DeleteActivity extends AppCompatActivity implements View.OnClickListener{
+public class DeleteActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TABLE_NAME = "tbl_WG";
     private static final String DB_NAME = "Mydb.db";
     private String helpName;
@@ -22,10 +22,10 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView tv = (TextView) findViewById(R.id.tv);
         //retract the incoming intent
@@ -34,17 +34,15 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         String dataValue = intent.getExtras().getString("string");
 
         //split the whole string to parts
-        if(dataValue!=null){
-            String data[] =dataValue.split(" ");
+        if (dataValue != null) {
+            String data[] = dataValue.split(" ");
             //store the int value that we want to delete
             //Integer helpInt = Integer.parseInt(data[data.length - 1]);
-            helpName=data[data.length-4];
+            helpName = data[data.length - 4];
             System.out.println(helpName);
 
             tv.setText(dataValue);
         }
-
-
 
 
     }
@@ -68,8 +66,7 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private AlertDialog AskOption()
-    {
+    private AlertDialog AskOption() {
         return new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete Action")
@@ -85,7 +82,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                 })
-
 
 
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {

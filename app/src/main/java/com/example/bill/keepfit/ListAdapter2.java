@@ -10,30 +10,29 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 
 /**
  * Created by Bill on 07/02/2016.
  */
-public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheckedChangeListener{
-    private  ArrayList<String> goalList= null;
+public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheckedChangeListener {
+    private ArrayList<String> goalList = null;
     private Context context;
     private Switch sw;
     private Boolean[] checkedStatus;
     private int mFieldId = 0;
 
 
-
-
-    public ListAdapter2(Context context,ArrayList<String> resource, Boolean[] checkedStatus) {
-        super(context,R.layout.toggle_button_row,resource);
+    public ListAdapter2(Context context, ArrayList<String> resource, Boolean[] checkedStatus) {
+        super(context, R.layout.toggle_button_row, resource);
         // TODO Auto-generated constructor stub
         this.context = context;
-        goalList= new ArrayList<>();
-        this.goalList =resource;
-        this.checkedStatus=checkedStatus;
-      //  mFieldId=textViewResourceId;
+        goalList = new ArrayList<>();
+        this.goalList = resource;
+        this.checkedStatus = checkedStatus;
+        //  mFieldId=textViewResourceId;
 
     }
 
@@ -41,13 +40,13 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.toggle_button_row, parent, false);
         View v1 = convertView;
         TextView name = (TextView) v1.findViewById(R.id.textview1);
         name.setText(goalList.get(position).toString());
         //switches
-        sw= (Switch) v1.findViewById(R.id.switch1);
+        sw = (Switch) v1.findViewById(R.id.switch1);
         sw.setTag(position);
         sw.setOnCheckedChangeListener(ListAdapter2.this);
         sw.setChecked(checkedStatus[position]);

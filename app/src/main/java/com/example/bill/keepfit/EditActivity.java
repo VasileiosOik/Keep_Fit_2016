@@ -19,7 +19,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private String helpName;
     private EditText et1;
     private EditText et2;
-    private String nameCh="";
+    private String nameCh = "";
 
 
     @Override
@@ -27,7 +27,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,17 +42,16 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         String data[] = dataValue != null ? dataValue.split(" ") : new String[0];
         //store the int value that we want to edit
         Integer helpInt = Integer.parseInt(data[data.length - 1]);
-        helpName=data[data.length-4];
-
+        helpName = data[data.length - 4];
 
 
         //initialize the editText
         et1 = (EditText) findViewById(R.id.editName);
         et1.setText(helpName);
-        et2=(EditText) findViewById(R.id.editsteps);
+        et2 = (EditText) findViewById(R.id.editsteps);
         et2.setText(String.valueOf(helpInt));
         TextView tv = (TextView) findViewById(R.id.Number_of_steps);
-        tv.setText("New Number of " +unitReturn());
+        tv.setText("New Number of " + unitReturn());
 
     }
 
@@ -62,21 +61,20 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
         //Give new name
-        String name=et1.getText().toString();
+        String name = et1.getText().toString();
         //Give new number of steps
-        Integer helpSteps=Integer.parseInt(et2.getText().toString());
+        Integer helpSteps = Integer.parseInt(et2.getText().toString());
         et1.setText("");
         et2.setText("");
 
         //we want here to update the values with new ones given by the user
 
-        database.execSQL("UPDATE tbl_WG SET steps='"+helpSteps+"' WHERE name='"+helpName+"'");
-        if(helpName.equals(name)){
+        database.execSQL("UPDATE tbl_WG SET steps='" + helpSteps + "' WHERE name='" + helpName + "'");
+        if (helpName.equals(name)) {
             //dont do anything
             System.out.println("Name is the same");
-        }
-        else{
-            database.execSQL("UPDATE tbl_WG SET name='"+name+"' WHERE name='"+helpName+"'");
+        } else {
+            database.execSQL("UPDATE tbl_WG SET name='" + name + "' WHERE name='" + helpName + "'");
         }
 
         Toast.makeText(this, "Changes applied successfully!", Toast.LENGTH_LONG).show();
@@ -104,44 +102,40 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.save:
                 System.out.println(et1.getText().toString());
                 String regex = "[0-9]+";
-                if(et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")){
+                if (et1.getText().toString().trim().equals("") || et2.getText().toString().trim().equals("")) {
                     Toast.makeText(EditActivity.this, "You have to specify a value",
                             Toast.LENGTH_LONG).show();
-                }else if(et1.getText().toString().trim().equals("0")){
+                } else if (et1.getText().toString().trim().equals("0")) {
                     Toast.makeText(EditActivity.this, "Wrong name",
                             Toast.LENGTH_LONG).show();
-                }
-                else if((Integer.parseInt(et2.getText().toString().trim()))<=0 ){
+                } else if ((Integer.parseInt(et2.getText().toString().trim())) <= 0) {
                     Toast.makeText(EditActivity.this, "Wrong number of steps",
                             Toast.LENGTH_LONG).show();
-                }else if ( et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
-                    || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
-                    || et1.getText().toString().trim().contains("%") ||  et1.getText().toString().trim().contains("^")
-                    || et1.getText().toString().trim().contains("&") ||  et1.getText().toString().trim().contains("*")
-                    || et1.getText().toString().trim().contains("(") ||  et1.getText().toString().trim().contains(")")
-                    || et1.getText().toString().trim().contains("[") ||  et1.getText().toString().trim().contains("]")
-                    || et1.getText().toString().trim().contains("{") ||  et1.getText().toString().trim().contains("}")
-                    || et1.getText().toString().trim().contains(";") ||  et1.getText().toString().trim().contains(":")
-                    || et1.getText().toString().trim().contains("'") ||  et1.getText().toString().trim().contains("|")
-                    || et1.getText().toString().trim().contains(",") ||  et1.getText().toString().trim().contains("<")
-                    || et1.getText().toString().trim().contains(">") ||  et1.getText().toString().trim().contains(".")
-                    || et1.getText().toString().trim().contains("?") ||  et1.getText().toString().trim().contains("/")
-                    || et1.getText().toString().trim().contains("-") ||  et1.getText().toString().trim().contains("_")
-                    || et1.getText().toString().trim().contains("+") ||  et1.getText().toString().trim().contains("=")){
-                      Toast.makeText(EditActivity.this, "Name cannot contain special characters",
+                } else if (et1.getText().toString().trim().contains("~") || et1.getText().toString().trim().contains("@")
+                        || et1.getText().toString().trim().contains("#") || et1.getText().toString().trim().contains("$")
+                        || et1.getText().toString().trim().contains("%") || et1.getText().toString().trim().contains("^")
+                        || et1.getText().toString().trim().contains("&") || et1.getText().toString().trim().contains("*")
+                        || et1.getText().toString().trim().contains("(") || et1.getText().toString().trim().contains(")")
+                        || et1.getText().toString().trim().contains("[") || et1.getText().toString().trim().contains("]")
+                        || et1.getText().toString().trim().contains("{") || et1.getText().toString().trim().contains("}")
+                        || et1.getText().toString().trim().contains(";") || et1.getText().toString().trim().contains(":")
+                        || et1.getText().toString().trim().contains("'") || et1.getText().toString().trim().contains("|")
+                        || et1.getText().toString().trim().contains(",") || et1.getText().toString().trim().contains("<")
+                        || et1.getText().toString().trim().contains(">") || et1.getText().toString().trim().contains(".")
+                        || et1.getText().toString().trim().contains("?") || et1.getText().toString().trim().contains("/")
+                        || et1.getText().toString().trim().contains("-") || et1.getText().toString().trim().contains("_")
+                        || et1.getText().toString().trim().contains("+") || et1.getText().toString().trim().contains("=")) {
+                    Toast.makeText(EditActivity.this, "Name cannot contain special characters",
                             Toast.LENGTH_LONG).show();
-                }
-                else if (nameChecked(et1.getText().toString().trim()) != null && !nameChecked(et1.getText().toString().trim()).isEmpty() && !nameChecked(et1.getText().toString().trim()).equals(helpName)) {
-                        Toast.makeText(EditActivity.this, "Name already exists", Toast.LENGTH_LONG).show();
-                }else if(helpName.equals(et1.getText().toString().trim())){
+                } else if (nameChecked(et1.getText().toString().trim()) != null && !nameChecked(et1.getText().toString().trim()).isEmpty() && !nameChecked(et1.getText().toString().trim()).equals(helpName)) {
+                    Toast.makeText(EditActivity.this, "Name already exists", Toast.LENGTH_LONG).show();
+                } else if (helpName.equals(et1.getText().toString().trim())) {
                     System.out.println("Bainw edw");
                     editGoal();
-                }
-                else if(et1.getText().toString().trim().matches(regex)){
+                } else if (et1.getText().toString().trim().matches(regex)) {
                     Toast.makeText(EditActivity.this, "Name cannot contain only numbers",
                             Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     editGoal();
                 }
                 break;
@@ -167,21 +161,21 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         EditActivity.this.finish();
     }
 
-    public String nameChecked(String name){
+    public String nameChecked(String name) {
         //The database is open!
-        boolean isFound=false;
-        System.out.println("To name pou pernaw einai: " +name);
+        boolean isFound = false;
+        System.out.println("To name pou pernaw einai: " + name);
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
         Cursor cursor = database.rawQuery("select name from tbl_WG", null);
         cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
+        if (!cursor.isAfterLast()) {
             do {
-                nameCh=cursor.getString(cursor.getColumnIndex("name"));
+                nameCh = cursor.getString(cursor.getColumnIndex("name"));
 
-                if(nameCh.equals(name)){
+                if (nameCh.equals(name)) {
                     System.out.println("to vrika sth vasi");
-                    isFound=true;
+                    isFound = true;
                     break;
                 }
 
@@ -190,12 +184,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         cursor.close();
         database.close();
-        if(isFound){
-            System.out.println("To name pou epistrefw einai: " +nameCh);
+        if (isFound) {
+            System.out.println("To name pou epistrefw einai: " + nameCh);
             return nameCh;
-        }else{
-            nameCh="";
-            System.out.println("To name pou epistrefw einai: " +nameCh);
+        } else {
+            nameCh = "";
+            System.out.println("To name pou epistrefw einai: " + nameCh);
             return nameCh;
         }
 

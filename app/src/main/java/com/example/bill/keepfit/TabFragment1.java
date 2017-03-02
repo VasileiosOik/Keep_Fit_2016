@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,24 +40,23 @@ public class TabFragment1 extends Fragment {
     private Double min = Double.MAX_VALUE;
     private Double max = Double.MIN_VALUE;
     private Double total = 0.0;
-    private String[] state1={  "More Views","Kilometres", "Miles", "Meters", "Yards","Steps"};
+    private String[] state1 = {"More Views", "Kilometres", "Miles", "Meters", "Yards", "Steps"};
     private Spinner spinnerUnit;
-    private int value=0;
+    private int value = 0;
     private int unitForMenu;
-    private String  unitToInsert;
-    private int stateOption=0;
+    private String unitToInsert;
+    private int stateOption = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab_fragment_1, container,false);
+        View v = inflater.inflate(R.layout.tab_fragment_1, container, false);
 
         spinnerUnit = (Spinner) v.findViewById(R.id.spinner1);
         ArrayAdapter<String> adapter_state1 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, state1);
         adapter_state1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUnit.setAdapter(adapter_state1);
 
-        spinnerUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spinnerUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
 
@@ -106,53 +106,52 @@ public class TabFragment1 extends Fragment {
         SharedPreferences myPrefs = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         String prefName = myPrefs.getString("MyData", "0");
         prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));//current steps
-        goalName=myPrefs.getString("MyData3", "0");//name of the current goal
+        goalName = myPrefs.getString("MyData3", "0");//name of the current goal
 
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
         SharedPreferences testModePreferences = getActivity().getSharedPreferences("textModeSetting", Context.MODE_PRIVATE);
-        dateTM=testModePreferences.getString("date", null);
-        numberTM=testModePreferences.getInt("testM",0);
+        dateTM = testModePreferences.getString("date", null);
+        numberTM = testModePreferences.getInt("testM", 0);
 
         //here we initialize the listview to the list in the xml file
 
 
-        mainListView = (ListView)v.findViewById(R.id.goal_list);
-
+        mainListView = (ListView) v.findViewById(R.id.goal_list);
 
 
         //get the present date
-        if(numberTM==0){
-            curDateHistory=getCurrentDate();
-            String[] data=curDateHistory.split("/");
-            currentMonth=Integer.parseInt(data[data.length-2]);
-        }else{
-            curDateHistory=dateTM;
-            String[] data=curDateHistory.split("/");
-            currentMonth=Integer.parseInt(data[data.length-2]);
+        if (numberTM == 0) {
+            curDateHistory = getCurrentDate();
+            String[] data = curDateHistory.split("/");
+            currentMonth = Integer.parseInt(data[data.length - 2]);
+        } else {
+            curDateHistory = dateTM;
+            String[] data = curDateHistory.split("/");
+            currentMonth = Integer.parseInt(data[data.length - 2]);
         }
 
 
-      //  return inflater.inflate(R.layout.tab_fragment_1, container, false);
+        //  return inflater.inflate(R.layout.tab_fragment_1, container, false);
         display1(v);
         return v;
     }
 
-    public String getCurrentDate(){
+    public String getCurrentDate() {
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         return format.format(curDate);
     }
 
-    public void display1(View v){
+    public void display1(View v) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("status", getContext().MODE_PRIVATE);
-        String goal_to_remember=sharedPreferences.getString("MyGoal1", "0");
-        if(goal_to_remember.equals("0")){
+        String goal_to_remember = sharedPreferences.getString("MyGoal1", "0");
+        if (goal_to_remember.equals("0")) {
             //dont show anything
-        }else {
+        } else {
             String data[] = goal_to_remember.split(" ");
             //store the name of the goal that was chosen
             String nameOfCurrentGoal = data[data.length - 4];
-           // System.out.println(nameOfCurrentGoal);
+            // System.out.println(nameOfCurrentGoal);
 
             //The database is open!
             ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
@@ -162,43 +161,42 @@ public class TabFragment1 extends Fragment {
 
             Cursor cursor = database.rawQuery("select * from history_tbl_WG where active='" + 1 + "'", null);
             cursor.moveToFirst();
-            String name="";
-            int steps=0;
-            double stepsDid=0.0;
-            String unit="";
-            float percentage=0f;
-            int modeTest=0;
-            long daysDifference=0;
+            String name = "";
+            int steps = 0;
+            double stepsDid = 0.0;
+            String unit = "";
+            float percentage = 0f;
+            int modeTest = 0;
+            long daysDifference = 0;
             if (!cursor.isAfterLast()) {
                 do {
                     System.out.println("Retrieve data now and checking the date...");
                     name = cursor.getString(cursor.getColumnIndex("name"));
                     steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                     stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
-                    unit=cursor.getString(cursor.getColumnIndex("unit"));
+                    unit = cursor.getString(cursor.getColumnIndex("unit"));
                     percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
-                    modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
+                    modeTest = cursor.getInt(cursor.getColumnIndex("testMode"));
                     dateTime = cursor.getString(cursor.getColumnIndex("date"));
-                    String[] splitDate=dateTime.split("/");
-                    int month=Integer.parseInt(splitDate[splitDate.length-2]);
-                    daysDifference=Daybetween(curDateHistory,dateTime);
-                   // System.out.println("oi meres einai: " +daysDifference);
+                    String[] splitDate = dateTime.split("/");
+                    int month = Integer.parseInt(splitDate[splitDate.length - 2]);
+                    daysDifference = Daybetween(curDateHistory, dateTime);
+                    // System.out.println("oi meres einai: " +daysDifference);
 
-                 //   if(!dateTime.equals(curDateHistory)) {
-                        if (stepsDid > max) {
-                            max = stepsDid;
+                    //   if(!dateTime.equals(curDateHistory)) {
+                    if (stepsDid > max) {
+                        max = stepsDid;
 
-                        }
-                        if (stepsDid < min) {
-                            min = stepsDid;
+                    }
+                    if (stepsDid < min) {
+                        min = stepsDid;
 
-                        }
-                        System.out.println("Min : " + min + " Max : " + max);
+                    }
+                    System.out.println("Min : " + min + " Max : " + max);
 
-                        count++; // increment counter
-                        total += stepsDid; // accumulate the sum
-                 //   }
-
+                    count++; // increment counter
+                    total += stepsDid; // accumulate the sum
+                    //   }
 
 
                 } while (cursor.moveToNext());
@@ -207,12 +205,12 @@ public class TabFragment1 extends Fragment {
             database.close();
 
 
-            if(min != max){
+            if (min != max) {
                 goalList = new ArrayList<>();
                 findMinAndPrint(min);
                 findMaxAndPrint(max);
                 System.out.println("KSANAAAA EDWWWWW");
-            }else{
+            } else {
                 goalList = new ArrayList<>();
                 System.out.println("BIKAAAAA EDWWWWWW");
                 findMaxAndPrint(max);
@@ -221,7 +219,7 @@ public class TabFragment1 extends Fragment {
             Double average = (Double) total / count;
 
             // ListAdapter adapter = new ListAdapter(getActivity(), goalList);
-          //  mainListView.setAdapter(adapter);
+            //  mainListView.setAdapter(adapter);
         }
 
 
@@ -232,52 +230,52 @@ public class TabFragment1 extends Fragment {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
         database = dbOpenHelper.openDataBase();
         //here i retrieve the data i want
-      //  goalList = new ArrayList<String>();
+        //  goalList = new ArrayList<String>();
 
         Cursor cursor = database.rawQuery("select * from history_tbl_WG where didsteps='" + max + "'", null);
         cursor.moveToFirst();
-        String name="";
-        int steps=0;
+        String name = "";
+        int steps = 0;
         double stepsDid;
-        String unit="";
+        String unit = "";
         float percentage;
-        int modeTest=0;
-        long daysDifference=0;
+        int modeTest = 0;
+        long daysDifference = 0;
         if (!cursor.isAfterLast()) {
             do {
                 System.out.println("Retrieve data now and checking the date...");
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                 stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
-                unit=cursor.getString(cursor.getColumnIndex("unit"));
+                unit = cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
-                modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
+                modeTest = cursor.getInt(cursor.getColumnIndex("testMode"));
                 dateTime = cursor.getString(cursor.getColumnIndex("date"));
-                String[] splitDate=dateTime.split("/");
-                int month=Integer.parseInt(splitDate[splitDate.length-2]);
-                daysDifference=Daybetween(curDateHistory,dateTime);
-             //   System.out.println("oi meres einai: " +daysDifference);
+                String[] splitDate = dateTime.split("/");
+                int month = Integer.parseInt(splitDate[splitDate.length - 2]);
+                daysDifference = Daybetween(curDateHistory, dateTime);
+                //   System.out.println("oi meres einai: " +daysDifference);
 
                 //hereeeeeeee test mode again
-                if(numberTM==1  && modeTest==2 && (daysDifference>=1 && daysDifference<=7) ){
+                if (numberTM == 1 && modeTest == 2 && (daysDifference >= 1 && daysDifference <= 7)) {
                     System.out.println("here in test mode");
 
 
-                    if(unitReturn().equals("Steps")) {
-                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
-                    }else{
-                        goalList.add("Max" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                    if (unitReturn().equals("Steps")) {
+                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                    } else {
+                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                     }
                 }
 
-                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && (daysDifference>=1 && daysDifference<=7)) {
+                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && (daysDifference >= 1 && daysDifference <= 7)) {
                     System.out.println("difference in days in if: " + differenceInDays());
-                    if(unitReturn().equals("Steps")){
-                        goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + new Double(stepsDid).longValue());
+                    if (unitReturn().equals("Steps")) {
+                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + new Double(stepsDid).longValue());
 
-                    }else{
-                        goalList.add("Max" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
+                    } else {
+                        goalList.add("Max" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));
                     }
 
                 } else {
@@ -291,7 +289,7 @@ public class TabFragment1 extends Fragment {
         cursor.close();
         database.close();
 
-         ListAdapter adapter = new ListAdapter(getActivity(), goalList);
+        ListAdapter adapter = new ListAdapter(getActivity(), goalList);
         mainListView.setAdapter(adapter);
     }
 
@@ -300,52 +298,52 @@ public class TabFragment1 extends Fragment {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), DB_NAME);
         database = dbOpenHelper.openDataBase();
         //here i retrieve the data i want
-      //  goalList = new ArrayList<String>();
+        //  goalList = new ArrayList<String>();
 
         Cursor cursor = database.rawQuery("select * from history_tbl_WG where didsteps='" + min + "'", null);
         cursor.moveToFirst();
-        String name="";
-        int steps=0;
-        double stepsDid=0.0;
-        String unit="";
-        float percentage=0f;
-        int modeTest=0;
-        long daysDifference=0;
+        String name = "";
+        int steps = 0;
+        double stepsDid = 0.0;
+        String unit = "";
+        float percentage = 0f;
+        int modeTest = 0;
+        long daysDifference = 0;
         if (!cursor.isAfterLast()) {
             do {
                 System.out.println("Retrieve data now and checking the date...");
                 name = cursor.getString(cursor.getColumnIndex("name"));
                 steps = cursor.getInt(cursor.getColumnIndex("allsteps"));
                 stepsDid = cursor.getDouble(cursor.getColumnIndex("didsteps"));
-                unit=cursor.getString(cursor.getColumnIndex("unit"));
+                unit = cursor.getString(cursor.getColumnIndex("unit"));
                 percentage = cursor.getFloat(cursor.getColumnIndex("percentage"));
-                modeTest=cursor.getInt(cursor.getColumnIndex("testMode"));
+                modeTest = cursor.getInt(cursor.getColumnIndex("testMode"));
                 dateTime = cursor.getString(cursor.getColumnIndex("date"));
-                String[] splitDate=dateTime.split("/");
-                int month=Integer.parseInt(splitDate[splitDate.length-2]);
-                daysDifference=Daybetween(curDateHistory,dateTime);
-              //  System.out.println("oi meres einai: " +daysDifference);
+                String[] splitDate = dateTime.split("/");
+                int month = Integer.parseInt(splitDate[splitDate.length - 2]);
+                daysDifference = Daybetween(curDateHistory, dateTime);
+                //  System.out.println("oi meres einai: " +daysDifference);
 
                 //hereeeeeeee test mode again
-                if(numberTM==1  && modeTest==2 && (daysDifference>=1 && daysDifference<=7) ){
+                if (numberTM == 1 && modeTest == 2 && (daysDifference >= 1 && daysDifference <= 7)) {
                     System.out.println("here in test mode");
 
 
-                    if(unitReturn().equals("Steps")) {
-                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
-                    }else{
-                        goalList.add("Min" +" " +dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
+                    if (unitReturn().equals("Steps")) {
+                        goalList.add("Min" + " " + dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
+                    } else {
+                        goalList.add("Min" + " " + dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
                     }
                 }
 
-                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory)<0) && numberTM==0 && (daysDifference>=1 && daysDifference<=7)) {
+                if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && (daysDifference >= 1 && daysDifference <= 7)) {
                     System.out.println("difference in days in if: " + differenceInDays());
-                    if(unitReturn().equals("Steps")){
-                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + Double.valueOf(stepsDid).longValue());
+                    if (unitReturn().equals("Steps")) {
+                        goalList.add("Min" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + Double.valueOf(stepsDid).longValue());
 
-                    }else{
-                        goalList.add("Min" +" " +dateTime+ "\n" +"Name: " + name + " || "+unitReturn()+": " + steps + " || Percentage: " + (int) ((percentage*100)+0.5) + "%"  +" ||" +"\n" +unitReturn()+" Walked: " + df2.format(stepsDid));
+                    } else {
+                        goalList.add("Min" + " " + dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));
                     }
 
                 } else {
@@ -359,8 +357,8 @@ public class TabFragment1 extends Fragment {
         cursor.close();
         database.close();
 
-       //  ListAdapter adapter = new ListAdapter(getActivity(), goalList);
-      //  mainListView.setAdapter(adapter);
+        //  ListAdapter adapter = new ListAdapter(getActivity(), goalList);
+        //  mainListView.setAdapter(adapter);
     }
 
     public String unitReturn() {
@@ -368,7 +366,7 @@ public class TabFragment1 extends Fragment {
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(getActivity(), "MyHistorydb.db");
         database = dbOpenHelper.openDataBase();
 
-        Cursor cursor = database.rawQuery("select unit from history_tbl_WG where name='" +goalName+ "'", null);
+        Cursor cursor = database.rawQuery("select unit from history_tbl_WG where name='" + goalName + "'", null);
         cursor.moveToFirst();
         String unit = null;
         if (!cursor.isAfterLast()) {
@@ -384,9 +382,9 @@ public class TabFragment1 extends Fragment {
         return unit;
     }
 
-    public long differenceInDays(){
+    public long differenceInDays() {
 
-        long days=0;
+        long days = 0;
         //the format of the date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -394,14 +392,14 @@ public class TabFragment1 extends Fragment {
             Date oldDate = dateFormat.parse(dateTime);
 
 
-            Date currentDate =  dateFormat.parse(curDateHistory);
+            Date currentDate = dateFormat.parse(curDateHistory);
 
 
-            if(oldDate.compareTo(currentDate)==0){
-                days=0;
+            if (oldDate.compareTo(currentDate) == 0) {
+                days = 0;
 
-            }else{
-                days=1;
+            } else {
+                days = 1;
             }
 
         } catch (ParseException e) {
@@ -411,18 +409,17 @@ public class TabFragment1 extends Fragment {
 
         return days;
     }
-    public long Daybetween(String date1,String date2)
-    {
+
+    public long Daybetween(String date1, String date2) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date Date1 = null,Date2 = null;
-        try{
+        Date Date1 = null, Date2 = null;
+        try {
             Date1 = sdf.parse(date1);
             Date2 = sdf.parse(date2);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ((Date1 != null ? Date1.getTime() : 0) - Date2.getTime())/(24*60*60*1000);
+        return ((Date1 != null ? Date1.getTime() : 0) - Date2.getTime()) / (24 * 60 * 60 * 1000);
     }
 
 }

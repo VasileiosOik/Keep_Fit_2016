@@ -49,17 +49,16 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private DecoView mDecoView;
     private final float mSeriesMax = 50f;
     private float steps_count = 0f;
-    private Double Steps_so_far=0.0;
+    private Double Steps_so_far = 0.0;
     private Double prefNameSteps;
     private int totalPrefSteps;
-  //  private float prefNameSteps;
+    //  private float prefNameSteps;
     private String goalName;
-    private ArrayList<String>  goalList1;
+    private ArrayList<String> goalList1;
     private String dateTM;
     private TextView textTestMode;
     private static DecimalFormat df2 = new DecimalFormat(".##");
     private static final int RESULT_SETTINGS = 1;
-
 
 
     @Override
@@ -71,7 +70,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         setSupportActionBar(toolbar);
 
         //initialize the text view
-        textTestMode =(TextView) findViewById(R.id.textActivity2);
+        textTestMode = (TextView) findViewById(R.id.textActivity2);
 
 
         //create basic table
@@ -88,13 +87,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         //hereeeeeeeeeeeeeeeeeeeeeeeeee i open the shared preferences of the test mode
         SharedPreferences testModePreferences = this.getSharedPreferences("textModeSetting", MODE_PRIVATE);
-        dateTM=testModePreferences.getString("date", null);
+        dateTM = testModePreferences.getString("date", null);
         Integer numberTM = testModePreferences.getInt("testM", 0);
 
-        if(numberTM ==1){
+        if (numberTM == 1) {
             textTestMode.setText("Test Mode is ON");
             textTestMode.setBackgroundColor(Color.RED);
-        }else{
+        } else {
             textTestMode.setText("");
         }
 
@@ -183,7 +182,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         toggle.syncState();
 
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(StartActivity.this);
         //request focus to each item
@@ -208,7 +206,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "percentage FLOAT);";
         db.execSQL(CREATE_TABLE_WalkingGoals);
         db.close();
-     //   System.out.println("Table has created successfully!");
+        //   System.out.println("Table has created successfully!");
 
 
     }
@@ -248,20 +246,19 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 Double resultRemain;
-                if(totalPrefSteps==0 && prefNameSteps==null){
-                     resultRemain=0.0;
-                }else{
-                    resultRemain=  totalPrefSteps - prefNameSteps;
-                  //  System.out.print("To apot einai: " +resultRemain);
+                if (totalPrefSteps == 0 && prefNameSteps == null) {
+                    resultRemain = 0.0;
+                } else {
+                    resultRemain = totalPrefSteps - prefNameSteps;
+                    //  System.out.print("To apot einai: " +resultRemain);
                 }
 
-                if(resultRemain==0.0){
+                if (resultRemain == 0.0) {
                     textToGo.setText("Goal Reached!");
-                }else if(resultRemain<0.0){
-                    textToGo.setText("Goal Reached! " +"\n" +"Above " +unitReturn() +": " +df2.format(Math.abs(resultRemain)) );
-                }
-                else{
-                    textToGo.setText(df2.format(resultRemain)+ " " +unitReturn()+" to goal " +totalPrefSteps);
+                } else if (resultRemain < 0.0) {
+                    textToGo.setText("Goal Reached! " + "\n" + "Above " + unitReturn() + ": " + df2.format(Math.abs(resultRemain)));
+                } else {
+                    textToGo.setText(df2.format(resultRemain) + " " + unitReturn() + " to goal " + totalPrefSteps);
                 }
             }
 
@@ -275,13 +272,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         seriesItem.addArcSeriesItemListener(new SeriesItem.SeriesItemListener() {
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
-                if(Steps_so_far==0.0){
-                    textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(0));
-                }else{
-                    if(unitReturn().equals("Steps")){
-                        textActivity1.setText(unitReturn() +" walked so far: " + Double.valueOf(Steps_so_far).longValue());
-                    }else{
-                        textActivity1.setText(unitReturn() +" walked so far: " +String.valueOf(df2.format(Steps_so_far)));
+                if (Steps_so_far == 0.0) {
+                    textActivity1.setText(unitReturn() + " walked so far: " + String.valueOf(0));
+                } else {
+                    if (unitReturn().equals("Steps")) {
+                        textActivity1.setText(unitReturn() + " walked so far: " + Double.valueOf(Steps_so_far).longValue());
+                    } else {
+                        textActivity1.setText(unitReturn() + " walked so far: " + String.valueOf(df2.format(Steps_so_far)));
                     }
 
                 }
@@ -329,7 +326,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
                     @Override
                     public void onEventEnd(DecoEvent decoEvent) {
-                           resetText();
+                        resetText();
 
                     }
                 })
@@ -395,8 +392,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
     }
 
-    public void preferences()
-    {
+    public void preferences() {
         //check if the app starts for the first time
         SharedPreferences runCheck; //load the preferences
         runCheck = getSharedPreferences("hasRunBefore", 0);
@@ -407,29 +403,28 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             edit.putBoolean("hasRun", true); //set to has run
             edit.apply(); //apply
             //code for if this is the first time the app has run
-            steps_count=0f;
-        }
-        else {
+            steps_count = 0f;
+        } else {
             //code if the app HAS run before
             // shared preferences
             SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
             String prefName = myPrefs.getString("MyData", "0");
-            prefNameSteps=Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
-            System.out.println("Einai ta steps pou eginan: " +prefNameSteps);
-            totalPrefSteps=  myPrefs.getInt("MyData5", 0);
-            System.out.println("Einai: " +totalPrefSteps);
-          //  prefNameSteps = myPrefs.getFloat("MyData2", 0);
-            goalName=myPrefs.getString("MyData3", "0");
+            prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
+            System.out.println("Einai ta steps pou eginan: " + prefNameSteps);
+            totalPrefSteps = myPrefs.getInt("MyData5", 0);
+            System.out.println("Einai: " + totalPrefSteps);
+            //  prefNameSteps = myPrefs.getFloat("MyData2", 0);
+            goalName = myPrefs.getString("MyData3", "0");
             steps_count = (Float.parseFloat(prefName)) / 2;
-            Steps_so_far=  prefNameSteps;
+            Steps_so_far = prefNameSteps;
             // Steps_so_far= (int) prefNameSteps;
             System.out.println("The percentage is: " + steps_count);
-            System.out.println("The amount of "+ unitReturn() +" that have been walked so far: " +  Steps_so_far);
+            System.out.println("The amount of " + unitReturn() + " that have been walked so far: " + Steps_so_far);
 
         }
     }
 
-    public void createTableHistory(){
+    public void createTableHistory() {
         //create the table
         database = openOrCreateDatabase("MyHelpdb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
         database.setVersion(1);
@@ -447,10 +442,10 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                         + "date STRING);";
         database.execSQL(CREATE_TABLE_TIME_Goals);
         database.close();
-     //   System.out.println("Table2 has created successfully!");
+        //   System.out.println("Table2 has created successfully!");
     }
 
-    public void createHelpTableHistory(){
+    public void createHelpTableHistory() {
         //create the table
         database = openOrCreateDatabase("MyHistorydb.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
         database.setVersion(1);
@@ -516,10 +511,10 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(StartActivity.this, TestModeActivity.class);
             startActivity(i);
             return true;
-        }else if(id==R.id.menu_settings){
+        } else if (id == R.id.menu_settings) {
             // Display the fragment as the main content.
-               Intent i = new Intent(getBaseContext(), SettingActivity.class);
-               startActivityForResult(i, RESULT_SETTINGS);
+            Intent i = new Intent(getBaseContext(), SettingActivity.class);
+            startActivityForResult(i, RESULT_SETTINGS);
 
             return true;
         }
@@ -534,11 +529,11 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
     }
 
-    private void loadPref(){
+    private void loadPref() {
 
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean my_checkbox_preference = mySharedPreferences.getBoolean("switchRef", false);
-        System.out.println("H epilogh mou einai: " +my_checkbox_preference);
+        System.out.println("H epilogh mou einai: " + my_checkbox_preference);
 
 
     }

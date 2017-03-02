@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
 
@@ -34,13 +35,13 @@ public class ChooseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose);
 
         //for the back button in the menu
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initialize the list view
-        mainListView = (ListView) findViewById( R.id.goal_list1 );
+        mainListView = (ListView) findViewById(R.id.goal_list1);
         mainListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
         //display the options
@@ -64,11 +65,11 @@ public class ChooseActivity extends AppCompatActivity {
         // Take appropriate action for each action item click
         switch (item.getItemId()) {
             case R.id.save:
-                int count=0;
-                int onlyOne=0;
+                int count = 0;
+                int onlyOne = 0;
                 //check how many true values the table has
                 for (boolean value : checkedStatus) {
-                    if (value){
+                    if (value) {
                         onlyOne++;
                     }
 
@@ -87,11 +88,11 @@ public class ChooseActivity extends AppCompatActivity {
                     }
                 }
 
-                if(onlyOne>1) {
+                if (onlyOne > 1) {
                     Toast.makeText(ChooseActivity.this, "Multiple goals selected", Toast.LENGTH_LONG).show();
                 }
 
-                if(count==checkedStatus.length && onlyOne==0){
+                if (count == checkedStatus.length && onlyOne == 0) {
                     Toast.makeText(ChooseActivity.this, "No goal selected", Toast.LENGTH_LONG).show();
                 }
 
@@ -115,13 +116,13 @@ public class ChooseActivity extends AppCompatActivity {
         //put cursor
         Cursor cursor = database.rawQuery("select * from tbl_WG", null);
         cursor.moveToFirst();
-        if(!cursor.isAfterLast()) {
+        if (!cursor.isAfterLast()) {
             do {
-                String name=cursor.getString(cursor.getColumnIndex("name"));
-                String unit=cursor.getString(cursor.getColumnIndex("unit"));
-                Integer steps=Integer.parseInt(cursor.getString(1));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String unit = cursor.getString(cursor.getColumnIndex("unit"));
+                Integer steps = Integer.parseInt(cursor.getString(1));
 
-                goalList.add("Name: "+name+" || " +unit+": "+steps);
+                goalList.add("Name: " + name + " || " + unit + ": " + steps);
 
 
             } while (cursor.moveToNext());
@@ -129,12 +130,12 @@ public class ChooseActivity extends AppCompatActivity {
         cursor.close();
         database.close();
         //size of the status list;
-        status= new boolean[goalList.size()];
+        status = new boolean[goalList.size()];
 
         //check state
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         checkedStatus = new Boolean[goalList.size()];
-        for ( int index = 0; index < checkedStatus.length; index++)
+        for (int index = 0; index < checkedStatus.length; index++)
             checkedStatus[index] = sharedPreferences.getBoolean(Integer.toString(index), false);
 
         //create an ArrayAdaptar from the String Array
