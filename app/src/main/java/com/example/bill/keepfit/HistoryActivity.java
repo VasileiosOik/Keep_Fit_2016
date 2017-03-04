@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class HistoryActivity extends AppCompatActivity {
@@ -207,7 +208,7 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
         //return the data from the pedometer activity (last goal is active there)
-        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
         String prefName = myPrefs.getString("MyData", "0");
         prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));//current steps
         goalName = myPrefs.getString("MyData3", "0");//name of the current goal
@@ -361,7 +362,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     public String getCurrentDate() {
         Date curDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         String DateToStr = format.format(curDate);
         return DateToStr;
     }
@@ -370,7 +371,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         long days = 0;
         //the format of the date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         try {
 
             Date oldDate = dateFormat.parse(dateTime);
@@ -752,7 +753,7 @@ public class HistoryActivity extends AppCompatActivity {
 
 
     public long Daybetween(String date1, String date2) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         Date Date1 = null, Date2 = null;
         try {
             Date1 = sdf.parse(date1);
@@ -760,7 +761,7 @@ public class HistoryActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ((Date1 != null ? Date1.getTime() : 0) - Date2.getTime()) / (24 * 60 * 60 * 1000);
+        return ((Date1 != null ? Date1.getTime() : 0) - (Date2 != null ? Date2.getTime() : 0)) / (24 * 60 * 60 * 1000);
     }
 
     public void showEdit() {
@@ -793,7 +794,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     boolean isWithinRange(String testDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         SharedPreferences datePickerPref = getSharedPreferences("myDatePicker", MODE_PRIVATE);
         String stDate1 = datePickerPref.getString("date1", curDateHistory);
         stDate2 = datePickerPref.getString("date2", curDateHistory);
@@ -808,7 +809,6 @@ public class HistoryActivity extends AppCompatActivity {
 //            System.out.println("Einai h Deuterh: " +convertedDate2);
 //            System.out.println("Einai h eksetazomenh: " +tDate);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return tDate.after(convertedDate1) && tDate.before(convertedDate2);

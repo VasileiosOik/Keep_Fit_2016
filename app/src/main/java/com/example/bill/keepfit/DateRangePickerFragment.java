@@ -40,7 +40,7 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.date_range_picker, container, false);
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE)
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         TabHost tabHost = (TabHost) root.findViewById(R.id.tabHost);
         Button butSetDateRange = (Button) root.findViewById(R.id.but_set_time_range);
         startDatePicker = (DatePicker) root.findViewById(R.id.start_date_picker);

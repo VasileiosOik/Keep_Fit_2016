@@ -1,8 +1,5 @@
 package com.example.bill.keepfit;
 
-/**
- * Created by Bill on 22/01/2016.
- */
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,21 +39,19 @@ public class ListAdapter extends ArrayAdapter implements View.OnClickListener{
 
 public ListAdapter(Context context, ArrayList<String> resource) {
         super(context,R.layout.row,resource);
-        // TODO Auto-generated constructor stub
         this.context = context;
-        goalList=new ArrayList<String>();
+        goalList=new ArrayList<>();
         this.goalList =resource;
 }
 
+@NonNull
 @Override
 public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.row, parent, false);
         v1=convertView;
         TextView name = (TextView) convertView.findViewById(R.id.textview1);
-        name.setText(goalList.get(position).toString());
+        name.setText(goalList.get(position));
 
         return convertView;
         }
@@ -63,7 +59,6 @@ public View getView(final int position, View convertView, ViewGroup parent) {
 
         @Override
         public Object getItem(int position) {
-                // TODO Auto-generated method stub
                 return position;
         }
 
@@ -74,7 +69,6 @@ public View getView(final int position, View convertView, ViewGroup parent) {
         }
 
         public int getCount() {
-                // TODO Auto-generated method stub
                 return goalList.size();
         }
 }

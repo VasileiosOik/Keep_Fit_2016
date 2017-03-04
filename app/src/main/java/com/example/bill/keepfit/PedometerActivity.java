@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class PedometerActivity extends AppCompatActivity {
 
@@ -77,7 +78,7 @@ public class PedometerActivity extends AppCompatActivity {
 
 
         //shared preferences for the data number to start again
-        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
         Double prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", String.valueOf(0.0)));
         System.out.println("Epanekinhsh me timh: " + prefNameSteps);
         //here i convert the units if there is a difference between them
@@ -357,7 +358,6 @@ public class PedometerActivity extends AppCompatActivity {
                 break;
             default:
                 // steps
-                newStepsStore = newStepsStore;
                 break;
         }
 
@@ -407,7 +407,7 @@ public class PedometerActivity extends AppCompatActivity {
         //percentage of the current steps/total steps
         String data1 = String.valueOf((st / st1));
         //use of shared preferences
-        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = myPrefs.edit();
         prefsEditor.putString("MyData", data1);//percentage
         prefsEditor.putString("MyData2", String.valueOf(st));//current steps
@@ -517,7 +517,7 @@ public class PedometerActivity extends AppCompatActivity {
         database.close();
 
         //check the time difference
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         long days = 0;
 
 
@@ -581,7 +581,7 @@ public class PedometerActivity extends AppCompatActivity {
     public String getCurrentDate() {
         Date curDate = new Date();
         //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         //   System.out.println(DateToStr);
         return format.format(curDate);
     }

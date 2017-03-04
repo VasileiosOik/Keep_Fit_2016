@@ -187,7 +187,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
     private void storeTheDate() {
 
         String currentDate;
-        Integer activeTestMode = 0;
+        Integer activeTestMode;
         if (et.getText().toString().trim().equals("")) {
             //dont store something
             currentDate = "";
@@ -226,7 +226,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
             destroyTestModeGoals();
             et.setText("");
         } else {
-            SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+            SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
             SharedPreferences.Editor prefsEditor = myPrefs.edit();
             prefsEditor.putString("MyData", String.valueOf(0));//percentage
             prefsEditor.putString("MyData2", String.valueOf(0));
@@ -314,7 +314,7 @@ public class TestModeActivity extends AppCompatActivity implements CompoundButto
 
         }
 
-        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+        SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = myPrefs.edit();
         prefsEditor.putString("MyData", String.valueOf(0));//percentage
         prefsEditor.putString("MyData2", String.valueOf(0));

@@ -409,7 +409,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         } else {
             //code if the app HAS run before
             // shared preferences
-            SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+            SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_PRIVATE);
             String prefName = myPrefs.getString("MyData", "0");
             prefNameSteps = Double.valueOf(myPrefs.getString("MyData2", valueOf(0.0)));
             System.out.println("Einai ta steps pou eginan: " + prefNameSteps);
