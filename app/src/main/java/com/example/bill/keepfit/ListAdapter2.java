@@ -35,7 +35,7 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
 
     @NonNull
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.toggle_button_row, parent, false);
         View v1 = convertView;

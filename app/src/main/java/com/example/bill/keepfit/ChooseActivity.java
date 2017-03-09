@@ -121,10 +121,7 @@ public class ChooseActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 String unit = cursor.getString(cursor.getColumnIndex("unit"));
                 Integer steps = Integer.parseInt(cursor.getString(1));
-
                 goalList.add("Name: " + name + " || " + unit + ": " + steps);
-
-
             } while (cursor.moveToNext());
         }
         cursor.close();

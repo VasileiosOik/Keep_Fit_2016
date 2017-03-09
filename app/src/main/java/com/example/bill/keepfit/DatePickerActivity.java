@@ -29,7 +29,8 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         editor.putInt("nbRepet", 1);
         editor.apply();
 
-        DateRangePickerFragment dateRangePickerFragment = DateRangePickerFragment.newInstance(DatePickerActivity.this, false);
+        DateRangePickerFragment dateRangePickerFragment;
+        dateRangePickerFragment = DateRangePickerFragment.newInstance(DatePickerActivity.this, false);
         dateRangePickerFragment.show(getFragmentManager(), "datePicker");
     }
 

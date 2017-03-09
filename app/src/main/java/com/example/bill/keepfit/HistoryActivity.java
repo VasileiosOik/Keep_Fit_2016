@@ -47,6 +47,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String dateTM;
     private Integer numberTM;
     private int exists = 0;
+    private int positionSpinner;
     private MenuItem mSpinnerItem1 = null;
     private ArrayAdapter spinnerAdapter;
     private Spinner spinnerDays;
@@ -55,14 +56,9 @@ public class HistoryActivity extends AppCompatActivity {
     private String[] state1 = {"More Views", "Completed", "% Above", "% Below", "Kilometres", "Miles", "Meters", "Yards", "Steps"};
     private int currentMonth;
     private int year;
-    private int month;
-    private int day;
-    private int cur = 0;
-    private String date1, date2;
     private int stateOption = 0;
     private int perCentage;
     private String stDate2;
-    private int positionSpinner;
     private int value = 1;
     private int unitForMenu;
     private String unitToInsert;
@@ -335,7 +331,7 @@ public class HistoryActivity extends AppCompatActivity {
                     if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0) {
                         System.out.println("difference in days in if: " + differenceInDays());
                         if (unitReturn().equals("Steps")) {
-                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + new Double(stepsDid).longValue());
+                            goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + Double.valueOf(stepsDid).longValue());
 
                         } else {
                             goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));
@@ -583,7 +579,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (numberTM == 1 && modeTest == 2 && (currentMonth - month == 1)) {
                             System.out.println("here in test mode");
                             if (unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + stepsDid.longValue());
                             } else {
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -687,7 +683,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (numberTM == 1 && modeTest == 2 && (percentage * 100 <= perCentage)) {
                             System.out.println("here in test mode");
                             if (unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                             } else {
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
 
@@ -714,7 +710,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (numberTM == 1 && modeTest == 2 && checkRange) {
                             System.out.println("here in test mode");
                             if (unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + new Double(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + Double.valueOf(stepsDid).longValue());
                             } else {
                                 System.out.println("here in test mode againnnnn");
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unit + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unit + " Walked: " + df2.format(stepsDid));
@@ -725,7 +721,7 @@ public class HistoryActivity extends AppCompatActivity {
                         if (differenceInDays() >= 1 && (dateTime.compareTo(curDateHistory) < 0) && numberTM == 0 && checkRange) {
                             System.out.println("difference in days in if: " + differenceInDays());
                             if (unitReturn().equals("Steps")) {
-                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + Double.valueOf(stepsDid).longValue());
+                                goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + stepsDid.longValue());
 
                             } else {
                                 goalList.add(dateTime + "\n" + "Name: " + name + " || " + unitReturn() + ": " + steps + " || Percentage: " + (int) ((percentage * 100) + 0.5) + "%" + " ||" + "\n" + unitReturn() + " Walked: " + df2.format(stepsDid));
@@ -811,7 +807,7 @@ public class HistoryActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return tDate.after(convertedDate1) && tDate.before(convertedDate2);
+        return (tDate != null ? tDate.after(convertedDate1) : false) && tDate.before(convertedDate2);
     }
 
     @Override
