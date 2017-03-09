@@ -79,7 +79,7 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
                 endDatePicker.getDayOfMonth(), endDatePicker.getMonth() + 1, endDatePicker.getYear());
     }
 
-    abstract static class OnDateRangeSelectedListener {
-        abstract void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear);
+    interface OnDateRangeSelectedListener {
+         void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear);
     }
 }
