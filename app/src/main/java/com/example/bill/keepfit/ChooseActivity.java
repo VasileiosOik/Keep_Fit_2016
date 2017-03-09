@@ -24,6 +24,7 @@ public class ChooseActivity extends AppCompatActivity {
     public boolean[] status;
     private Boolean[] checkedStatus;
 
+    public ChooseActivity(){}
 
     public ChooseActivity(View v1) {
         this.v1 = v1;
