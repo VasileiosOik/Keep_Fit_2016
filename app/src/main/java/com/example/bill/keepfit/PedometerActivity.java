@@ -127,8 +127,6 @@ public class PedometerActivity extends AppCompatActivity {
                 stepsToStartAgain = 0.0;
                 activeGoal = 0;
                 clearCurrentTable();
-            } else {
-                //continue
             }
         }
 
@@ -224,7 +222,6 @@ public class PedometerActivity extends AppCompatActivity {
                 } else {
                     tvAdding.setText(String.format("%s%d", getString(R.string.stepsAdd1), Long.parseLong(editText.getText().toString().trim())));
                 }
-                //  tvAdding.setText("Add Steps: " +Long.parseLong(editText.getText().toString().trim()));
                 System.out.println("Current " + helpUnit + ": " + newStepsStore);
                 System.out.println("Total Goal is: " + helpInt);
 

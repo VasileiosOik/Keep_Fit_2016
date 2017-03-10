@@ -30,10 +30,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        //retract the incoming intent
+        //retrieve the incoming intent
         Intent intent = getIntent();
         //recover the row that we want to edit
         String dataValue = intent.getExtras().getString("string");
@@ -44,7 +42,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         Integer helpInt = Integer.parseInt(data[data.length - 1]);
         helpName = data[data.length - 4];
 
-
         //initialize the editText
         et1 = (EditText) findViewById(R.id.editName);
         et1.setText(helpName);
@@ -52,7 +49,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         et2.setText(String.valueOf(helpInt));
         TextView tv = (TextView) findViewById(R.id.Number_of_steps);
         tv.setText(String.format("%s%s", getString(R.string.editSet), unitReturn()));
-
     }
 
 
@@ -68,7 +64,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         et2.setText("");
 
         //we want here to update the values with new ones given by the user
-
         database.execSQL("UPDATE tbl_WG SET steps='" + helpSteps + "' WHERE name='" + helpName + "'");
         if (helpName.equals(name)) {
             //dont do anything
@@ -88,7 +83,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -130,7 +124,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 } else if (nameChecked(et1.getText().toString().trim()) != null && !nameChecked(et1.getText().toString().trim()).isEmpty() && !nameChecked(et1.getText().toString().trim()).equals(helpName)) {
                     Toast.makeText(EditActivity.this, "Name already exists", Toast.LENGTH_LONG).show();
                 } else if (helpName.equals(et1.getText().toString().trim())) {
-                    System.out.println("Bainw edw");
+                    System.out.println("editing...");
                     editGoal();
                 } else if (et1.getText().toString().trim().matches(regex)) {
                     Toast.makeText(EditActivity.this, "Name cannot contain only numbers",
@@ -162,9 +156,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public String nameChecked(String name) {
-        //The database is open!
         boolean isFound = false;
         System.out.println("To name pou pernaw einai: " + name);
+        //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         database = dbOpenHelper.openDataBase();
         Cursor cursor = database.rawQuery("select name from tbl_WG", null);
@@ -172,9 +166,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         if (!cursor.isAfterLast()) {
             do {
                 nameCh = cursor.getString(cursor.getColumnIndex("name"));
-
                 if (nameCh.equals(name)) {
-                    System.out.println("to vrika sth vasi");
                     isFound = true;
                     break;
                 }

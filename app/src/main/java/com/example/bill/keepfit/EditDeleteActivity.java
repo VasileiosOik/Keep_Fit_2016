@@ -29,6 +29,10 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     private Boolean statusChecked;
     private boolean my_checkbox_preference = false;
 
+    public EditDeleteActivity(View v1) {
+        this.v1 = v1;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         //here we retrieve the state of the editable
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -72,9 +74,8 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int index;
-        //!!!!!!!!!!!!!!!!!because it is an object you have to cast!!!!!!!!!!!!!!!
+        //it needs casting!!!!!!!!!!
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
 
         //it returns the names
         updateChoices(info, goalList);
@@ -84,7 +85,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
                 case R.id.edit_btn:
                     //here i store the position of each of the items in the row
                     index = info.position;
-
                     Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
                     a.putExtra("string", goalList.get(index));
                     startActivity(a);
@@ -92,17 +92,12 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
                 case R.id.delete_btn:
                     index = info.position;
-
-
                     Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
                     b.putExtra("string", goalList.get(index));
                     startActivity(b);
-
-
                     break;
                 default:
                     return super.onContextItemSelected(item);
-
             }
         } else {
             if (name != null && name.equals(name1)) {
@@ -141,7 +136,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
                     case R.id.edit_btn:
                         //here i store the position of each of the items in the row
                         index = info.position;
-
                         Intent a = new Intent(EditDeleteActivity.this, EditActivity.class);
                         a.putExtra("string", goalList.get(index));
                         startActivity(a);
@@ -149,27 +143,21 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
                     case R.id.delete_btn:
                         index = info.position;
-
-
                         Intent b = new Intent(EditDeleteActivity.this, DeleteActivity.class);
                         b.putExtra("string", goalList.get(index));
                         startActivity(b);
-
-
                         break;
+
                     default:
                         return super.onContextItemSelected(item);
 
                 }
             }
         }
-
-
         return super.onContextItemSelected(item);
-
     }
 
-    //checks here if it is a currnet goal or not
+    //checks here if it is a current goal or not
     private void updateChoices(AdapterView.AdapterContextMenuInfo info, ArrayList<String> goalList) {
         int index;
         SharedPreferences sharedPreferences = EditDeleteActivity.this.getSharedPreferences("status", MODE_PRIVATE);
@@ -190,11 +178,9 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
             name1 = data1[data1.length - 4];
             System.out.println("Here: " + name);
             System.out.println("Here: " + name1);
-
         }
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,8 +192,6 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
         if (id == android.R.id.home) {
             onBackPressed();
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -222,14 +206,14 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
 
     @Override
-    public void onClick(View v) {
-    }
+    public void onClick(View v) {}
 
 
     public void display(View v) {
         //The database is open!
         ExternalDbOpenHelper dbOpenHelper = new ExternalDbOpenHelper(this, DB_NAME);
         SQLiteDatabase database = dbOpenHelper.openDataBase();
+
         goalList = new ArrayList<>();
         Cursor cursor = database.rawQuery("select * from tbl_WG", null);
         cursor.moveToFirst();
@@ -256,7 +240,4 @@ public class EditDeleteActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void setV1(View v1) {
-        this.v1 = v1;
-    }
 }

@@ -22,10 +22,11 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
+
+        //back button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView tv = (TextView) findViewById(R.id.tv);
         //retract the incoming intent
@@ -36,15 +37,10 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         //split the whole string to parts
         if (dataValue != null) {
             String data[] = dataValue.split(" ");
-            //store the int value that we want to delete
-            //Integer helpInt = Integer.parseInt(data[data.length - 1]);
             helpName = data[data.length - 4];
             System.out.println(helpName);
-
             tv.setText(dataValue);
         }
-
-
     }
 
     @Override
@@ -59,7 +55,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         SQLiteDatabase database = dbOpenHelper.openDataBase();
 
         database.delete(TABLE_NAME, "name" + "='" + helpName + "'", null);
-
         database.close();
         Toast.makeText(this, "goal deleted successfully!", Toast.LENGTH_LONG).show();
         finish();
@@ -105,7 +100,6 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete_menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 

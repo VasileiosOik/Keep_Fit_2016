@@ -19,7 +19,7 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
     private ArrayList<String> goalList = null;
     private Context context;
     private Boolean[] checkedStatus;
-    private int mFieldId = 0;
+    private int mFieldId;
 
 
     public ListAdapter2(Context context, ArrayList<String> resource, Boolean[] checkedStatus) {
@@ -78,12 +78,4 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
         return goalList.size();
     }
 
-
-    public int getmFieldId() {
-        return mFieldId;
-    }
-
-    public void setmFieldId(int mFieldId) {
-        this.mFieldId = mFieldId;
-    }
 }

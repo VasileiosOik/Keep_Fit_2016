@@ -20,7 +20,6 @@ public class DatePickerActivity extends AppCompatActivity implements DateRangePi
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences prefs;
         SharedPreferences.Editor editor;

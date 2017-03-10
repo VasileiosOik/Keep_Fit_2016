@@ -37,7 +37,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tv = (TextView) findViewById(R.id.Number_of_steprs);
 
@@ -69,6 +68,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
 
         String name = et1.getText().toString();
         Integer steps = Integer.parseInt(et2.getText().toString());
+        //empty texts
         et1.setText("");
         et2.setText("");
         System.out.println("H monada einai: " + unit);
@@ -87,7 +87,6 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -210,9 +209,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     @Override
     public void onPause() {
@@ -235,10 +232,7 @@ public class GoalActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private int load() {
-
-
         SharedPreferences prefs = getSharedPreferences("spinnerState", MODE_PRIVATE);
         return prefs.getInt("spinnerSelection", 0);
-
     }
 }

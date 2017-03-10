@@ -39,7 +39,6 @@ public class ChooseActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initialize the list view
         mainListView = (ListView) findViewById(R.id.goal_list1);
@@ -54,7 +53,6 @@ public class ChooseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -73,9 +71,8 @@ public class ChooseActivity extends AppCompatActivity {
                     if (value) {
                         onlyOne++;
                     }
-
                 }
-                //start the new activity only when only one switch is on
+                //start the new activity ONLY when ONE switch is ON
                 for (Boolean checkedStatu : checkedStatus) {
                     if (checkedStatu && onlyOne == 1) {
                         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
@@ -88,7 +85,6 @@ public class ChooseActivity extends AppCompatActivity {
                         count++;
                     }
                 }
-
                 if (onlyOne > 1) {
                     Toast.makeText(ChooseActivity.this, "Multiple goals selected", Toast.LENGTH_LONG).show();
                 }
@@ -140,7 +136,6 @@ public class ChooseActivity extends AppCompatActivity {
         ListAdapter2 adapter = new ListAdapter2(this, goalList, checkedStatus);
         // Assign adapter to ListView
         mainListView.setAdapter(adapter);
-
     }
 
     // Physical back button click handler
@@ -149,5 +144,4 @@ public class ChooseActivity extends AppCompatActivity {
         ChooseActivity.this.finish();
 
     }
-
 }
