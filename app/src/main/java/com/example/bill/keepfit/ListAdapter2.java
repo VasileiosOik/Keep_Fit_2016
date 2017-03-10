@@ -19,7 +19,6 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
     private ArrayList<String> goalList = null;
     private Context context;
     private Boolean[] checkedStatus;
-    private int mFieldId;
 
 
     public ListAdapter2(Context context, ArrayList<String> resource, Boolean[] checkedStatus) {
@@ -28,8 +27,6 @@ public class ListAdapter2 extends ArrayAdapter implements CompoundButton.OnCheck
         goalList = new ArrayList<>();
         this.goalList = resource;
         this.checkedStatus = checkedStatus;
-        //  mFieldId=textViewResourceId;
-
     }
 
 

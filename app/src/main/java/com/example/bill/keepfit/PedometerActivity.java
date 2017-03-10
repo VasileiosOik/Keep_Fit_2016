@@ -218,9 +218,9 @@ public class PedometerActivity extends AppCompatActivity {
 
                 // newStepsStore= convertStepsToAnotherUnit();
                 if (editText.getText().toString().trim().equals("")) {
-                    tvAdding.setText(String.format("%s%d", getString(R.string.stepsAdd), 0));
+                    tvAdding.setText(String.format(Locale.getDefault(),"%s%d", getString(R.string.stepsAdd), 0));
                 } else {
-                    tvAdding.setText(String.format("%s%d", getString(R.string.stepsAdd1), Long.parseLong(editText.getText().toString().trim())));
+                    tvAdding.setText(String.format(Locale.getDefault(),"%s%d", getString(R.string.stepsAdd1), Long.parseLong(editText.getText().toString().trim())));
                 }
                 System.out.println("Current " + helpUnit + ": " + newStepsStore);
                 System.out.println("Total Goal is: " + helpInt);

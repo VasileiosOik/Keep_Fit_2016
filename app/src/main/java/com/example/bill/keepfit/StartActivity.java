@@ -39,10 +39,8 @@ import static java.lang.String.*;
 
 public class StartActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SQLiteDatabase database;
-    private static final String TABLE_NAME = "tbl_WG";
-    private static final String DB_NAME = "Mydb.db";
-    private ArrayAdapter<String> listAdapter;
-    private ListView mainListView;
+    //private static final String TABLE_NAME = "tbl_WG";
+    //private static final String DB_NAME = "Mydb.db";
     private View v1;
     private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
     private long mBackPressed;
@@ -54,13 +52,17 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     private Double Steps_so_far = 0.0;
     private Double prefNameSteps;
     private int totalPrefSteps;
-    //  private float prefNameSteps;
     private String goalName;
-    private ArrayList<String> goalList1;
     private String dateTM;
     private TextView textTestMode;
     private static DecimalFormat df2 = new DecimalFormat(".##");
     private static final int RESULT_SETTINGS = 1;
+
+    public StartActivity(){}
+
+    public StartActivity(View v1) {
+        this.v1 = v1;
+    }
 
 
     @Override
@@ -233,7 +235,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onSeriesItemAnimationProgress(float percentComplete, float currentPosition) {
                 float percentFilled = ((currentPosition - seriesItem.getMinValue()) / (seriesItem.getMaxValue() - seriesItem.getMinValue()));
-                textPercentage.setText(format("%.0f%%", percentFilled * 100f));
+                textPercentage.setText(format(Locale.getDefault(), "%.0f%%", percentFilled * 100f));
             }
 
             @Override

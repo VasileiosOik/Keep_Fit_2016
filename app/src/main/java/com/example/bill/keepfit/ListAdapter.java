@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ListAdapter extends ArrayAdapter implements View.OnClickListener{
+class ListAdapter extends ArrayAdapter implements View.OnClickListener{
         private  ArrayList<String> goalList= null;
         private  Context context;
 
 
-        public ListAdapter(Context context, ArrayList<String> resource) {
+        ListAdapter(Context context, ArrayList<String> resource) {
         super(context,R.layout.row,resource);
         this.context = context;
         goalList=new ArrayList<>();
